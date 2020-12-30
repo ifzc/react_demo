@@ -4,6 +4,7 @@ import { Router, Link } from "react-router-dom"
 import {
     PieChartOutlined,
     UserOutlined,
+    BellOutlined
 } from '@ant-design/icons'
 import { createBrowserHistory } from 'history'
 import RouterSwitch from './RouterSwitch'
@@ -50,7 +51,23 @@ class BasicLayout extends React.Component<any, any> {
                         </Menu>
                     </Sider>
                     <Layout className="site-layout">
-                        <Header className="site-layout-background" style={{ padding: 0 }} />
+                        <Header className="site-layout-background" style={{ padding: 0 }} >
+                            <Menu mode="horizontal" style={{ float: 'right' }}>
+                                <Menu.Item key="/Page7">
+                                    <Link to="/Page7">{<BellOutlined />}</Link>
+                                </Menu.Item>
+                                <Menu.Item key="/Page8">
+                                    <Link to="/Page8">数据大屏</Link>
+                                </Menu.Item>
+                                <Menu.Item key="/Page9">
+                                    <Link to="/Page9">帮助文档</Link>
+                                </Menu.Item>
+                                <SubMenu key="sub1" title="User">
+                                    <Menu.Item key="/Personal/BasicData"><Link to="/Personal/BasicData">个人资料</Link></Menu.Item>
+                                    <Menu.Item key="/Page10"><Link to="/Page10">退出</Link></Menu.Item>
+                                </SubMenu>
+                            </Menu>
+                        </Header>
                         <Content style={{ margin: '0 16px' }}>
                             <Breadcrumb style={{ margin: '16px 0' }}>
                                 <Breadcrumb.Item>User</Breadcrumb.Item>

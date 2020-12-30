@@ -1,0 +1,32 @@
+.personal-active {
+    min-height: 100vh;
+
+    .ant-layout-header {
+        background: #fff;
+    }
+
+    .ant-menu,
+    .ant-layout-sider {
+        background: #F3F2F0;
+    }
+
+    .personal-center {
+        height: 82px;
+        line-height: 100px;
+        text-align: center;
+        background: #E8E7E4;
+        color: #333;
+    }
+
+    .ant-menu-dark.ant-menu-inline .ant-menu-item a {
+        color: #333;
+    }
+
+    .ant-menu-dark.ant-menu-inline .ant-menu-item a:hover {
+        color: #20A0FF;
+    }
+
+    .ant-menu.ant-menu-inline .ant-menu-item {
+        text-align: center;
+    }
+}

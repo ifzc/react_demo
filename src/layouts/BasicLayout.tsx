@@ -63,7 +63,7 @@ class BasicLayout extends React.Component<any, any> {
                                     <Link to="/Page9">帮助文档</Link>
                                 </Menu.Item>
                                 <SubMenu key="sub1" title="User">
-                                    <Menu.Item key="/Personal/BasicData"><Link to="/Personal/BasicData">个人资料</Link></Menu.Item>
+                                    <Menu.Item key="/Personal/BasicData"><Link to="/user/info">个人资料</Link></Menu.Item>
                                     <Menu.Item key="/Page10"><Link to="/Page10">退出</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>

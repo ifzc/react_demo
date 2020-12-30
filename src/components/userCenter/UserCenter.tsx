@@ -11,13 +11,13 @@ class UserCenter extends React.Component {
         <div className="personal-center">个人中心</div>
         <Menu mode="inline">
               <Menu.Item key="1">
-                <Link to="/Personal/BasicData">基本资料</Link>
+                <Link to="/user/info">基本资料</Link>
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to="/Personal/SetUp">安全设置</Link>
+                <Link to="/user/settings">安全设置</Link>
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to="/Personal/log">操作日志</Link>
+                <Link to="/user/log">操作日志</Link>
               </Menu.Item>
               <Menu.Item key="4">
                 <Link to="/Page2">共享账号</Link>

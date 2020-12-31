@@ -8,6 +8,9 @@ import {
     MobileOutlined,
     LockOutlined
 } from '@ant-design/icons';
+import Password from '../../../components/userFrom/Password'
+import ConfirmPassword from '../../../components/userFrom/ConfirmPassword'
+import { Components } from 'antd/lib/date-picker/generatePicker';
 const { Header, Content } = Layout;
 interface Values {
     /* title: string;
@@ -36,7 +39,19 @@ const data = [
         icon: <MailOutlined />
     }
 ];
-
+const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+  interface Props{
+    titleType:string
+  }
 export interface State {
     isModalVisible: boolean
 }
@@ -59,7 +74,7 @@ class SecuritySettings extends React.Component<any, any> {
                                             avatar={item.icon}
                                             description={item.content}
                                         />
-                                        <div>{item.title === '手机绑定' ? '' : <CollectionsPage />}</div>
+                                        <div>{item.title === '手机绑定' ? '' : <CollectionsPage titleType="item.title"/>}</div>
                                     </List.Item>
                                 )}
                             />
@@ -80,9 +95,9 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     return (
         <Modal
             visible={visible}
-            title="Create a new collection"
-            okText="Create"
-            cancelText="Cancel"
+            title="修改密码"
+            okText="确认"
+            cancelText="取消"
             onCancel={onCancel}
             onOk={() => {
                 form
@@ -97,42 +112,41 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             }}
         >
             <Form
+            {...formItemLayout}
                 form={form}
                 layout="vertical"
                 name="form_in_modal"
-                initialValues={{ modifier: 'public' }}
             >
                 <Form.Item
                     name="title"
-                    label="Title"
-                    rules={[{ required: true, message: 'Please input the title of collection!' }]}
+                    label="原密码"
+                    rules={[{ required: true, message: '请输入原密码!' }]}
                 >
-                    <Input />
+                    <Input placeholder="请输入原密码"/>
                 </Form.Item>
-                <Form.Item name="description" label="Description">
-                    <Input type="textarea" />
-                </Form.Item>
-                <Form.Item name="modifier" className="collection-create-form_last-form-item">
-                    <Input />
-                </Form.Item>
+                <Password status={1}/>
+                <ConfirmPassword status={1}/>
             </Form>
         </Modal>
     );
 };
 //控制表单弹出隐藏
-const CollectionsPage = () => {
-    const [visible, setVisible] = useState(false);
+const [visible, setVisible] = useState(false);
+class CollectionsPage extends React.Component<Props> {
+    
 
-    const onCreate = (values: Values) => {
+    onCreate = (values: Values) => {
         console.log(values);
         setVisible(false);
     };
-
+render(){
     return (
         <div>
             <Button
                 type="link"
                 onClick={() => {
+                    console.log(this.props.titleType);
+                    
                     setVisible(true);
                 }}
             >
@@ -140,12 +154,13 @@ const CollectionsPage = () => {
         </Button>
             <CollectionCreateForm
                 visible={visible}
-                onCreate={onCreate}
+                onCreate={this.onCreate}
                 onCancel={() => {
                     setVisible(false);
                 }}
             />
         </div>
     );
+            }
 };
 export default SecuritySettings

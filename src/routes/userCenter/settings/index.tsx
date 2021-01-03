@@ -10,14 +10,15 @@ import {
 } from '@ant-design/icons';
 import Password from '../../../components/userFrom/Password'
 import ConfirmPassword from '../../../components/userFrom/ConfirmPassword'
-import { Components } from 'antd/lib/date-picker/generatePicker';
 const { Header, Content } = Layout;
 interface Values {
     /* title: string;
     description: string;
     modifier: string; */
 }
+
 interface CollectionCreateFormProps {
+    titleType: string;
     visible: boolean;
     onCreate: (values: Values) => void;
     onCancel: () => void;
@@ -41,20 +42,21 @@ const data = [
 ];
 const formItemLayout = {
     labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
+        xs: { span: 24 },
+        sm: { span: 8 },
     },
     wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
+        xs: { span: 24 },
+        sm: { span: 16 },
     },
-  };
-  interface Props{
-    titleType:string
-  }
+};
+export interface Props {
+    titleType: string
+}
 export interface State {
     isModalVisible: boolean
 }
+
 class SecuritySettings extends React.Component<any, any> {
     render() {
         return (
@@ -74,7 +76,7 @@ class SecuritySettings extends React.Component<any, any> {
                                             avatar={item.icon}
                                             description={item.content}
                                         />
-                                        <div>{item.title === '手机绑定' ? '' : <CollectionsPage titleType="item.title"/>}</div>
+                                        <div>{item.title === '手机绑定' ? '' : <CollectionsPage titleType={item.title} />}</div>
                                     </List.Item>
                                 )}
                             />
@@ -85,82 +87,111 @@ class SecuritySettings extends React.Component<any, any> {
         )
     }
 }
-//表单
-const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
-    visible,
-    onCreate,
-    onCancel,
-}) => {
-    const [form] = Form.useForm();
-    return (
-        <Modal
-            visible={visible}
-            title="修改密码"
-            okText="确认"
-            cancelText="取消"
-            onCancel={onCancel}
-            onOk={() => {
-                form
-                    .validateFields()
-                    .then(values => {
-                        form.resetFields();
-                        onCreate(values);
-                    })
-                    .catch(info => {
-                        console.log('Validate Failed:', info);
-                    });
-            }}
-        >
-            <Form
-            {...formItemLayout}
-                form={form}
-                layout="vertical"
-                name="form_in_modal"
-            >
-                <Form.Item
-                    name="title"
-                    label="原密码"
-                    rules={[{ required: true, message: '请输入原密码!' }]}
-                >
-                    <Input placeholder="请输入原密码"/>
-                </Form.Item>
-                <Password status={1}/>
-                <ConfirmPassword status={1}/>
-            </Form>
-        </Modal>
-    );
-};
 //控制表单弹出隐藏
-const [visible, setVisible] = useState(false);
-class CollectionsPage extends React.Component<Props> {
-    
-
-    onCreate = (values: Values) => {
+function CollectionsPage(props: any) {
+    const [visible, setVisible] = useState(false);
+    const onCreate = (values: Values) => {
         console.log(values);
         setVisible(false);
-    };
-render(){
+    }
     return (
         <div>
             <Button
                 type="link"
                 onClick={() => {
-                    console.log(this.props.titleType);
-                    
                     setVisible(true);
                 }}
             >
                 修改
         </Button>
             <CollectionCreateForm
+                titleType={props.titleType}
                 visible={visible}
-                onCreate={this.onCreate}
+                onCreate={onCreate}
                 onCancel={() => {
                     setVisible(false);
                 }}
             />
         </div>
     );
-            }
+}
+//表单
+const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
+    titleType,
+    visible,
+    onCreate,
+    onCancel,
+}) => {
+    const [form] = Form.useForm();
+    if (titleType === "登录密码") {
+        return (
+            <Modal
+                visible={visible}
+                title="修改密码"
+                okText="确认"
+                cancelText="取消"
+                onCancel={onCancel}
+                onOk={() => {
+                    form
+                        .validateFields()
+                        .then(values => {
+                            form.resetFields();
+                            onCreate(values);
+                        })
+                        .catch(info => {
+                            console.log('Validate Failed:', info);
+                        });
+                }}
+            >
+                <Form
+                    {...formItemLayout}
+                    form={form}
+                    layout="vertical"
+                    name="form_in_modal"
+                >
+                    <Form.Item
+                        name="title"
+                        label="原密码"
+                        rules={[{ required: true, message: '请输入原密码!' }]}
+                    >
+                        <Input placeholder="请输入原密码" />
+                    </Form.Item>
+                    <Password status={1} />
+                    <ConfirmPassword status={1} />
+                </Form>
+            </Modal>
+        );
+    } else {
+        return (
+            <Modal
+                visible={visible}
+                title="修改邮箱"
+                okText="确认"
+                cancelText="取消"
+                onCancel={onCancel}
+                onOk={() => {
+                    form
+                        .validateFields()
+                        .then(values => {
+                            form.resetFields();
+                            onCreate(values);
+                        })
+                        .catch(info => {
+                            console.log('Validate Failed:', info);
+                        });
+                }}
+            >
+                <Form
+                    {...formItemLayout}
+                    form={form}
+                    layout="vertical"
+                    name="form_in_modal"
+                >
+                    <Password status={1} />
+                    <ConfirmPassword status={1} />
+                </Form>
+            </Modal>
+        );
+    }
 };
 export default SecuritySettings

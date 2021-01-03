@@ -10,6 +10,8 @@ import {
 } from '@ant-design/icons';
 import Password from '../../../components/userFrom/Password'
 import ConfirmPassword from '../../../components/userFrom/ConfirmPassword'
+import Email from '../../../components/userFrom/Email'
+import Captcha from '../../../components/userFrom/Captcha'
 const { Header, Content } = Layout;
 interface Values {
     /* title: string;
@@ -188,7 +190,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                     name="form_in_modal"
                 >
                     <Password status={1} />
-                    <ConfirmPassword status={1} />
+                    <Email />
+                    <Captcha />
                 </Form>
             </Modal>
         );

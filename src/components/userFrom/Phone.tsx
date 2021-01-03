@@ -7,7 +7,7 @@ interface Props {
 
 class Phone extends React.Component<Props> {
     render() {
-        if (this.props.status == 1) {
+        if (this.props.status === 1) {
             return (
                 <Form.Item
                     name="phone"

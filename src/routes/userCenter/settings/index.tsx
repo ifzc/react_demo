@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-import { Card } from 'antd';
-import { Layout } from 'antd';
+import { Layout, Card, List, Modal, Button, Form, Input } from 'antd';
+
 import UserCenter from '../../../components/userCenter/UserCenter';
-import { List, Modal, Button, Form, Input } from 'antd';
-import {
-    MailOutlined,
-    MobileOutlined,
-    LockOutlined
-} from '@ant-design/icons';
+import {MailOutlined,MobileOutlined,LockOutlined} from '@ant-design/icons';
 import Password from '../../../components/userFrom/Password'
 import ConfirmPassword from '../../../components/userFrom/ConfirmPassword'
 import Email from '../../../components/userFrom/Email'

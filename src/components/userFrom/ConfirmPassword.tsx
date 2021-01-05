@@ -17,7 +17,7 @@ class ConfirmPassword extends React.Component<Props> {
           rules={[
             {
               required: true,
-              message: 'Please confirm your password!',
+              message: '请输入密码!',
             },
             ({ getFieldValue }) => ({
               validator(rule, value) {
@@ -33,12 +33,13 @@ class ConfirmPassword extends React.Component<Props> {
         </Form.Item>
       );
     } else {
+      return(
       <Form.Item
-        name="password"
+        name="confirm"
         rules={[
           {
             required: true,
-            message: 'Please confirm your password!',
+            message: '请输入密码!',
           },
           ({ getFieldValue }) => ({
             validator(rule, value) {
@@ -55,6 +56,7 @@ class ConfirmPassword extends React.Component<Props> {
           placeholder="Password"
         />
       </Form.Item>
+      )
     }
   }
 };

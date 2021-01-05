@@ -23,7 +23,7 @@ class Password extends React.Component<Props> {
           rules={[
             {
               required: true,
-              message: 'Please input your password!',
+              message: '请输入密码!',
               // }, {
               //   validator(rule, value) {
               //     //正则验证：let reg;
@@ -44,9 +44,10 @@ class Password extends React.Component<Props> {
         </Form.Item>
       );
     } else {
+      return(
       <Form.Item
         name="password"
-        rules={[{ required: true, message: 'Please input your Password!' }]}
+        rules={[{ required: true, message: '请输入密码!' }]}
       >
         <Input
           prefix={<LockOutlined className="site-form-item-icon" />}
@@ -54,6 +55,7 @@ class Password extends React.Component<Props> {
           placeholder="Password"
         />
       </Form.Item>
+      )
     }
   }
 };

@@ -65,7 +65,7 @@ export default function LoginLayout(Props: any) {
                             <img src="/images/login/login.png" alt="" style={{ 'width': '100%' }} />
                         </Col>
                         <Col className="gutter-row" span={12}>
-                            <div>{/* <Button type="primary" onClick={Login}>Primary Button</Button> */}<LoginFromCard /></div>
+                            <div><LoginFromCard Login={Login} /></div>
                         </Col>
                     </Row>
                     <div className="login-layout-text"><p>与云端防护中心规则联动</p>
@@ -80,31 +80,50 @@ export default function LoginLayout(Props: any) {
 }
 
 //tab
-function LoginFromCard() {
+function LoginFromCard(Login: any) {
     const callback = (key: any) => {
         console.log(key);
     }
+    const loginTab = { Login: Login, fromKey: 1 }
     return (
         <Card style={{ width: 350, 'margin': '0 auto' }}>
             <Tabs defaultActiveKey="1" onChange={callback}>
-                <TabPane tab="登录" key="1"><LoginFrom fromKey={1} /></TabPane>
-                <TabPane tab="注册" key="2"><LoginFrom fromKey={2} /></TabPane>
+                <TabPane tab="登录" key="1"><LoginFrom tab={loginTab} /></TabPane>
+                <TabPane tab="注册" key="2"><LoginFrom tab={2} /></TabPane>
             </Tabs>
         </Card>
     )
 }
 //from
-function LoginFrom(key: any) {
-    const onFinish = (values: any) => {
-        console.log('主',values);
-    };
+function LoginFrom(tab: any) {
+    console.log(tab)
     const [visible, setVisible] = useState(false);
     const [fromType, setFromType] = useState("免密登录");
+    const [manner, setManner] = useState(true);
+    const onFinish = (values: any) => {
+        //登陆成功执行
+        if (tab.tab.fromKey === 1) {
+            tab.tab.Login.Login()
+        }
+        console.log('主', values);
+    };
 
     const onCreate = (values: any) => {
         console.log('弹出层', values);
         setVisible(false);
     };
+    let mannerImg;
+    if (tab.tab.fromKey === 1) {
+        if (manner) {
+            mannerImg = <Form.Item>
+                <img src="/images/login/qrlogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(false) }} />
+            </Form.Item>
+        } else {
+            <Form.Item>
+                <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true) }} />
+            </Form.Item>
+        }
+    }
     return (
         <Form
             name="normal_login"
@@ -112,10 +131,16 @@ function LoginFrom(key: any) {
             initialValues={{ remember: true }}
             onFinish={onFinish}
         >
+            {mannerImg}
             <UserName status={0} />
             <Password status={0} />
-            {key.fromKey === 2 ?
-                <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha /></div>
+            {tab.tab === 2 ?
+                <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha />
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-form-button">同意条款并注册</Button>
+                    </Form.Item>
+                    <Form.Item>注册表示您同意<a href="https://www.duoyinsu.com/productService.html" target="_blank">《安识科技服务条款》</a></Form.Item>
+                </div>
                 : <div className="login-other-options">
                     <Form.Item>
                         <Button type="link" onClick={() => {
@@ -127,6 +152,9 @@ function LoginFrom(key: any) {
                             setFromType("重置密码")
                         }}>忘记密码</Button>
                     </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-form-button">登 录</Button>
+                    </Form.Item>
                 </div>}
             <CollectionCreateForm
                 fromType={fromType}
@@ -136,11 +164,6 @@ function LoginFrom(key: any) {
                     setVisible(false);
                 }}
             />
-            <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-form-button">
-                    Log in
-            </Button>
-            </Form.Item>
         </Form>
     );
 }
@@ -155,10 +178,11 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     const [form] = Form.useForm();
     return (
         <Modal
+            centered
             visible={visible}
             title={fromType}
-            okText="Create"
-            cancelText="Cancel"
+            okText="确认"
+            cancelText="取消"
             onCancel={onCancel}
             onOk={() => {
                 form

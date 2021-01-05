@@ -1,6 +1,85 @@
+@import '~antd/dist/antd.css';
+
+$body_padding: 100px;
+
 .login-layout {
-    .gutter-box {
-        padding: 8px 0;
-        background: #00a0e9;
+    background: #253b62;
+
+    .ant-layout-header {
+        padding: 0;
+        width: 100%;
+        background: #253b62;
+        margin: 5px 0;
+
+        .ant-menu {
+            color: #fff;
+            background: #253b62;
+            border: none;
+
+            a {
+                color: #fff;
+            }
+        }
     }
+
+    .ant-layout-content {
+        position: relative;
+        height: calc(100vh - #{$body_padding});
+
+        .ant-row .gutter-row {
+            line-height:calc(100vh - #{$body_padding});
+        }
+
+        .login-layout-text {
+            position: absolute;
+            top: 50%;
+            left: 20%;
+            p{
+                color: #fff;
+            }
+            p:nth-last-of-type(2) {
+                font-size: 20px;
+                margin-bottom: 6px;
+            }
+            p:nth-last-of-type(1) {
+                font-size: 29px;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .ant-layout-footer {
+        height: 40px;
+        color: #fff;
+        background: #253b62 !important;
+        text-align: center;
+        padding: 2px 0;
+        p{
+            font-size: 12px;
+            color: #999999;
+        }
+    }
+
+    .ant-divider {
+        border-top: 1px solid rgba(255,255,255,0.3);
+        margin: 0;
+    }
+    p{
+        margin: 0;
+        padding: 0;
+    }
+      #normal_login .login-form-button {
+        width: 100%;
+      }
+      .login-other-options{
+        button:nth-of-type(1){
+            float: left;
+        }
+        button:nth-of-type(2){
+            float: right;
+        }
+        button{
+            padding: 0;
+        }
+      }
 }

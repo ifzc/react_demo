@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './LoginLayout.scss'
-import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal } from 'antd';
+import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal, Tooltip } from 'antd';
 import UserName from '../components/userFrom/UserName'
 import Password from '../components/userFrom/Password'
 import ConfirmPassword from '../components/userFrom/ConfirmPassword'
@@ -31,14 +31,14 @@ export default function LoginLayout(Props: any) {
         <>
             <Layout className="login-layout">
                 <Header>
-                    <Row>
-                        <Col span={8} offset={4}><img src="/images/login/logo_blue.png" alt="" /></Col>
-                        <Col span={8}>
+                    <Row style={{ 'width': '1200px', 'margin': '0 auto' }}>
+                        <Col span={13}><img src="/images/login/logo_white.png" alt="" /></Col>
+                        <Col span={11}>
                             <Menu mode="horizontal">
                                 <Menu.Item>
                                     <a href="https://www.duoyinsu.com" target="_blank" rel="noopener noreferrer">安识科技<div></div></a>
                                 </Menu.Item>
-                                <SubMenu title="Navigation Three - Submenu">
+                                <SubMenu title="安全产品">
                                     <Menu.Item><a href="https://v.duoyinsu.com" target="_blank" rel="noopener noreferrer">伏特分布式漏洞扫描</a></Menu.Item>
                                     <Menu.Item><a href="https://insight.duoyinsu.com" target="_blank" rel="noopener noreferrer">洞悉威胁情报监控</a></Menu.Item>
                                     <Menu.Item>
@@ -60,7 +60,7 @@ export default function LoginLayout(Props: any) {
                 </Header>
                 <Divider />
                 <Content>
-                    <Row justify="space-between" align="middle" style={{ 'width': '60%', 'margin': '0 auto' }}>
+                    <Row justify="space-between" align="middle" style={{ 'width': '1100px', 'margin': '0 auto' }}>
                         <Col className="gutter-row gutter-row-img" span={12}>
                             <img src="/images/login/login.png" alt="" style={{ 'width': '100%' }} />
                         </Col>
@@ -115,56 +115,67 @@ function LoginFrom(tab: any) {
     let mannerImg;
     if (tab.tab.fromKey === 1) {
         if (manner) {
-            mannerImg = <Form.Item>
-                <img src="/images/login/qrlogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(false) }} />
-            </Form.Item>
+            mannerImg = <div className="manner-box">
+                <Tooltip placement="right" color={"#fff"} visible title={'使用扫码登录'}>
+                    <img src="/images/login/qrlogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(false) }} />
+                </Tooltip>
+            </div>
         } else {
-            <Form.Item>
-                <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true) }} />
-            </Form.Item>
+            mannerImg = <div>
+                <div className="manner-box">
+                    <Tooltip placement="right" color={"#fff"} visible title={'使用密码登录'}>
+                        <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true) }} />
+                    </Tooltip>
+                </div>
+                <div className="qr-code"><p className="qr-code-status-success">二维码加载成功, 请扫码进行确认!</p><img src="/images/login/qrcode.png" alt="" /><p className="qr-code-description">打开多因素令牌APP 或 微信小程序，进入“扫码登录”</p></div>
+            </div>
         }
     }
     return (
-        <Form
-            name="normal_login"
-            className="login-form"
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-        >
+        <div>
             {mannerImg}
-            <UserName status={0} />
-            <Password status={0} />
-            {tab.tab === 2 ?
-                <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha />
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">同意条款并注册</Button>
-                    </Form.Item>
-                    <Form.Item>注册表示您同意<a href="https://www.duoyinsu.com/productService.html" target="_blank">《安识科技服务条款》</a></Form.Item>
-                </div>
-                : <div className="login-other-options">
-                    <Form.Item>
-                        <Button type="link" onClick={() => {
-                            setVisible(true);
-                            setFromType("免密登录")
-                        }}>免密登录</Button>
-                        <Button type="link" onClick={() => {
-                            setVisible(true);
-                            setFromType("重置密码")
-                        }}>忘记密码</Button>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">登 录</Button>
-                    </Form.Item>
-                </div>}
-            <CollectionCreateForm
-                fromType={fromType}
-                visible={visible}
-                onCreate={onCreate}
-                onCancel={() => {
-                    setVisible(false);
-                }}
-            />
-        </Form>
+            { manner &&
+                <Form
+                    name="normal_login"
+                    className="login-form"
+                    initialValues={{ remember: true }}
+                    onFinish={onFinish}
+                >
+                    <UserName status={0} />
+                    <Password status={0} />
+                    {tab.tab === 2 ?
+                        <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha />
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit" className="login-form-button">同意条款并注册</Button>
+                            </Form.Item>
+                            <Form.Item>注册表示您同意<a href="https://www.duoyinsu.com/productService.html" target="_blank">《安识科技服务条款》</a></Form.Item>
+                        </div>
+                        : <div className="login-other-options">
+                            <Form.Item>
+                                <Button type="link" onClick={() => {
+                                    setVisible(true);
+                                    setFromType("免密登录")
+                                }}>免密登录</Button>
+                                <Button type="link" onClick={() => {
+                                    setVisible(true);
+                                    setFromType("重置密码")
+                                }}>忘记密码</Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit" className="login-form-button">登 录</Button>
+                            </Form.Item>
+                        </div>}
+                    <CollectionCreateForm
+                        fromType={fromType}
+                        visible={visible}
+                        onCreate={onCreate}
+                        onCancel={() => {
+                            setVisible(false);
+                        }}
+                    />
+                </Form>
+            }
+        </div>
     );
 }
 

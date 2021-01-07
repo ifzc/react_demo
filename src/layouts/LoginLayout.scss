@@ -133,19 +133,6 @@ $body_padding: 120px;
     width: 370px;
 }
 
-.ant-tooltip-inner {
-    color: #B7B7B7 !important;
-    box-shadow: none;
-}
-
-.ant-tooltip-inner,
-.ant-tooltip-arrow-content {
-    border: 1px solid #dadada;
-}
-
-.ant-tooltip {
-    z-index: auto;
-}
 
 .ant-tabs-nav-list {
     width: 100%;
@@ -158,4 +145,8 @@ $body_padding: 120px;
             margin: 0 auto;
         }
     }
+}
+.manner-box-span{
+    color: #B7B7B7;
+    margin-left: 10px;
 }

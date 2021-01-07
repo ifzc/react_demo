@@ -116,17 +116,13 @@ function LoginFrom(tab: any) {
     if (tab.tab.fromKey === 1) {
         if (manner) {
             mannerImg = <div className="manner-box">
-                <Tooltip placement="right" color={"#fff"} visible title={'使用扫码登录'}>
                     <img src="/images/login/qrlogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(false) }} />
-                </Tooltip>
+                    <span className="manner-box-span">使用扫码登录</span>
             </div>
         } else {
             mannerImg = <div>
-                <div className="manner-box">
-                    <Tooltip placement="right" color={"#fff"} visible title={'使用密码登录'}>
                         <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true) }} />
-                    </Tooltip>
-                </div>
+                        <span className="manner-box-span">使用密码登录</span>
                 <div className="qr-code"><p className="qr-code-status-success">二维码加载成功, 请扫码进行确认!</p><img src="/images/login/qrcode.png" alt="" /><p className="qr-code-description">打开多因素令牌APP 或 微信小程序，进入“扫码登录”</p></div>
             </div>
         }

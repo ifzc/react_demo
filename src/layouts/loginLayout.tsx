@@ -81,15 +81,24 @@ export default function LoginLayout(Props: any) {
 
 //tab
 function LoginFromCard(Login: any) {
+    const [tabLogin,setTabLogin]=useState("登录");
+    const [tabRegistered,setTabRegistered]=useState("注册");
+    const [activeKey,setActiveKey]=useState("1");
     const callback = (key: any) => {
-        console.log(key);
+        setActiveKey(key)
     }
-    const loginTab = { Login: Login, fromKey: 1 }
+    const changeActive=(key:any)=>{
+        setActiveKey(key)
+        setTabRegistered("注册新账号")
+        setTabLogin("绑定已有账号")
+    }
+    const loginTab = { Login: Login, fromKey: 1,changeActive:changeActive }
+    const registeredTab = { fromKey: 2,changeActive:changeActive }
     return (
         <Card style={{ width: 350, 'margin': '0 auto' }}>
-            <Tabs defaultActiveKey="1" onChange={callback}>
-                <TabPane tab="登录" key="1"><LoginFrom tab={loginTab} /></TabPane>
-                <TabPane tab="注册" key="2"><LoginFrom tab={2} /></TabPane>
+            <Tabs activeKey={activeKey} onChange={callback}>
+                <TabPane tab={tabLogin} key="1"><LoginFrom tab={loginTab} /></TabPane>
+                <TabPane tab={tabRegistered} key="2"><LoginFrom tab={registeredTab} /></TabPane>
             </Tabs>
         </Card>
     )
@@ -100,6 +109,8 @@ function LoginFrom(tab: any) {
     const [visible, setVisible] = useState(false);
     const [fromType, setFromType] = useState("免密登录");
     const [manner, setManner] = useState(true);
+    const [qrImg, setQrImg] = useState("");
+    let statusAccount;
     const onFinish = (values: any) => {
         //登陆成功执行
         if (tab.tab.fromKey === 1) {
@@ -107,23 +118,41 @@ function LoginFrom(tab: any) {
         }
         console.log('主', values);
     };
-
     const onCreate = (values: any) => {
         console.log('弹出层', values);
         setVisible(false);
     };
+    let test
+    const nameLogin=()=>{
+        setManner(false)
+        //定时请求接口=> 拿到二维码图片路径=> 更改img-url
+        test=setInterval(function(){ qrImgFun() },3000);
+        //需换一个位置
+        if(manner){
+            //清除定时事件
+           clearInterval(test)
+        }
+    }
+    function qrImgFun(){
+        console.log("Hello");
+        setQrImg("/images/login/qrcode.png");
+        //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
+        statusAccount="1";
+        tab.tab.changeActive(statusAccount)   
+    }
+    //调用父组件传过来的事件 changeActive
     let mannerImg;
     if (tab.tab.fromKey === 1) {
         if (manner) {
             mannerImg = <div className="manner-box">
-                    <img src="/images/login/qrlogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(false) }} />
+                    <img src="/images/login/qrlogin.png" alt="" style={{ 'width': '30px' }} onClick={nameLogin} />
                     <span className="manner-box-span">使用扫码登录</span>
             </div>
         } else {
             mannerImg = <div>
-                        <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true) }} />
+                        <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true) }}/>
                         <span className="manner-box-span">使用密码登录</span>
-                <div className="qr-code"><p className="qr-code-status-success">二维码加载成功, 请扫码进行确认!</p><img src="/images/login/qrcode.png" alt="" /><p className="qr-code-description">打开多因素令牌APP 或 微信小程序，进入“扫码登录”</p></div>
+                <div className="qr-code"><p className="qr-code-status-success">二维码加载成功, 请扫码进行确认!</p><img src={qrImg} alt="" /><p className="qr-code-description">打开多因素令牌APP 或 微信小程序，进入“扫码登录”</p></div>
             </div>
         }
     }
@@ -139,7 +168,7 @@ function LoginFrom(tab: any) {
                 >
                     <UserName status={0} />
                     <Password status={0} />
-                    {tab.tab === 2 ?
+                    {tab.tab.fromKey === 2 ?
                         <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha />
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">同意条款并注册</Button>

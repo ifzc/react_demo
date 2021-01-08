@@ -53,7 +53,7 @@ class ConfirmPassword extends React.Component<Props> {
       >
         <Input
           type="password"
-          placeholder="Password"
+          placeholder="确认密码"
         />
       </Form.Item>
       )

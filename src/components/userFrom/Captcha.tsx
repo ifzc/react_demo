@@ -6,7 +6,7 @@ render(){
   return (
     <Form.Item>
     <Row gutter={8}>
-      <Col span={12}>
+      <Col span={16}>
         <Form.Item
           name="captcha"
           noStyle
@@ -15,8 +15,8 @@ render(){
           <Input placeholder="验证码" />
         </Form.Item>
       </Col>
-      <Col span={12}>
-        <Button>发送验证码</Button>
+      <Col span={8}>
+        <Button type="primary">发送验证码</Button>
       </Col>
     </Row>
   </Form.Item>

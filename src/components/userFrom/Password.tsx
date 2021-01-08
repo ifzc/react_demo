@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Tooltip, } from 'antd';
-import { QuestionCircleOutlined, LockOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 interface Props {
   status: number
@@ -50,9 +50,8 @@ class Password extends React.Component<Props> {
         rules={[{ required: true, message: '请输入密码!' }]}
       >
         <Input
-          prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
-          placeholder="Password"
+          placeholder="请输入密码"
         />
       </Form.Item>
       )

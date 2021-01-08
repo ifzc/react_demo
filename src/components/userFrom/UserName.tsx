@@ -20,7 +20,7 @@ class UserName extends React.Component<Props> {
               </Tooltip>
             </span>
           }
-          rules={[{ required: true, message: 'Please input your Username!' }]}
+          rules={[{ required: true, message: '请输入用户名!' }]}
         >
           <Input placeholder="用户名" />
         </Form.Item>
@@ -29,9 +29,9 @@ class UserName extends React.Component<Props> {
       return (
         <Form.Item
           name="username"
-          rules={[{ required: true, message: 'Please input your Username!' }]}
+          rules={[{ required: true, message: '请输入用户名!' }]}
         >
-          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
+          <Input placeholder="请输入用户名" />
         </Form.Item>
       );
     }

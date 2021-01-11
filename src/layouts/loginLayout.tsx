@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import request from '../utils/http'
 import './LoginLayout.scss'
 import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal, Tooltip } from 'antd';
 import UserName from '../components/userFrom/UserName'
@@ -114,7 +115,16 @@ function LoginFrom(tab: any) {
     const onFinish = (values: any) => {
         //登陆成功执行
         if (tab.tab.fromKey === 1) {
+            let dataLogin={method: 'post',url: '/login',params:{...values} }
+            request(dataLogin).then((res:any) => {
+            console.log(res);
+        })
             tab.tab.Login.Login()
+        }else{
+            let dataRegistered={method: 'POST',url: '/register',params: values}
+            request(dataRegistered).then((res:any) => {
+                console.log(res);
+            })
         }
         console.log('主', values);
     };

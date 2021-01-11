@@ -8,7 +8,7 @@ render(){
     <Row gutter={8}>
       <Col span={16}>
         <Form.Item
-          name="captcha"
+          name="code"
           noStyle
           rules={[{ required: true, message: '请输入您获得的验证码!' }]}
         >

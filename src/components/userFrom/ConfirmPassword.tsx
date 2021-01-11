@@ -10,7 +10,7 @@ class ConfirmPassword extends React.Component<Props> {
     if (this.props.status === 1) {
       return (
         <Form.Item
-          name="confirm"
+          name="password2"
           label="确认密码"
           dependencies={['password']}
           hasFeedback
@@ -35,7 +35,7 @@ class ConfirmPassword extends React.Component<Props> {
     } else {
       return(
       <Form.Item
-        name="confirm"
+        name="password2"
         rules={[
           {
             required: true,

@@ -11,7 +11,7 @@ class UserName extends React.Component<Props> {
     if (this.props.status === 1) {
       return (
         <Form.Item
-          name="username"
+          name="name"
           label={
             <span>
               用户名&nbsp;
@@ -28,7 +28,7 @@ class UserName extends React.Component<Props> {
     } else {
       return (
         <Form.Item
-          name="username"
+          name="name"
           rules={[{ required: true, message: '请输入用户名!' }]}
         >
           <Input placeholder="请输入用户名" />

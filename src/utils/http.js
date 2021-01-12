@@ -1,10 +1,7 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
-import { notification } from 'antd'
 
 import 'nprogress/nprogress.css'
-
-const env = process.env.REACT_APP_BUILD_ENV
 
 // 状态码错误信息
 const codeMessage = {
@@ -41,6 +38,8 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
+    // 配置 headers 相关
+axios.defaults.headers['Apollo-Token'] = localStorage.getItem('Token')
     NProgress.done()
     return response
   },
@@ -52,55 +51,9 @@ axios.interceptors.response.use(
   }
 )
 
-// 配置 headers 相关
-axios.defaults.headers['Apollo-Token'] = localStorage.getItem('Token')
+
 axios.defaults.withCredentials = true
 axios.defaults.timeout = 100000
-axios.defaults.baseURL = "http://192.160.0.122:8081/api/auth";
+axios.defaults.baseURL = "http://139.217.130.227:8081/api/auth";
 
-export default function request(opt) {
-  console.log("404")
-  console.log(opt)
-  // 调用 axios api，统一拦截
-  return axios(opt)
-    .then((response) => {
-      // 打印业务错误提示
-      if (response.data && response.data.errorCode !== 0) {
-        // errorCode 401 跳转登录
-        if (response.data.errorCode === 401) {
-          window.location.href = '/error'
-        }
-      }
-
-      return { ...response }
-    })
-    .catch((error) => {
-      console.log(error)
-
-      // 请求配置发生的错误
-      if (!error.response) {
-        return console.log('Error', error.message)
-      }
-
-      // 响应时状态码处理
-      const status = error.response.status
-      const errortext = codeMessage[status] || error.response.statusText
-      if (env === 'testing') {
-        if (status !== 401) {
-          notification.error({
-            message: `请求错误 ${status}`,
-            description: errortext
-          })
-        } else {
-          this.props.history.push({
-            pathname: '/error'
-          })
-        }
-      } else {
-        // http status 401 跳转登录
-        if (status === 401) {
-          window.location.href = '/'
-        }
-      }
-    })
-}
+export default axios

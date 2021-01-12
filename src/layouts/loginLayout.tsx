@@ -23,11 +23,7 @@ interface CollectionCreateFormProps {
     onCancel: () => void;
 }
 
-export default function LoginLayout(Props: any) {
-    const Login = () => {
-        // 接受父组件传递过来的函数，调用并传值给父组件
-        Props.login(true)
-    }
+export default function LoginLayout() {
     return (
         <>
             <Layout className="login-layout">
@@ -66,7 +62,7 @@ export default function LoginLayout(Props: any) {
                             <img src="/images/login/login.png" alt="" style={{ 'width': '100%' }} />
                         </Col>
                         <Col className="gutter-row" span={12}>
-                            <div><LoginFromCard Login={Login} /></div>
+                            <div><LoginFromCard /></div>
                         </Col>
                     </Row>
                     <div className="login-layout-text"><p>与云端防护中心规则联动</p>
@@ -81,7 +77,7 @@ export default function LoginLayout(Props: any) {
 }
 
 //tab
-function LoginFromCard(Login: any) {
+function LoginFromCard() {
     const [tabLogin, setTabLogin] = useState("登录");
     const [tabRegistered, setTabRegistered] = useState("注册");
     const [activeKey, setActiveKey] = useState("1");
@@ -93,7 +89,7 @@ function LoginFromCard(Login: any) {
         setTabRegistered("注册新账号")
         setTabLogin("绑定已有账号")
     }
-    const loginTab = { Login: Login, fromKey: 1, changeActive: changeActive }
+    const loginTab = { fromKey: 1, changeActive: changeActive }
     const registeredTab = { fromKey: 2, changeActive: changeActive }
     return (
         <Card style={{ width: 350, 'margin': '0 auto' }}>
@@ -121,8 +117,8 @@ function LoginFrom(tab: any) {
                     if (res.data.status === "200") {
                         console.log(res.data);
                         localStorage.setItem("Token", res.data.token);
+                        window.location.reload()
                         message.success(res.data.msg);
-                        tab.tab.Login.Login()
                     }
                 }
             })
@@ -219,7 +215,7 @@ function LoginFrom(tab: any) {
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">同意条款并注册</Button>
                             </Form.Item>
-                            <Form.Item>注册表示您同意<a href="https://www.duoyinsu.com/productService.html" target="_blank">《安识科技服务条款》</a></Form.Item>
+                            <Form.Item>注册表示您同意<a href="https://www.duoyinsu.com/productService.html" target="_blank" rel="noopener noreferrer">《安识科技服务条款》</a></Form.Item>
                         </div>
                         : <div className="login-other-options">
                             <Form.Item>

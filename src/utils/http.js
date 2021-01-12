@@ -4,7 +4,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 // 状态码错误信息
-const codeMessage = {
+/* const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
@@ -20,12 +20,16 @@ const codeMessage = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。'
-}
+} */
 
 // 添加一个请求拦截器，用于设置请求过渡状态
 axios.interceptors.request.use(
   (config) => {
     // 请求开始，蓝色过渡滚动条开始出现
+    let token=localStorage.getItem('Token')
+    /* if(token===null || token===undefined || token===""){
+      window.location.href ="/"
+    } */
     NProgress.start()
     return config
   },

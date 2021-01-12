@@ -32,6 +32,7 @@ class BasicLayout extends React.Component<any, any> {
         this.setState({ collapsed });
     };
     render() {
+        console.log(localStorage.getItem('Token'))
         const { collapsed } = this.state;
         return (
             <Layout style={{ minHeight: '100vh' }}>
@@ -64,7 +65,7 @@ class BasicLayout extends React.Component<any, any> {
                                 </Menu.Item>
                                 <SubMenu key="sub1" title="User">
                                     <Menu.Item key="/Personal/BasicData"><Link to="/user/info">个人资料</Link></Menu.Item>
-                                    <Menu.Item key="/Page10"><Link to="/Page10">退出</Link></Menu.Item>
+                                    <Menu.Item onClick={()=>{localStorage.removeItem('Token');window.location.reload()}}><Link to="/login">退出</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>
                         </Header>

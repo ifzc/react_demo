@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Spin } from 'antd'
 import { Route, Switch, Redirect } from 'react-router-dom';
 
+/* const LoginLayout = lazy(() => import('./LoginLayout')) */
 const Dashboard = lazy(() => import('../routes/dashboard'))
 const UserInfo = lazy(() => import('../routes/userCenter/userInfo'))
 const UserSettings = lazy(() => import('../routes/userCenter/settings'))
@@ -12,7 +13,7 @@ class RouterSwitch extends React.Component {
         return (
             <Suspense fallback={<div className="suspense-box"><Spin size="large" /></div>}>
                 <Switch>
-                    <Route path='/' exact render={() => (
+                    <Route path='/dashboard' exact render={() => (
                         <Redirect to='/dashboard' />
                     )} />
                     <Route path='/dashboard' component={Dashboard} />

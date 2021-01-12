@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Tooltip, } from 'antd';
-import { QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 interface Props {
   status: number

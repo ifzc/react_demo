@@ -101,21 +101,55 @@ function LoginFromCard() {
     )
 }
 //from
+let dysUid="";
 function LoginFrom(tab: any) {
     const [visible, setVisible] = useState(false);
     const [fromType, setFromType] = useState("免密登录");
     const [manner, setManner] = useState(true);
     const [qrImg, setQrImg] = useState("");
     //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
-    const [dysUid, setDysUid] = useState("");
-    useEffect(() => {
-        if(dysUid!==""){let uid=dysUid;console.log(uid);setDysUid(uid)}
-        console.log("zhixing1")
+    
+    let eventId="";
+    const nameLogin=()=> {
+        setManner(false)
+        //定时请求接口=> 拿到二维码图片路径=> 更改img-url
+        axios.get('/code').then((res: any) => {
+            if (res.data.status === "200") {
+                setQrImg(res.data.code_info.qrcode_url);
+                eventId=res.data.code_info.event_id;
+                qrLogob()
+            } else {
+                message.error(res.data.msg);
+            }
+        })
+    }
+    const qrLogob=()=> {
+        let event_id = { event_id: eventId }
+        axios.post('/code', event_id).then((res: any) => {
+            if (res.data.status === "200") {
+                localStorage.setItem("Token", res.data.token);
+                window.location.reload()
+                message.success(res.data.msg);
+            } else if (res.data.status === "201") {
+                statusAccount = "1";
+                tab.tab.changeActive(statusAccount)
+                dysUid=res.data.dys_uid           
+            }
+            //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
+            else if (res.data.status === "202") {
+                statusAccount = "2";
+                tab.tab.changeActive(statusAccount)
+                dysUid=res.data.dys_uid
+                console.log("202")
+            } 
+        })
         console.log(dysUid)
-      });
+        setTimeout((function () { qrLogob() }), 2000);
+    }
     let statusAccount;
     const onFinish = (values: any) => {
         //登陆成功执行
+        console.log(dysUid)
         if (tab.tab.fromKey === 1) {
             if(tab.tab.tabLogin === "登录"){
             axios.post('/login', values).then((res: any) => {
@@ -150,7 +184,7 @@ function LoginFrom(tab: any) {
                 }
             })
         }else{
-            values.dys_uid=dysUid 
+            values.dys_uid= dysUid
             console.log(dysUid)
             axios.post('/bind', values).then((res: any) => {
                 if (res.data.status === "200") {
@@ -201,43 +235,7 @@ function LoginFrom(tab: any) {
         console.log('弹出层', values);
         setVisible(false);
     };
-    //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
-    let eventId="";
-    const nameLogin=()=> {
-        setManner(false)
-        //定时请求接口=> 拿到二维码图片路径=> 更改img-url
-        axios.get('/code').then((res: any) => {
-            if (res.data.status === "200") {
-                setQrImg(res.data.code_info.qrcode_url);
-                eventId=res.data.code_info.event_id;
-                qrLogob()
-            } else {
-                message.error(res.data.msg);
-            }
-        })
-    }
-    const qrLogob=()=> {
-        let event_id = { event_id: eventId }
-        axios.post('/code', event_id).then((res: any) => {
-            if (res.data.status === "200") {
-                localStorage.setItem("Token", res.data.token);
-                window.location.reload()
-                message.success(res.data.msg);
-            } else if (res.data.status === "201") {
-                statusAccount = "1";
-                tab.tab.changeActive(statusAccount)
-                setDysUid(res.data.dys_uid)
-                console.log(dysUid)               
-            }
-            //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
-            else if (res.data.status === "202") {
-                statusAccount = "2";
-                tab.tab.changeActive(statusAccount)
-                setDysUid(res.data.dys_uid)
-            } 
-        })
-        setTimeout((function () { qrLogob() }), 2000);
-    }
+    
     //调用父组件传过来的事件 changeActive
     let mannerImg;
     if (tab.tab.fromKey === 1) {

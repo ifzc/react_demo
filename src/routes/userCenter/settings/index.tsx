@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Layout, Card, List, Modal, Button, Form, Input } from 'antd';
+import axios from '../../../utils/http'
+import { Layout, Card, List, Modal, Button, Form, Input, message } from 'antd';
 
 import UserCenter from '../../../components/userCenter/UserCenter';
-import {MailOutlined,MobileOutlined,LockOutlined} from '@ant-design/icons';
+import { MailOutlined, MobileOutlined, LockOutlined } from '@ant-design/icons';
 import Password from '../../../components/userFrom/Password'
 import ConfirmPassword from '../../../components/userFrom/ConfirmPassword'
 import Email from '../../../components/userFrom/Email'
@@ -37,16 +38,10 @@ const data = [
         icon: <MailOutlined />
     }
 ];
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-    },
-};
+const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  };
 export interface Props {
     titleType: string
 }
@@ -88,7 +83,25 @@ class SecuritySettings extends React.Component<any, any> {
 function CollectionsPage(props: any) {
     const [visible, setVisible] = useState(false);
     const onCreate = (values: Values) => {
-        console.log(values);
+        console.log(props.titleType);
+        console.log("console.log(props.titleType);");
+        if(props.titleType==="登录密码"){
+        axios.post('/user', values).then((res: any) => {
+            if (res.status === 200) {
+                if (res.data.status === "200") {
+                    message.success(res.data.msg);
+                }
+            }
+        })
+    }else{
+        axios.put('/user', values).then((res: any) => {
+            if (res.status === 200) {
+                if (res.data.status === "200") {
+                    message.success(res.data.msg);
+                }
+            }
+        })
+    }
         setVisible(false);
     }
     return (
@@ -120,76 +133,49 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     onCancel,
 }) => {
     const [form] = Form.useForm();
-    if (titleType === "登录密码") {
-        return (
-            <Modal
-                visible={visible}
-                title="修改密码"
-                okText="确认"
-                cancelText="取消"
-                onCancel={onCancel}
-                onOk={() => {
-                    form
-                        .validateFields()
-                        .then(values => {
-                            form.resetFields();
-                            onCreate(values);
-                        })
-                        .catch(info => {
-                            console.log('Validate Failed:', info);
-                        });
-                }}
+    return (
+        <Modal
+            visible={visible}
+            title={titleType}
+            okText="确认"
+            cancelText="取消"
+            onCancel={onCancel}
+            onOk={() => {
+                form
+                    .validateFields()
+                    .then(values => {
+                        form.resetFields();
+                        onCreate(values);
+                    })
+                    .catch(info => {
+                        console.log('Validate Failed:', info);
+                    });
+            }}
+        >
+            <Form
+                form={form}
+                layout="vertical"
+                name="form_in_modal"
             >
-                <Form
-                    {...formItemLayout}
-                    form={form}
-                    layout="vertical"
-                    name="form_in_modal"
-                >
-                    <Form.Item
-                        name="title"
-                        label="原密码"
-                        rules={[{ required: true, message: '请输入原密码!' }]}
-                    >
-                        <Input placeholder="请输入原密码" />
-                    </Form.Item>
-                    <Password status={1} />
-                    <ConfirmPassword status={1} />
-                </Form>
-            </Modal>
-        );
-    } else {
-        return (
-            <Modal
-                visible={visible}
-                title="修改邮箱"
-                okText="确认"
-                cancelText="取消"
-                onCancel={onCancel}
-                onOk={() => {
-                    form
-                        .validateFields()
-                        .then(values => {
-                            form.resetFields();
-                            onCreate(values);
-                        })
-                        .catch(info => {
-                            console.log('Validate Failed:', info);
-                        });
-                }}
-            >
-                <Form
-                    {...formItemLayout}
-                    form={form}
-                    layout="vertical"
-                    name="form_in_modal"
-                >
-                    <Password status={1} />
-                    <Email />
-                    <Captcha />
-                </Form>
-            </Modal>
-        );
-    }
+                <Form.Item
+                            name="old_password"
+                            label="原密码"
+                            rules={[{ required: true, message: '请输入原密码!' }]}
+                        >
+                            <Input placeholder="请输入原密码" />
+                        </Form.Item>
+                {titleType === "登录密码" ?
+                    <div>
+                        <Password status={1} />
+                        <ConfirmPassword status={1} />
+                    </div>
+                    : <div>
+                        <Email />
+                        <Captcha />
+                    </div>
+                }
+            </Form>
+        </Modal>
+    );
 };
 export default SecuritySettings

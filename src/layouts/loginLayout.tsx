@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from '../utils/http'
 import './LoginLayout.scss'
 import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal, message } from 'antd';

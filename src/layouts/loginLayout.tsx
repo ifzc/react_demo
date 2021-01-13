@@ -308,6 +308,10 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     onCancel,
 }) => {
     const [form] = Form.useForm();
+    const setCaptchaValue={
+        form:form,
+        fromType:"3"
+    }
     return (
         <Modal
             centered
@@ -335,7 +339,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 initialValues={{ modifier: 'public' }}
             >
                 <Phone status={0} />
-                <Captcha />
+                <Captcha value={setCaptchaValue}/>
                 {fromType === "重置密码" &&
                     <div>
                         <Password status={0} />

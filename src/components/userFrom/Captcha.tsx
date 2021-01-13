@@ -1,8 +1,22 @@
-import React from 'react';
-import { Form, Input, Row, Col, Button } from 'antd';
+import React,{useState} from 'react';
+import axios from '../../utils/http'
+import { Form, Input, Row, Col, Button, message } from 'antd';
 
-class Captcha extends React.Component {
-render(){
+function Captcha(props:any) {
+  console.log(props.value.form.getFieldValue('phone'))
+  const sendCode=()=>{
+    let param={
+      phone:props.value.form.getFieldValue('phone'),
+      type:props.value.fromType
+    }
+    axios.post('/send',param).then((res: any) => {
+      if (res.data.status === "200") {
+        message.success(res.data.msg);
+      }else{
+        message.error(res.data.msg);
+      }
+    })
+  }
   return (
     <Form.Item>
     <Row gutter={8}>
@@ -16,11 +30,10 @@ render(){
         </Form.Item>
       </Col>
       <Col span={8}>
-        <Button type="primary">发送验证码</Button>
+        <Button type="primary" onClick={sendCode}>发送验证码</Button>
       </Col>
     </Row>
   </Form.Item>
   );
-}
 };
 export default Captcha

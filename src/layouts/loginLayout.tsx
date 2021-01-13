@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import axios from '../utils/http'
 import './LoginLayout.scss'
 import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal, message } from 'antd';
@@ -89,8 +89,8 @@ function LoginFromCard() {
         setTabRegistered("注册新账号")
         setTabLogin("绑定已有账号")
     }
-    const loginTab = { fromKey: 1, changeActive: changeActive }
-    const registeredTab = { fromKey: 2, changeActive: changeActive }
+    const loginTab = { fromKey: 1, changeActive: changeActive, tabLogin:tabLogin }
+    const registeredTab = { fromKey: 2, changeActive: changeActive, tabRegistered:tabRegistered }
     return (
         <Card style={{ width: 350, 'margin': '0 auto' }}>
             <Tabs activeKey={activeKey} onChange={callback}>
@@ -108,21 +108,39 @@ function LoginFrom(tab: any) {
     const [qrImg, setQrImg] = useState("");
     //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
     const [dysUid, setDysUid] = useState("");
+    useEffect(() => {
+        if(dysUid!==""){let uid=dysUid;console.log(uid);setDysUid(uid)}
+        console.log("zhixing1")
+        console.log(dysUid)
+      });
     let statusAccount;
     const onFinish = (values: any) => {
         //登陆成功执行
         if (tab.tab.fromKey === 1) {
+            if(tab.tab.tabLogin === "登录"){
             axios.post('/login', values).then((res: any) => {
                 if (res.status === 200) {
                     if (res.data.status === "200") {
-                        console.log(res.data);
                         localStorage.setItem("Token", res.data.token);
                         window.location.reload()
                         message.success(res.data.msg);
                     }
                 }
             })
+        }else{
+            values.dys_uid=dysUid
+            axios.put('/bind', values).then((res: any) => {
+                if (res.status === 200) {
+                    if (res.data.status === "200") {
+                        localStorage.setItem("Token", res.data.token);
+                        window.location.reload()
+                        message.success(res.data.msg);
+                    }
+                }
+            })
+        }
         } else {
+            if(tab.tab.tabRegistered === "注册"){
             axios.post('/register', values).then((res: any) => {
                 if (res.data.status === "200") {
                     localStorage.setItem("Token", res.data.token);
@@ -130,10 +148,31 @@ function LoginFrom(tab: any) {
                 } else {
                     message.error(res.data.msg);
                 }
-
+            })
+        }else{
+            values.dys_uid=dysUid 
+            console.log(dysUid)
+            axios.post('/bind', values).then((res: any) => {
+                if (res.data.status === "200") {
+                    localStorage.setItem("Token", res.data.token);
+                    message.success(res.data.msg);
+                } else {
+                    message.error(res.data.msg);
+                }
             })
         }
+    }
     };
+    /* const axiosPost=(url:any,values:any)=>{
+        axios.post(url, values).then((res: any) => {
+            if (res.data.status === "200") {
+                localStorage.setItem("Token", res.data.token);
+                message.success(res.data.msg);
+            } else {
+                message.error(res.data.msg);
+            }
+        })
+    } */
     const onCreate = (values: any) => {
         if (fromType === "免密登录") {
             axios.post('/free_login', values).then((res: any) => {
@@ -162,6 +201,7 @@ function LoginFrom(tab: any) {
         console.log('弹出层', values);
         setVisible(false);
     };
+    //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
     let eventId="";
     const nameLogin=()=> {
         setManner(false)
@@ -184,16 +224,16 @@ function LoginFrom(tab: any) {
                 window.location.reload()
                 message.success(res.data.msg);
             } else if (res.data.status === "201") {
-                setDysUid(res.data.dys_uid)
-                console.log(dysUid)
                 statusAccount = "1";
                 tab.tab.changeActive(statusAccount)
+                setDysUid(res.data.dys_uid)
+                console.log(dysUid)               
             }
             //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
             else if (res.data.status === "202") {
-                setDysUid(res.data.dys_uid)
                 statusAccount = "2";
                 tab.tab.changeActive(statusAccount)
+                setDysUid(res.data.dys_uid)
             } 
         })
         setTimeout((function () { qrLogob() }), 2000);

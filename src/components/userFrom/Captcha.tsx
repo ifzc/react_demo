@@ -3,6 +3,7 @@ import axios from '../../utils/http'
 import { Form, Input, Row, Col, Button, message } from 'antd';
 
 function Captcha(props:any) {
+  //props.value.form[0].getFieldValue('phone')
   console.log(props.value.form.getFieldValue('phone'))
   const sendCode=()=>{
     let param={

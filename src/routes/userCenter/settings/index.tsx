@@ -133,6 +133,10 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     onCancel,
 }) => {
     const [form] = Form.useForm();
+    const setCaptchaValue={
+        form:form,
+        fromType:"2"
+    }
     return (
         <Modal
             visible={visible}
@@ -171,7 +175,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                     </div>
                     : <div>
                         <Email />
-                        <Captcha />
+                        <Captcha value={setCaptchaValue}/>
                     </div>
                 }
             </Form>

@@ -252,20 +252,26 @@ function LoginFrom(tab: any) {
             </div>
         }
     }
+    const [form] = Form.useForm();
+    form.resetFields();
+    const setCaptchaValue={
+        form:form,
+        fromType:"1"
+    }
     return (
         <div>
             {mannerImg}
             { manner &&
                 <Form
                     name="normal_login"
+                    form={form}
                     className="login-form"
-                    initialValues={{ remember: true }}
                     onFinish={onFinish}
                 >
                     <UserName status={0} />
                     <Password status={0} />
                     {tab.tab.fromKey === 2 ?
-                        <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha />
+                        <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha value={setCaptchaValue}/>
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">同意条款并注册</Button>
                             </Form.Item>
@@ -308,9 +314,15 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     onCancel,
 }) => {
     const [form] = Form.useForm();
+    form.resetFields();
     const setCaptchaValue={
         form:form,
-        fromType:"3"
+        fromType:""
+    }
+    if(fromType === "重置密码"){
+        setCaptchaValue.fromType="2"
+    }else{
+        setCaptchaValue.fromType="3"
     }
     return (
         <Modal

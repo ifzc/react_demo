@@ -3,9 +3,21 @@ import axios from '../../utils/http'
 import { Form, Input, Row, Col, Button, message } from 'antd';
 
 function Captcha(props:any) {
-  //props.value.form[0].getFieldValue('phone')
-  console.log(props.value.form.getFieldValue('phone'))
+  
   const sendCode=()=>{
+    if(props.value.type==="email"){
+      let paramEmail={
+        phone:props.value.form.getFieldValue('email'),
+        type:props.value.fromType
+      }
+      axios.put('/send',paramEmail).then((res: any) => {
+        if (res.data.status === "200") {
+          message.success(res.data.msg);
+        }else{
+          message.error(res.data.msg);
+        }
+      })
+    }else{
     let param={
       phone:props.value.form.getFieldValue('phone'),
       type:props.value.fromType
@@ -18,6 +30,7 @@ function Captcha(props:any) {
       }
     })
   }
+}
   return (
     <Form.Item>
     <Row gutter={8}>

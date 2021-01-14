@@ -18,7 +18,7 @@ const UserInfo=()=> {
     useEffect(() => {
         axios.get('/user').then((res: any) => {
             if (res.data.status === "200") {
-                setInfo(res.data)
+                setInfo(res.data.msg)
             }
         })
       },[]);

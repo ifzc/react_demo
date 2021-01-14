@@ -143,13 +143,11 @@ function LoginFrom(tab: any) {
                 console.log("202")
             } 
         })
-        console.log(dysUid)
         setTimeout((function () { qrLogob() }), 2000);
     }
     let statusAccount;
     const onFinish = (values: any) => {
         //登陆成功执行
-        console.log(dysUid)
         if (tab.tab.fromKey === 1) {
             if(tab.tab.tabLogin === "登录"){
             axios.post('/login', values).then((res: any) => {
@@ -196,14 +194,17 @@ function LoginFrom(tab: any) {
             })
         }
     }
+    form.resetFields();
     };
     /* const axiosPost=(url:any,values:any)=>{
         axios.post(url, values).then((res: any) => {
+            if(res.status === 200){
             if (res.data.status === "200") {
                 localStorage.setItem("Token", res.data.token);
                 message.success(res.data.msg);
             } else {
                 message.error(res.data.msg);
+            }
             }
         })
     } */
@@ -238,7 +239,7 @@ function LoginFrom(tab: any) {
     
     //调用父组件传过来的事件 changeActive
     let mannerImg;
-    if (tab.tab.fromKey === 1) {
+    if (tab.tab.fromKey === 1 && tab.tab.tabLogin!=="绑定已有账号") {
         if (manner) {
             mannerImg = <div className="manner-box">
                 <img src="/images/login/qrlogin.png" alt="" style={{ 'width': '30px' }} onClick={nameLogin} />
@@ -253,7 +254,6 @@ function LoginFrom(tab: any) {
         }
     }
     const [form] = Form.useForm();
-    form.resetFields();
     const setCaptchaValue={
         form:form,
         fromType:"1"
@@ -314,7 +314,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     onCancel,
 }) => {
     const [form] = Form.useForm();
-    form.resetFields();
+    //form.resetFields();
     const setCaptchaValue={
         form:form,
         fromType:""
@@ -336,8 +336,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 form
                     .validateFields()
                     .then(values => {
-                        form.resetFields();
                         onCreate(values);
+                        form.resetFields();
                     })
                     .catch(info => {
                         console.log('Validate Failed:', info);

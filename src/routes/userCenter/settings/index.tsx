@@ -135,7 +135,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     const [form] = Form.useForm();
     const setCaptchaValue={
         form:form,
-        fromType:"2"
+        fromType:"1",
+        type:"email"
     }
     return (
         <Modal

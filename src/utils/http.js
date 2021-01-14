@@ -23,14 +23,17 @@ import 'nprogress/nprogress.css'
 } */
 
 // 添加一个请求拦截器，用于设置请求过渡状态
+axios.defaults.headers['Apollo-Token'] = localStorage.getItem('Token')
 axios.interceptors.request.use(
   (config) => {
+    console.log("request")
     // 请求开始，蓝色过渡滚动条开始出现
     let token=localStorage.getItem('Token')
-    /* if(token===null || token===undefined || token===""){
-      window.location.href ="/"
-    } */
-    NProgress.start()
+    if(token===null || token===undefined || token===""){
+      window.location.reload()
+    }else{
+      NProgress.start()
+    }
     return config
   },
   (error) => {
@@ -43,7 +46,6 @@ axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
     // 配置 headers 相关
-axios.defaults.headers['Apollo-Token'] = localStorage.getItem('Token')
     NProgress.done()
     return response
   },

@@ -7,6 +7,7 @@ const Dashboard = lazy(() => import('../routes/dashboard'))
 const UserInfo = lazy(() => import('../routes/userCenter/userInfo'))
 const UserSettings = lazy(() => import('../routes/userCenter/settings'))
 const UserLog = lazy(() => import('../routes/userCenter/log'))
+const ShareAccount = lazy(() => import('../routes/userCenter/share'))
 
 class RouterSwitch extends React.Component {
     render() {
@@ -20,6 +21,7 @@ class RouterSwitch extends React.Component {
                     <Route path='/user/info' component={UserInfo} />
                     <Route path='/user/settings' component={UserSettings} />
                     <Route path='/user/log' component={UserLog} />
+                    <Route path='/user/share' component={ShareAccount} />
                 </Switch>
             </Suspense>
         )

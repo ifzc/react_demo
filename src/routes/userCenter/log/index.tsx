@@ -2,12 +2,16 @@ import React from 'react';
 import { Card } from 'antd';
 import { Layout } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
-import { Form, Input, Button, Table, Tag, Space} from 'antd';
+import { Form, Input, Button, Table} from 'antd';
+import Time from '../../../components/table/Time'
+import PaginationNum from '../../../components/table/pagination'
 const { Header, Content } = Layout;
 
-class SetUp extends React.Component {
-
-    render() {
+function SetUp(props:any){
+const changeSize=(value:any)=>{
+  console.log("changeSize")
+console.log(value)
+}
         return (
             <Layout className="personal-active">
                 <UserCenter />
@@ -16,13 +20,13 @@ class SetUp extends React.Component {
                     <Content style={{ margin: '16px' }}>
                         <Card style={{ textAlign: 'left' }}>
                         <FormLayoutDemo />
-                        <Table columns={LogTable} dataSource={data} />
+                        <Table columns={LogTable} pagination={false} dataSource={data} />
+                        <PaginationNum change={changeSize}/>
                         </Card>
                     </Content>
                 </Layout>
             </Layout>
         );
-    }
 }
 //
 const FormLayoutDemo = () => {
@@ -33,15 +37,17 @@ const FormLayoutDemo = () => {
         <Form
           layout='inline'
           form={form}
+          style={{margin:'0 0 20px 0'}}
         >
-          <Form.Item label="Field A">
-            <Input placeholder="input placeholder" />
-          </Form.Item>
-          <Form.Item label="Field B">
-            <Input placeholder="input placeholder" />
+          <Form.Item label="日志搜索：">
+            <Input placeholder="请输入" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary">Submit</Button>
+            <Time />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" style={{margin:'0 10px 0 0'}}>查询</Button>
+            <Button>重置</Button>
           </Form.Item>
         </Form>
       </>
@@ -50,74 +56,46 @@ const FormLayoutDemo = () => {
   //表格
   const LogTable = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text:any) => <a href="##">{text}</a>,
+      title: '操作',
+      dataIndex: 'operating',
+      key: '1',
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'IP',
+      dataIndex: 'ip',
+      key: '2',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (tags:any) => (
-        <>
-          {tags.map((tag:any)=> {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text:any, record:any) => (
+      title: '获取时间',
+      key: '3',
+      dataIndex: 'getTime',
+      /* render: (text:any, record:any) => (
         <Space size="middle">
           <a href="##">Invite {record.name}</a>
           <a href="##">Delete</a>
         </Space>
-      ),
+      ), */
     },
   ];
   
   const data = [
     {
       key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
+      operating: 'operating',
+      ip: "duoyinsu",
+      getTime: '2020-2-20',
     },
     {
       key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
+      operating: 'operating',
+      ip: "duoyinsu",
+      getTime: '2020-2-20',
     },
     {
       key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
+      operating: 'operating',
+      ip: "duoyinsu",
+      getTime: '2020-2-20',
     },
   ];
 export default SetUp

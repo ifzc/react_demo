@@ -21,7 +21,7 @@ class UserCenter extends React.Component {
                 <Link to="/user/log">操作日志</Link>
               </Menu.Item>
               <Menu.Item key="4">
-                <Link to="/Page2">共享账号</Link>
+                <Link to="/user/share">共享账号</Link>
               </Menu.Item>
             </Menu>
         </Sider>

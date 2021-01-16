@@ -1,18 +1,26 @@
 import { Form, Modal } from 'antd';
+import { useState, useEffect } from 'react';
+function ModalFrom(params: any) {
+    console.log(params.value)
+    const [visible, setVisible] = useState(false)
+    useEffect(() => {
+        setVisible(params.value.visible)
+    }, [params])
 
-function ModalFrom(params:any) {
-    console.log(params)
     const [form] = Form.useForm();
-    const onCancel=()=>{
+    const onCancel = () => {
         form.resetFields();
+        setVisible(false)
     }
-    const onCreate=(value:any)=>{
+    const onCreate = (value: any) => {
         console.log(value)
+        params.value.params(value)
+        setVisible(false)
     }
     return (
         <Modal
             centered
-            visible={params.value.visible}
+            visible={visible}
             title={params.value.fromType}
             okText="确认"
             cancelText="取消"
@@ -29,6 +37,12 @@ function ModalFrom(params:any) {
                     });
             }}
         >
+            <Form
+                form={form}
+                name="form_in_modal"
+            >
+
+            </Form>
         </Modal>
     );
 };

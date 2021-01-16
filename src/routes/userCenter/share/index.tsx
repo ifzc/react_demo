@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Layout, Table, Button } from 'antd';
+import { Card, Layout, Table, Button, Form, Input } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
 import ModalFrom from '../../../components/userFrom/Modal'
 const { Header, Content } = Layout;
@@ -77,7 +77,6 @@ export default function ShareAccount() {
     fromType: fromType,
     getFromValue: getFromValue
   }
-
   return (
     <Layout className="personal-active">
       <UserCenter />
@@ -88,7 +87,15 @@ export default function ShareAccount() {
             <Button type="primary" style={{ float: 'right', margin: '0 0 20px 0' }} onClick={addChildrenAccount}>添加子账号</Button>
             <Table columns={LogTable} dataSource={data} />
           </Card>
-          <ModalFrom value={madalValue}></ModalFrom>
+          <ModalFrom value={madalValue}>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Please input your password!' }]}
+            >
+              <Input.Password />
+            </Form.Item>
+          </ModalFrom>
         </Content>
       </Layout>
     </Layout>

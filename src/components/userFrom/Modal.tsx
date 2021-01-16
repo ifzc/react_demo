@@ -1,6 +1,7 @@
 import { Form, Modal } from 'antd';
 import { useState, useEffect } from 'react';
 function ModalFrom(params: any) {
+    console.log(params)
     const [visible, setVisible] = useState(false)
     useEffect(() => {
         setVisible(params.value.visible)
@@ -13,7 +14,7 @@ function ModalFrom(params: any) {
     }
     const onCreate = (value: any) => {
         console.log(value)
-        params.value.params(value)
+        params.value.getFromValue(value)
         setVisible(false)
     }
     return (
@@ -35,12 +36,11 @@ function ModalFrom(params: any) {
                         console.log('Validate Failed:', info);
                     });
             }}
+        ><Form
+            form={form}
+            name="form_in_modal"
         >
-            <Form
-                form={form}
-                name="form_in_modal"
-            >
-
+                {params.children}
             </Form>
         </Modal>
     );

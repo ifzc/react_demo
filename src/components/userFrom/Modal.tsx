@@ -1,7 +1,6 @@
 import { Form, Modal } from 'antd';
 import { useState, useEffect } from 'react';
 function ModalFrom(params: any) {
-    console.log(params.value)
     const [visible, setVisible] = useState(false)
     useEffect(() => {
         setVisible(params.value.visible)

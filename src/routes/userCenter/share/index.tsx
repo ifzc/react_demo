@@ -55,19 +55,18 @@ export default function ShareAccount() {
     }
   ];
 
-  let num = 1
+  //let num = 1
   const addChildrenAccount = () => {
     console.log("添加子账号")
-    num++
-    setClickNum(num)
+    setClickNum(clickNum + 1)
     setVisible(true)
-    setFromType("添加子账号")
+    setFromType("添加子账号");
+    console.log("ending")
   }
   const editChildrenAccount = () => {
     setVisible(true)
     setFromType("编辑子账号")
-    num++
-    setClickNum(num)
+    setClickNum(clickNum + 1)
   }
   const getFromValue = (value: any) => {
     console.log(value)

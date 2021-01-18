@@ -2,6 +2,11 @@ import React,{useState} from 'react';
 import axios from '../../utils/http'
 import { Form, Input, Row, Col, Button, message } from 'antd';
 
+const buttonItemLayout =
+  {
+      wrapperCol: { span: 18, offset: 6 },
+    };
+
 function Captcha(props:any) {
   
   const sendCode=()=>{
@@ -32,7 +37,7 @@ function Captcha(props:any) {
   }
 }
   return (
-    <Form.Item>
+    <Form.Item {...buttonItemLayout}>
     <Row gutter={8}>
       <Col span={16}>
         <Form.Item

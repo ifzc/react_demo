@@ -1,15 +1,23 @@
 import { useState } from 'react';
-import { Card, Layout, Table, Button, Form, Input } from 'antd';
+import { Card, Layout, Table, Button, Form, Radio, Tooltip } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
 import ModalFrom from '../../../components/userFrom/Modal'
+import UserName from '../../../components/userFrom/UserName'
+import Password from '../../../components/userFrom/Password'
+import ConfirmPassword from '../../../components/userFrom/ConfirmPassword'
+import Email from '../../../components/userFrom/Email'
+import Phone from '../../../components/userFrom/Phone'
+import Captcha from '../../../components/userFrom/Captcha'
 const { Header, Content } = Layout;
-
-
-
+const formItemLayout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 },
+}
 export default function ShareAccount() {
   const [visible, setVisible] = useState(false)
   const [fromType, setFromType] = useState("添加子账号")
   const [clickNum, setClickNum] = useState(0)
+  const [form] = Form.useForm();
   //表格
   const LogTable = [
     {
@@ -57,16 +65,17 @@ export default function ShareAccount() {
 
   //let num = 1
   const addChildrenAccount = () => {
-    console.log("添加子账号")
     setClickNum(clickNum + 1)
     setVisible(true)
     setFromType("添加子账号");
-    console.log("ending")
   }
   const editChildrenAccount = () => {
     setVisible(true)
-    setFromType("编辑子账号")
     setClickNum(clickNum + 1)
+    form.setFieldsValue({
+      authority: "",
+      alert:""
+    })
   }
   const getFromValue = (value: any) => {
     console.log(value)
@@ -75,6 +84,7 @@ export default function ShareAccount() {
     clickNum: clickNum,
     visible: visible,
     fromType: fromType,
+    from: form,
     getFromValue: getFromValue
   }
   return (
@@ -88,13 +98,39 @@ export default function ShareAccount() {
             <Table columns={LogTable} dataSource={data} />
           </Card>
           <ModalFrom value={madalValue}>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]}
+            <Form
+              {...formItemLayout}
+              form={form}
+              initialValues={{
+                authority: "a",
+                alert:"接受"
+              }}
+              name="form_in_modal"
+              className="labelFrom"
             >
-              <Input.Password />
-            </Form.Item>
+              <UserName status={1} />
+              <Password status={1} />
+              <ConfirmPassword status={1} />
+              <Email />
+              <Captcha status={1} />
+              <Phone status={1} />
+              <Captcha status={1} />
+              <Form.Item label="权限" name="authority">
+                <Radio.Group buttonStyle="solid">
+                  <Radio.Button value="a">只读</Radio.Button>
+                  <Tooltip placement="top" title="可读、可执行操作、不可下发任务">
+                  <Radio.Button value="b">部分权限</Radio.Button>
+                  </Tooltip>
+                  <Radio.Button value="d">同主账号权限</Radio.Button>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="短信或邮箱告警" name="alert">
+                <Radio.Group buttonStyle="solid">
+                  <Radio.Button value="接受">接受</Radio.Button>
+                  <Radio.Button value="不接受">不接受</Radio.Button>
+                </Radio.Group>
+              </Form.Item>
+            </Form>
           </ModalFrom>
         </Content>
       </Layout>

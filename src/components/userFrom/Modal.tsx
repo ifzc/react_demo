@@ -1,20 +1,18 @@
-import { Form, Modal } from 'antd';
+import { Modal } from 'antd';
 import { useState, useEffect } from 'react';
 function ModalFrom(params: any) {
-    console.log(params)
     const [visible, setVisible] = useState(false)
     useEffect(() => {
         setVisible(params.value.visible)
     }, [params])
 
-    const [form] = Form.useForm();
     const onCancel = () => {
-        form.resetFields();
+        params.value.from.resetFields();
         setVisible(false)
     }
     const onCreate = (value: any) => {
-        console.log(value)
         params.value.getFromValue(value)
+        params.value.from.resetFields();
         setVisible(false)
     }
     return (
@@ -26,22 +24,17 @@ function ModalFrom(params: any) {
             cancelText="取消"
             onCancel={onCancel}
             onOk={() => {
-                form
+                params.value.from
                     .validateFields()
-                    .then(values => {
+                    .then((values:any) => {
                         onCreate(values);
-                        form.resetFields();
                     })
-                    .catch(info => {
+                    .catch((info:any) => {
                         console.log('Validate Failed:', info);
                     });
             }}
-        ><Form
-            form={form}
-            name="form_in_modal"
         >
                 {params.children}
-            </Form>
         </Modal>
     );
 };

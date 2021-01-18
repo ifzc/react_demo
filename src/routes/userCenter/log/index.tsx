@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
 import { Form, Input, Button, Table} from 'antd';
 import Time from '../../../components/table/Time'
-import PaginationNum from '../../../components/table/pagination'
+import PaginationNum from '../../../components/table/Pagination'
 const { Header, Content } = Layout;
 
 function SetUp(props:any){

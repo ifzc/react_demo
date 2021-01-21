@@ -5,16 +5,17 @@ import ProTable from '@ant-design/pro-table';
 import PaginationNum from './Pagination'
 
 export default function TableList(params: any) {
+
     useEffect(() => {
         setColumnsStateMap(params.props.columnsStateMap)
     }, [params])
 
     const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({});
-
+    //分页
     const changeSize = (size: any) => {
         params.props.changeSize(size)
     }
-
+    //选择列
     const onChange = (selectedRowKeys: any, selectedRows: any) => {
         params.props.selectedChange(selectedRowKeys, selectedRows)
     }

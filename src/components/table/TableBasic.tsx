@@ -2,14 +2,16 @@ import React from 'react';
 import { Table } from 'antd';
 import PaginationNum from './Pagination'
 
-export default function TableBasic(props: any) {
+export default function TableBasic(params: any) {
     const changeSize = (size: any) => {
-        console.log(size)
+        params.props.changeSize(size)
     }
     return (
         <div>
-            <Table columns={props.columns} dataSource={props.data} pagination={props.false} />
-            <PaginationNum change={changeSize} />
+            <Table columns={params.props.columns} dataSource={params.props.data} pagination={false} />
+            {!params.props.isShow &&
+                <PaginationNum change={changeSize} />
+            }
         </div>
     );
 };

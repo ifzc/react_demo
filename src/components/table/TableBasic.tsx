@@ -8,7 +8,7 @@ export default function TableBasic(props: any) {
     }
     return (
         <div>
-            <Table columns={props.columns} dataSource={props.data} pagination={false} />
+            <Table columns={props.columns} dataSource={props.data} pagination={props.false} />
             <PaginationNum change={changeSize} />
         </div>
     );

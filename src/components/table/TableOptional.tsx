@@ -1,55 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Space, Table } from 'antd';
 import type { ColumnsState } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import PaginationNum from './Pagination'
 
-const data = [
-    {
-        key: 1,
-        name: 'Edward King 1',
-        age: 32,
-        address: `London, Park Lane no.1`,
-    }
-];
+export default function TableList(params: any) {
+    useEffect(() => {
+        setColumnsStateMap(params.props.columnsStateMap)
+    }, [params])
 
-const columns = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name'
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age'
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address'
-    },
-];
+    const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({});
 
-export default function TableList(props: any) {
-    const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({
-        address: {
-            show: false,
-            order: 2,
-        },
-    });
     const changeSize = (size: any) => {
-        console.log(size)
+        params.props.changeSize(size)
     }
+
+    const onChange = (selectedRowKeys: any, selectedRows: any) => {
+        params.props.selectedChange(selectedRowKeys, selectedRows)
+    }
+
+    const rowSelection = {
+        onChange: onChange,
+        selections: [
+            Table.SELECTION_ALL,
+            Table.SELECTION_INVERT]
+    }
+
     return (
         <div>
             <ProTable
                 rowKey="key"
-                columns={columns}
+                columns={params.props.columns}
                 columnsStateMap={columnsStateMap}
-                rowSelection={{
-                    selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
-                }}
+                rowSelection={rowSelection}
                 tableAlertRender={({ selectedRowKeys, onCleanSelected }) => (
                     <Space size={24}>
                         <span>
@@ -59,7 +42,7 @@ export default function TableList(props: any) {
                     </Space>
                 )}
                 tableAlertOptionRender={false}
-                dataSource={data}
+                dataSource={params.props.data}
                 options={{
                     //搜索
                     search: false,

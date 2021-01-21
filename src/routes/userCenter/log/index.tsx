@@ -2,15 +2,20 @@ import React from 'react';
 import { Card } from 'antd';
 import { Layout } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
-import { Form, Input, Button, Table} from 'antd';
+import { Form, Input, Button} from 'antd';
 import Time from '../../../components/table/Time'
-import PaginationNum from '../../../components/table/Pagination'
+import TableBasic from '../../../components/table/TableBasic'
 const { Header, Content } = Layout;
 
-function SetUp(props:any){
+export default function SetUp(props:any){
 const changeSize=(value:any)=>{
-  console.log("changeSize")
 console.log(value)
+}
+let transferData={
+  columns:columns,
+  data:data,
+  changeSize:changeSize,
+  isShow:false
 }
         return (
             <Layout className="personal-active">
@@ -20,8 +25,7 @@ console.log(value)
                     <Content style={{ margin: '16px' }}>
                         <Card style={{ textAlign: 'left' }}>
                         <FormLayoutDemo />
-                        <Table columns={LogTable} pagination={false} dataSource={data} />
-                        <PaginationNum change={changeSize}/>
+                        <TableBasic props={transferData}/>
                         </Card>
                     </Content>
                 </Layout>
@@ -54,7 +58,7 @@ const FormLayoutDemo = () => {
     );
   };
   //表格
-  const LogTable = [
+  const columns = [
     {
       title: '操作',
       dataIndex: 'operating',
@@ -98,4 +102,3 @@ const FormLayoutDemo = () => {
       getTime: '2020-2-20',
     },
   ];
-export default SetUp

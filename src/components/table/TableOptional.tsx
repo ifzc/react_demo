@@ -38,7 +38,7 @@ export default function TableList(params: any) {
                     <Space size={24}>
                         <span>
                             已选 {selectedRowKeys.length} 项
-            <a style={{ marginLeft: 8 }} onClick={onCleanSelected}>取消选择</a>
+            <a style={{ marginLeft: 8 }} onClick={onCleanSelected} href='##'>取消选择</a>
                         </span>
                     </Space>
                 )}

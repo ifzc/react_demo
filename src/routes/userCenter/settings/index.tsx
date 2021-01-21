@@ -38,10 +38,6 @@ const data = [
         icon: <MailOutlined />
     }
 ];
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
 export interface Props {
     titleType: string
 }

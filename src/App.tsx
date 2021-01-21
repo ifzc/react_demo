@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 
 import BasicLayout from './layouts/BasicLayout'
 import LoginLayout from './layouts/LoginLayout'

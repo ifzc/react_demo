@@ -10,18 +10,18 @@ export default function PaginationNum(params: any) {
         console.log(current, pageSize);
         num.current = current
         num.pageSize = pageSize
-        params.change(num)
+        params.change.changeSize(num)
     }
     //	页码改变的回调，参数是改变后的页码及每页条数
     const onChange = (current: number, pageSize: any) => {
         console.log(current, pageSize);
         num.current = current
         num.pageSize = pageSize
-        params.change(num)
+        params.change.changeSize(num)
     }
     return (
         <Pagination
-            total={85}
+            total={params.change.count}
             showSizeChanger
             showQuickJumper
             showTotal={(total: any) => `共${total}条`}

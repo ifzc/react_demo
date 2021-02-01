@@ -37,7 +37,7 @@ export default function AssetsTable() {
             dataIndex: 'age',
             key: 'age',
             render: () => [
-                <EditOutlined onClick={addLabel}/>
+                <EditOutlined onClick={addLabel} />
             ]
         },
         {
@@ -45,7 +45,7 @@ export default function AssetsTable() {
             dataIndex: 'address',
             key: 'address',
             render: () => [
-                <EditOutlined onClick={addPrincipal}/>
+                <EditOutlined onClick={addPrincipal} />
             ]
         },
         {
@@ -116,25 +116,30 @@ export default function AssetsTable() {
             key: 'hosttype',
         },
     ];
-    const getFromValue = (value: any) => {
-        console.log(value)
-    }
-    const addPrincipal = () => {
-        setClickNum(clickNum + 1)
-        setVisible(true)
-        setFromType("编辑标签");
-    }
-    const addLabel= () =>{
-        setClickNum(clickNum + 1)
-        setVisible(true)
-        setFromType("编辑负责人");
-    }
+
     const [visible, setVisible] = useState(false)
     const [fromType, setFromType] = useState("编辑标签")
     const [clickNum, setClickNum] = useState(0)
     const [form] = Form.useForm();
+
+    const getFromValue = (value: any) => {
+        console.log('model表单值', value)
+    }
+    //编辑标签 负责人
+    const addPrincipal = () => {
+        addAssetsTag("编辑负责人")
+    }
+    const addLabel = () => {
+        addAssetsTag("编辑标签")
+    }
+    const addAssetsTag = (title: string) => {
+        setClickNum(clickNum + 1)
+        setVisible(true)
+        setFromType(title);
+    }
     //设置tag
-    let tagList=['Tage1','Tage2','Tage3','Tage4','Tage5']
+    let tagList = ['Tage1', 'Tage2', 'Tage3', 'Tage4', 'Tage5']
+    //moder
     let madalValue = {
         clickNum: clickNum,
         visible: visible,
@@ -142,6 +147,7 @@ export default function AssetsTable() {
         from: form,
         getFromValue: getFromValue
     }
+    //列表相关
     const columnsStateMap = {
         version: {
             show: false,
@@ -165,18 +171,19 @@ export default function AssetsTable() {
         changeSize: changeSize,
         selectedChange: selectedChange
     }
+    
     return (
         <div>
-        <TableOptional props={p} />
-        <ModalFrom value={madalValue}>
+            <TableOptional props={p} />
+            <ModalFrom value={madalValue}>
                 <Form
                     form={form}
                     name="form_in_modal"
                     className="labelFrom"
                 >
-                    <Form.Item label="标签" name="label"><TagGroup tags={tagList}/></Form.Item>
-                    <Form.Item label="历史标签" name="labelH"><TagGroup tags={tagList}/></Form.Item>
-                    </Form>
+                    <Form.Item label="标签" name="label"><TagGroup tags={tagList} /></Form.Item>
+                    <Form.Item label="历史标签" name="labelH"><TagGroup tags={tagList} /></Form.Item>
+                </Form>
             </ModalFrom>
         </div>
     )

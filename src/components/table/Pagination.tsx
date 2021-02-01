@@ -27,7 +27,7 @@ export default function PaginationNum(params: any) {
             showTotal={(total: any) => `共${total}条`}
             onShowSizeChange={onShowSizeChange}
             onChange={onChange}
-            style={{float:'right',margin:'20px 0 0 0'}}
+            className="table-pagination"
         />
     );
 };

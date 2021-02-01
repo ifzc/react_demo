@@ -11,8 +11,21 @@ const data = [
         age: 32,
         address: `London, Park Lane no.1`,
         location: "上海市",
-        status: '在线',
+        status: '离线',
         system: "公网",
+        system1: "windows",
+        update_time: "2020-01-09 16:15:35",
+        version: "1.22.5",
+        hosttype: "宿主机"
+    },
+    {
+        key: 2,
+        hostname: 'Edward King 1',
+        age: 32,
+        address: `London, Park Lane no.1`,
+        location: "上海市",
+        status: '在线',
+        system: "内网",
         system1: "windows",
         update_time: "2020-01-09 16:15:35",
         version: "1.22.5",
@@ -120,6 +133,7 @@ export default function AssetsTable() {
     const [visible, setVisible] = useState(false)
     const [fromType, setFromType] = useState("编辑标签")
     const [clickNum, setClickNum] = useState(0)
+    const [buttonD, setButtonD] = useState(true)
     const [form] = Form.useForm();
 
     const getFromValue = (value: any) => {
@@ -163,18 +177,30 @@ export default function AssetsTable() {
     const selectedChange = (key: Array<number>, row: any) => {
         console.log('key', key)
         console.log('row', row)
+        if(key.length!=0){
+            setButtonD(false)
+        }else{
+            setButtonD(true)
+        }
     }
-    let p = {
+    let assetsTable = {
+        count:11,
         columns: columns,
         data: data,
         columnsStateMap: columnsStateMap,
         changeSize: changeSize,
         selectedChange: selectedChange
     }
-    
+
     return (
         <div>
-            <TableOptional props={p} />
+            <TableOptional props={assetsTable} />
+            <div className="table-button">
+                <Button disabled={buttonD}>编辑标签</Button>
+                <Button disabled={buttonD}>编辑负责人</Button>
+                <Button disabled={buttonD}>导出报告</Button>
+                <Button disabled={buttonD}>一键安全检查</Button>
+                </div>
             <ModalFrom value={madalValue}>
                 <Form
                     form={form}

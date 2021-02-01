@@ -1,6 +1,6 @@
 import { Modal } from 'antd';
 import { useState, useEffect } from 'react';
-function ModalFrom(params: any) {
+export default function ModalFrom(params: any) {
     const [visible, setVisible] = useState(false)
     useEffect(() => {
         setVisible(params.value.visible)
@@ -38,4 +38,3 @@ function ModalFrom(params: any) {
         </Modal>
     );
 };
-export default ModalFrom

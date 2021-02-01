@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Tooltip, Button, Form } from 'antd';
+import { Tooltip, Button, Form, Tag, Input } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import TableOptional from '../../components/table/TableOptional'
 import TagGroup from '../../components/table/Tag'
@@ -50,7 +50,7 @@ export default function AssetsTable() {
             dataIndex: 'age',
             key: 'age',
             render: () => [
-                <EditOutlined onClick={addLabel} />
+                <EditOutlined onClick={()=>addAssetsTag('编辑标签',false)} />
             ]
         },
         {
@@ -58,7 +58,7 @@ export default function AssetsTable() {
             dataIndex: 'address',
             key: 'address',
             render: () => [
-                <EditOutlined onClick={addPrincipal} />
+                <EditOutlined onClick={()=>addAssetsTag('编辑负责人',false)} />
             ]
         },
         {
@@ -111,7 +111,7 @@ export default function AssetsTable() {
             key: 'option',
             valueType: 'option',
             render: () => [
-                <Button type="primary">详情</Button>
+                <Button type="primary" size="small">查看</Button>
             ],
         },
         {
@@ -134,25 +134,25 @@ export default function AssetsTable() {
     const [fromType, setFromType] = useState("编辑标签")
     const [clickNum, setClickNum] = useState(0)
     const [buttonD, setButtonD] = useState(true)
+    const [tag, setTag] = useState({add:[''],history:['']})
     const [form] = Form.useForm();
 
     const getFromValue = (value: any) => {
         console.log('model表单值', value)
     }
     //编辑标签 负责人
-    const addPrincipal = () => {
-        addAssetsTag("编辑负责人")
-    }
-    const addLabel = () => {
-        addAssetsTag("编辑标签")
-    }
-    const addAssetsTag = (title: string) => {
+    const addAssetsTag = (title: string,showTag:boolean) => {
+        if(!showTag){
+            console.log(1)
+            setTag({add:[],history:['Tage1', 'Tage2']})
+        }else{
+            console.log(2)
+            setTag({add:['Tage1', 'Tage2', 'Tage3'],history:['Tage1', 'Tage2']})
+        }
         setClickNum(clickNum + 1)
         setVisible(true)
         setFromType(title);
     }
-    //设置tag
-    let tagList = ['Tage1', 'Tage2', 'Tage3', 'Tage4', 'Tage5']
     //moder
     let madalValue = {
         clickNum: clickNum,
@@ -171,7 +171,7 @@ export default function AssetsTable() {
             order: 2,
         }
     }
-    const changeSize = (size: any) => {
+    const changeSize = (size: number) => {
         console.log("size", size)
     }
     const selectedChange = (key: Array<number>, row: any) => {
@@ -196,8 +196,8 @@ export default function AssetsTable() {
         <div>
             <TableOptional props={assetsTable} />
             <div className="table-button">
-                <Button disabled={buttonD}>编辑标签</Button>
-                <Button disabled={buttonD}>编辑负责人</Button>
+                <Button disabled={buttonD} onClick={()=>addAssetsTag('编辑标签',true)}>编辑标签</Button>
+                <Button disabled={buttonD} onClick={()=>addAssetsTag('编辑负责人',true)}>编辑负责人</Button>
                 <Button disabled={buttonD}>导出报告</Button>
                 <Button disabled={buttonD}>一键安全检查</Button>
                 </div>
@@ -207,8 +207,8 @@ export default function AssetsTable() {
                     name="form_in_modal"
                     className="labelFrom"
                 >
-                    <Form.Item label="标签" name="label"><TagGroup tags={tagList} /></Form.Item>
-                    <Form.Item label="历史标签" name="labelH"><TagGroup tags={tagList} /></Form.Item>
+                    <Form.Item label="标签" name="label"><TagGroup tags={tag.add} /></Form.Item>
+                    <Form.Item label="历史标签" name="labelH"><TagGroup tags={tag.history} /></Form.Item>
                 </Form>
             </ModalFrom>
         </div>

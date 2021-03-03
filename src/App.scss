@@ -14,3 +14,26 @@
 background: none;
 border: none;
 }
+//tag
+.site-tag-plus {
+  background: #fff;
+  border-style: dashed;
+}
+.edit-tag {
+  user-select: none;
+}
+.tag-input {
+  width: 78px;
+  margin-right: 8px;
+  vertical-align: top;
+}
+.table-button{
+  padding-left: 24px;
+  button{
+    margin-right: 10px;
+  }
+}
+.table-pagination{
+  float:right;
+  padding-right: 15px;
+}

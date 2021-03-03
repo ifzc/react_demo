@@ -4,7 +4,7 @@ export default function ModalFrom(params: any) {
     const [visible, setVisible] = useState(false)
     useEffect(() => {
         setVisible(params.value.visible)
-    }, [params])
+    }, [params.value.clickNum])
 
     const onCancel = () => {
         params.value.from.resetFields();

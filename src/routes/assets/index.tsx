@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tooltip, Button, Form, Tag, Input } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import TableOptional from '../../components/table/TableOptional'
@@ -50,7 +50,7 @@ export default function AssetsTable() {
             dataIndex: 'age',
             key: 'age',
             render: () => [
-                <EditOutlined onClick={()=>addAssetsTag('编辑标签',false)} />
+                <EditOutlined onClick={() => addAssetsTag('编辑标签', false)} />
             ]
         },
         {
@@ -58,7 +58,7 @@ export default function AssetsTable() {
             dataIndex: 'address',
             key: 'address',
             render: () => [
-                <EditOutlined onClick={()=>addAssetsTag('编辑负责人',false)} />
+                <EditOutlined onClick={() => addAssetsTag('编辑负责人', false)} />
             ]
         },
         {
@@ -134,25 +134,26 @@ export default function AssetsTable() {
     const [fromType, setFromType] = useState("编辑标签")
     const [clickNum, setClickNum] = useState(0)
     const [buttonD, setButtonD] = useState(true)
-    const [tag, setTag] = useState({add:[''],history:['']})
+    const [tag, setTag] = useState({ add: [''], history: [''] })
     const [form] = Form.useForm();
 
     const getFromValue = (value: any) => {
         console.log('model表单值', value)
     }
     //编辑标签 负责人
-    const addAssetsTag = (title: string,showTag:boolean) => {
-        if(!showTag){
+    const addAssetsTag = (title: string, showTag: boolean) => {
+        if (!showTag) {
             console.log(1)
-            setTag({add:[],history:['Tage1', 'Tage2']})
-        }else{
+            setTag({ add: [], history: ['Tage1', 'Tage2'] })
+        } else {
             console.log(2)
-            setTag({add:['Tage1', 'Tage2', 'Tage3'],history:['Tage1', 'Tage2']})
+            setTag({ add: ['Tage1', 'Tage2', 'Tage3'], history: ['Tage1', 'Tage2'] })
         }
         setClickNum(clickNum + 1)
         setVisible(true)
         setFromType(title);
     }
+
     //moder
     let madalValue = {
         clickNum: clickNum,
@@ -177,14 +178,14 @@ export default function AssetsTable() {
     const selectedChange = (key: Array<number>, row: any) => {
         console.log('key', key)
         console.log('row', row)
-        if(key.length!=0){
+        if (key.length !== 0) {
             setButtonD(false)
-        }else{
+        } else {
             setButtonD(true)
         }
     }
     let assetsTable = {
-        count:11,
+        count: 11,
         columns: columns,
         data: data,
         columnsStateMap: columnsStateMap,
@@ -196,11 +197,11 @@ export default function AssetsTable() {
         <div>
             <TableOptional props={assetsTable} />
             <div className="table-button">
-                <Button disabled={buttonD} onClick={()=>addAssetsTag('编辑标签',true)}>编辑标签</Button>
-                <Button disabled={buttonD} onClick={()=>addAssetsTag('编辑负责人',true)}>编辑负责人</Button>
+                <Button disabled={buttonD} onClick={() => addAssetsTag('编辑标签', true)}>编辑标签</Button>
+                <Button disabled={buttonD} onClick={() => addAssetsTag('编辑负责人', true)}>编辑负责人</Button>
                 <Button disabled={buttonD}>导出报告</Button>
                 <Button disabled={buttonD}>一键安全检查</Button>
-                </div>
+            </div>
             <ModalFrom value={madalValue}>
                 <Form
                     form={form}

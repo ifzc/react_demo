@@ -89,8 +89,8 @@ function LoginFromCard() {
         setTabRegistered("注册新账号")
         setTabLogin("绑定已有账号")
     }
-    const loginTab = { fromKey: 1, changeActive: changeActive, tabLogin:tabLogin }
-    const registeredTab = { fromKey: 2, changeActive: changeActive, tabRegistered:tabRegistered }
+    const loginTab = { fromKey: 1, changeActive: changeActive, tabLogin: tabLogin }
+    const registeredTab = { fromKey: 2, changeActive: changeActive, tabRegistered: tabRegistered }
     return (
         <Card style={{ width: 350, 'margin': '0 auto' }}>
             <Tabs activeKey={activeKey} onChange={callback}>
@@ -101,29 +101,29 @@ function LoginFromCard() {
     )
 }
 //from
-let dysUid="";
+let dysUid = "";
 function LoginFrom(tab: any) {
     const [visible, setVisible] = useState(false);
     const [fromType, setFromType] = useState("免密登录");
     const [manner, setManner] = useState(true);
     const [qrImg, setQrImg] = useState("");
     //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
-    
-    let eventId="";
-    const nameLogin=()=> {
+
+    let eventId = "";
+    const nameLogin = () => {
         setManner(false)
         //定时请求接口=> 拿到二维码图片路径=> 更改img-url
         axios.get('/code').then((res: any) => {
             if (res.data.status === "200") {
                 setQrImg(res.data.code_info.qrcode_url);
-                eventId=res.data.code_info.event_id;
+                eventId = res.data.code_info.event_id;
                 qrLogob()
             } else {
                 message.error(res.data.msg);
             }
         })
     }
-    const qrLogob=()=> {
+    const qrLogob = () => {
         let event_id = { event_id: eventId }
         axios.post('/code', event_id).then((res: any) => {
             if (res.data.status === "200") {
@@ -133,15 +133,15 @@ function LoginFrom(tab: any) {
             } else if (res.data.status === "201") {
                 statusAccount = "1";
                 tab.tab.changeActive(statusAccount)
-                dysUid=res.data.dys_uid           
+                dysUid = res.data.dys_uid
             }
             //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
             else if (res.data.status === "202") {
                 statusAccount = "2";
                 tab.tab.changeActive(statusAccount)
-                dysUid=res.data.dys_uid
+                dysUid = res.data.dys_uid
                 console.log("202")
-            } 
+            }
         })
         setTimeout((function () { qrLogob() }), 2000);
     }
@@ -149,52 +149,52 @@ function LoginFrom(tab: any) {
     const onFinish = (values: any) => {
         //登陆成功执行
         if (tab.tab.fromKey === 1) {
-            if(tab.tab.tabLogin === "登录"){
-            axios.post('/login', values).then((res: any) => {
-                if (res.status === 200) {
-                    if (res.data.status === "200") {
-                        localStorage.setItem("Token", res.data.token);
-                        window.location.reload()
-                        message.success(res.data.msg);
+            if (tab.tab.tabLogin === "登录") {
+                axios.post('/login', values).then((res: any) => {
+                    if (res.status === 200) {
+                        if (res.data.status === "200") {
+                            localStorage.setItem("Token", res.data.token);
+                            window.location.reload()
+                            message.success(res.data.msg);
+                        }
                     }
-                }
-            })
-        }else{
-            values.dys_uid=dysUid
-            axios.put('/bind', values).then((res: any) => {
-                if (res.status === 200) {
-                    if (res.data.status === "200") {
-                        localStorage.setItem("Token", res.data.token);
-                        window.location.reload()
-                        message.success(res.data.msg);
+                })
+            } else {
+                values.dys_uid = dysUid
+                axios.put('/bind', values).then((res: any) => {
+                    if (res.status === 200) {
+                        if (res.data.status === "200") {
+                            localStorage.setItem("Token", res.data.token);
+                            window.location.reload()
+                            message.success(res.data.msg);
+                        }
                     }
-                }
-            })
-        }
+                })
+            }
         } else {
-            if(tab.tab.tabRegistered === "注册"){
-            axios.post('/register', values).then((res: any) => {
-                if (res.data.status === "200") {
-                    localStorage.setItem("Token", res.data.token);
-                    message.success(res.data.msg);
-                } else {
-                    message.error(res.data.msg);
-                }
-            })
-        }else{
-            values.dys_uid= dysUid
-            console.log(dysUid)
-            axios.post('/bind', values).then((res: any) => {
-                if (res.data.status === "200") {
-                    localStorage.setItem("Token", res.data.token);
-                    message.success(res.data.msg);
-                } else {
-                    message.error(res.data.msg);
-                }
-            })
+            if (tab.tab.tabRegistered === "注册") {
+                axios.post('/register', values).then((res: any) => {
+                    if (res.data.status === "200") {
+                        localStorage.setItem("Token", res.data.token);
+                        message.success(res.data.msg);
+                    } else {
+                        message.error(res.data.msg);
+                    }
+                })
+            } else {
+                values.dys_uid = dysUid
+                console.log(dysUid)
+                axios.post('/bind', values).then((res: any) => {
+                    if (res.data.status === "200") {
+                        localStorage.setItem("Token", res.data.token);
+                        message.success(res.data.msg);
+                    } else {
+                        message.error(res.data.msg);
+                    }
+                })
+            }
         }
-    }
-    form.resetFields();
+        form.resetFields();
     };
     /* const axiosPost=(url:any,values:any)=>{
         axios.post(url, values).then((res: any) => {
@@ -236,10 +236,10 @@ function LoginFrom(tab: any) {
         console.log('弹出层', values);
         setVisible(false);
     };
-    
+
     //调用父组件传过来的事件 changeActive
     let mannerImg;
-    if (tab.tab.fromKey === 1 && tab.tab.tabLogin!=="绑定已有账号") {
+    if (tab.tab.fromKey === 1 && tab.tab.tabLogin !== "绑定已有账号") {
         if (manner) {
             mannerImg = <div className="manner-box">
                 <img src="/images/login/qrlogin.png" alt="" style={{ 'width': '30px' }} onClick={nameLogin} />
@@ -254,9 +254,9 @@ function LoginFrom(tab: any) {
         }
     }
     const [form] = Form.useForm();
-    const setCaptchaValue={
-        form:form,
-        fromType:"1"
+    const setCaptchaValue = {
+        form: form,
+        fromType: "1"
     }
     return (
         <div>
@@ -271,7 +271,7 @@ function LoginFrom(tab: any) {
                     <UserName status={0} />
                     <Password status={0} />
                     {tab.tab.fromKey === 2 ?
-                        <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha value={setCaptchaValue}/>
+                        <div><ConfirmPassword status={0} /><Phone status={0} /><Captcha value={setCaptchaValue} />
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">同意条款并注册</Button>
                             </Form.Item>
@@ -315,14 +315,14 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
 }) => {
     const [form] = Form.useForm();
     //form.resetFields();
-    const setCaptchaValue={
-        form:form,
-        fromType:""
+    const setCaptchaValue = {
+        form: form,
+        fromType: ""
     }
-    if(fromType === "重置密码"){
-        setCaptchaValue.fromType="2"
-    }else{
-        setCaptchaValue.fromType="3"
+    if (fromType === "重置密码") {
+        setCaptchaValue.fromType = "2"
+    } else {
+        setCaptchaValue.fromType = "3"
     }
     return (
         <Modal
@@ -351,7 +351,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 initialValues={{ modifier: 'public' }}
             >
                 <Phone status={0} />
-                <Captcha value={setCaptchaValue}/>
+                <Captcha value={setCaptchaValue} />
                 {fromType === "重置密码" &&
                     <div>
                         <Password status={0} />

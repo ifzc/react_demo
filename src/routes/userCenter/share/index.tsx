@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Layout, Table, Button, Form, Radio, Tooltip } from 'antd';
+import { Card, Layout, Table, Button, Form, Radio, Tooltip, Dropdown, Menu } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
 import ModalFrom from '../../../components/userFrom/Modal'
 import UserName from '../../../components/userFrom/UserName'
@@ -17,6 +17,7 @@ export default function ShareAccount() {
   const [visible, setVisible] = useState(false)
   const [fromType, setFromType] = useState("添加子账号")
   const [clickNum, setClickNum] = useState(0)
+  const [ifPhone, setIfPhone] = useState(0)
   const [form] = Form.useForm();
   //表格
   const LogTable = [
@@ -59,24 +60,48 @@ export default function ShareAccount() {
       title: '操作',
       dataIndex: '',
       key: 'x',
-      render: () => <div><Button type="primary" size={"small"} style={{ margin: '0 10px 0 0' }} onClick={editChildrenAccount}>编辑</Button><Button type="primary" danger size={"small"}>删除</Button></div>,
+      render: () => <div><Dropdown overlay={menu} placement="bottomCenter"><Button style={{ margin: '0 10px 0 0' }}>编辑</Button></Dropdown><Button type="primary" danger size={"small"}>删除</Button></div>,
     }
   ];
 
   //let num = 1
   const addChildrenAccount = () => {
+    setIfPhone(0)
     setClickNum(clickNum + 1)
     setVisible(true)
     setFromType("添加子账号");
   }
-  const editChildrenAccount = () => {
+  const editChildrenAccount = (i: number) => {
+    if (i === 1) {
+      setIfPhone(1)
+    } else if (i === 2) {
+      setIfPhone(2)
+    }else{
+      setIfPhone(0)
+    }
+    setFromType("编辑子账号");
     setVisible(true)
     setClickNum(clickNum + 1)
+    //清空表单值
     form.setFieldsValue({
       authority: "",
-      alert:""
+      alert: ""
     })
   }
+  //编辑菜单
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <Button type="text" size={"small"} onClick={() => editChildrenAccount(2)}>手机号</Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button type="text" size={"small"} onClick={() => editChildrenAccount(1)}>邮箱</Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button type="text" size={"small"} onClick={() => editChildrenAccount(0)}>其他</Button>
+      </Menu.Item>
+    </Menu>
+  );
   const getFromValue = (value: any) => {
     console.log(value)
   }
@@ -103,33 +128,44 @@ export default function ShareAccount() {
               form={form}
               initialValues={{
                 authority: "a",
-                alert:"接受"
+                alert: "接受"
               }}
               name="form_in_modal"
               className="labelFrom"
             >
-              <UserName status={1} />
-              <Password status={1} />
-              <ConfirmPassword status={1} />
-              <Email />
-              <Captcha status={1} />
-              <Phone status={1} />
-              <Captcha status={1} />
-              <Form.Item label="权限" name="authority">
-                <Radio.Group buttonStyle="solid">
-                  <Radio.Button value="a">只读</Radio.Button>
-                  <Tooltip placement="top" title="可读、可执行操作、不可下发任务">
-                  <Radio.Button value="b">部分权限</Radio.Button>
-                  </Tooltip>
-                  <Radio.Button value="d">同主账号权限</Radio.Button>
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="短信或邮箱告警" name="alert">
-                <Radio.Group buttonStyle="solid">
-                  <Radio.Button value="接受">接受</Radio.Button>
-                  <Radio.Button value="不接受">不接受</Radio.Button>
-                </Radio.Group>
-              </Form.Item>
+              {ifPhone === 0 &&
+                <div>
+                  <UserName status={1} />
+                  <Password status={1} />
+                  <ConfirmPassword status={1} />
+                  <Form.Item label="权限" name="authority">
+                    <Radio.Group buttonStyle="solid">
+                      <Radio.Button value="a">只读</Radio.Button>
+                      <Tooltip placement="top" title="可读、可执行操作、不可下发任务">
+                        <Radio.Button value="b">部分权限</Radio.Button>
+                      </Tooltip>
+                      <Radio.Button value="d">同主账号权限</Radio.Button>
+                    </Radio.Group>
+                  </Form.Item>
+                  <Form.Item label="短信或邮箱告警" name="alert">
+                    <Radio.Group buttonStyle="solid">
+                      <Radio.Button value="接受">接受</Radio.Button>
+                      <Radio.Button value="不接受">不接受</Radio.Button>
+                    </Radio.Group>
+                  </Form.Item>
+                </div>
+              }
+              {ifPhone === 1 &&
+                <div>
+                  <Email />
+                  <Captcha status={1} />
+                </div>}
+              {ifPhone === 2 &&
+                <div>
+                  <Phone status={1} />
+                  <Captcha status={1} />
+                </div>
+              }
             </Form>
           </ModalFrom>
         </Content>

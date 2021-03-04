@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Card, Layout, Table, Button, Form, Radio, Tooltip, Dropdown, Menu } from 'antd';
+import axios from '../../../utils/http'
+import { Card, Layout, Table, Button, Form, Radio, Tooltip, Dropdown, Menu, message } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
 import ModalFrom from '../../../components/userFrom/Modal'
 import UserName from '../../../components/userFrom/UserName'
@@ -18,6 +19,8 @@ export default function ShareAccount() {
   const [fromType, setFromType] = useState("添加子账号")
   const [clickNum, setClickNum] = useState(0)
   const [ifPhone, setIfPhone] = useState(0)
+  const [editId, setEditId] = useState(0)
+  //const [editType, setEditType] = useState(0)
   const [form] = Form.useForm();
   const setCaptchaValue = {
     form: form,
@@ -66,7 +69,7 @@ export default function ShareAccount() {
       title: '操作',
       dataIndex: '',
       key: 'x',
-      render: () => <div><Dropdown overlay={menu} placement="bottomCenter"><Button style={{ margin: '0 10px 0 0' }}>编辑</Button></Dropdown><Button type="primary" danger size={"small"}>删除</Button></div>,
+      render: (row:any) => <div><Dropdown overlay={menu} placement="bottomCenter"><Button style={{ margin: '0 10px 0 0' }} onMouseOver={()=>over(row)}>编辑</Button></Dropdown><Button type="primary" danger size={"small"}>删除</Button></div>,
     }
   ];
 
@@ -75,16 +78,19 @@ export default function ShareAccount() {
   } else {
     setCaptchaValue.fromType = "2"
   }
+  const over = (text:any) => {
+    setEditId(text.id)
+  }
   //let num = 1
   const addChildrenAccount = () => {
     setClickNum(clickNum + 1)
     setVisible(true)
     setFromType("添加子账号");
   }
-  const editChildrenAccount = (i: number) => {
-    if (i === 1) {
+  const editChildrenAccount = (menu: any) => {
+    if (menu.key === '1') {
       setIfPhone(1)
-    } else if (i === 2) {
+    } else if (menu.key === '2') {
       setIfPhone(2)
     } else {
       setIfPhone(0)
@@ -100,20 +106,40 @@ export default function ShareAccount() {
   }
   //编辑菜单
   const menu = (
-    <Menu>
-      <Menu.Item>
-        <Button type="text" size={"small"} onClick={() => editChildrenAccount(2)}>手机号</Button>
+    <Menu onClick={editChildrenAccount}>
+      <Menu.Item key="2">
+        <Button type="text" size={"small"}>手机号</Button>
       </Menu.Item>
-      <Menu.Item>
-        <Button type="text" size={"small"} onClick={() => editChildrenAccount(1)}>邮箱</Button>
+      <Menu.Item key="1">
+        <Button type="text" size={"small"}>邮箱</Button>
       </Menu.Item>
-      <Menu.Item>
-        <Button type="text" size={"small"} onClick={() => editChildrenAccount(0)}>其他</Button>
+      <Menu.Item key="0">
+        <Button type="text" size={"small"}>其他</Button>
       </Menu.Item>
     </Menu>
   );
   const getFromValue = (value: any) => {
-    console.log(value)
+    let editCode={
+      sub_id:editId,
+      code:value.code,
+      message:'',
+      send_type:''
+    }
+    if(ifPhone===2){
+      editCode.message=value.phone
+      editCode.send_type='1'
+    }else{
+      editCode.message=value.email
+      editCode.send_type='2'
+    }
+    console.log(editCode)
+    axios.patch('/sub_user', editCode).then((res: any) => {
+      if (res.data.status === "200") {
+        message.success(res.data.msg);
+      } else {
+        message.error(res.data.msg);
+      }
+    })
   }
   let madalValue = {
     clickNum: clickNum,
@@ -130,7 +156,7 @@ export default function ShareAccount() {
         <Content style={{ margin: '16px' }}>
           <Card style={{ textAlign: 'left' }}>
             <Button type="primary" style={{ float: 'right', margin: '0 0 20px 0' }} onClick={addChildrenAccount}>添加子账号</Button>
-            <Table columns={LogTable} dataSource={data} />
+            <Table rowKey="id" columns={LogTable} dataSource={data} />
           </Card>
           <ModalFrom value={madalValue}>
             <Form
@@ -148,10 +174,14 @@ export default function ShareAccount() {
                   <UserName status={1} />
                   <Password status={1} />
                   <ConfirmPassword status={1} />
+                  {fromType==="添加子账号" &&
+                  <div>
                   <Email />
                   <Captcha value={setCaptchaValue} />
                   <Phone status={1} />
                   <Captcha value={setCaptchaValue} />
+                  </div>
+              }
                   <Form.Item label="权限" name="authority">
                     <Radio.Group buttonStyle="solid">
                       <Radio.Button value="a">只读</Radio.Button>
@@ -190,7 +220,7 @@ export default function ShareAccount() {
 
 const data = [
   {
-    key: '1',
+    id: 1,
     name: 'name',
     phone: '18545612356',
     email: '18681810490@163.com',
@@ -201,7 +231,7 @@ const data = [
     operating: 'operating',
   },
   {
-    key: '2',
+    id: 2,
     name: 'ceshi2',
     phone: '14545454545',
     email: 'xieshaodong@duoyinsu.com',

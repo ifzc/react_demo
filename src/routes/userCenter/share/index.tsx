@@ -19,6 +19,12 @@ export default function ShareAccount() {
   const [clickNum, setClickNum] = useState(0)
   const [ifPhone, setIfPhone] = useState(0)
   const [form] = Form.useForm();
+  const setCaptchaValue = {
+    form: form,
+    fromType: "",
+    type: "child",
+    ifPhone: ifPhone
+  }
   //表格
   const LogTable = [
     {
@@ -64,9 +70,13 @@ export default function ShareAccount() {
     }
   ];
 
+  if (fromType === "添加子账号") {
+    setCaptchaValue.fromType = "1"
+  } else {
+    setCaptchaValue.fromType = "2"
+  }
   //let num = 1
   const addChildrenAccount = () => {
-    setIfPhone(0)
     setClickNum(clickNum + 1)
     setVisible(true)
     setFromType("添加子账号");
@@ -76,7 +86,7 @@ export default function ShareAccount() {
       setIfPhone(1)
     } else if (i === 2) {
       setIfPhone(2)
-    }else{
+    } else {
       setIfPhone(0)
     }
     setFromType("编辑子账号");
@@ -138,6 +148,10 @@ export default function ShareAccount() {
                   <UserName status={1} />
                   <Password status={1} />
                   <ConfirmPassword status={1} />
+                  <Email />
+                  <Captcha value={setCaptchaValue} />
+                  <Phone status={1} />
+                  <Captcha value={setCaptchaValue} />
                   <Form.Item label="权限" name="authority">
                     <Radio.Group buttonStyle="solid">
                       <Radio.Button value="a">只读</Radio.Button>
@@ -158,12 +172,12 @@ export default function ShareAccount() {
               {ifPhone === 1 &&
                 <div>
                   <Email />
-                  <Captcha status={1} />
+                  <Captcha value={setCaptchaValue} />
                 </div>}
               {ifPhone === 2 &&
                 <div>
                   <Phone status={1} />
-                  <Captcha status={1} />
+                  <Captcha value={setCaptchaValue} />
                 </div>
               }
             </Form>

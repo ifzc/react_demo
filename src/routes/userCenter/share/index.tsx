@@ -24,10 +24,22 @@ export default function ShareAccount() {
   const [form] = Form.useForm();
   const setCaptchaValue = {
     form: form,
-    fromType: "",
+    fromType: "2",
     type: "child",
     ifPhone: ifPhone
   }
+  const setCaptchaValueEmail = {
+    form: form,
+    fromType: "1",
+    type: "child",
+    ifPhone: ifPhone,
+    childEmailCode:true
+  }
+  if (fromType === "添加子账号") {
+    setCaptchaValue.fromType = "1"
+} else {
+    setCaptchaValue.fromType = "2"
+}
   //表格
   const LogTable = [
     {
@@ -73,11 +85,6 @@ export default function ShareAccount() {
     }
   ];
 
-  if (fromType === "添加子账号") {
-    setCaptchaValue.fromType = "1"
-  } else {
-    setCaptchaValue.fromType = "2"
-  }
   const over = (text:any) => {
     setEditId(text.id)
   }
@@ -100,8 +107,8 @@ export default function ShareAccount() {
     setClickNum(clickNum + 1)
     //清空表单值
     form.setFieldsValue({
-      authority: "",
-      alert: ""
+      permission: "",
+      alarm: ""
     })
   }
   //编辑菜单
@@ -119,6 +126,29 @@ export default function ShareAccount() {
     </Menu>
   );
   const getFromValue = (value: any) => {
+    if (fromType === "添加子账号") {
+      let editValue=value
+      console.log(editValue)
+      axios.post('/sub_user', editValue).then((res: any) => {
+        if (res.data.status === "200") {
+          message.success(res.data.msg);
+        } else {
+          message.error(res.data.msg);
+        }
+      })
+    }else{//编辑子账号
+      if(ifPhone===0){
+      value['sub_id']=editId
+      console.log(value)
+      axios.put('/sub_user', value).then((res: any) => {
+        if (res.data.status === "200") {
+          message.success(res.data.msg);
+        } else {
+          message.error(res.data.msg);
+        }
+      })
+      }else{//编辑子账号 验证码
+
     let editCode={
       sub_id:editId,
       code:value.code,
@@ -140,6 +170,8 @@ export default function ShareAccount() {
         message.error(res.data.msg);
       }
     })
+  }
+  }
   }
   let madalValue = {
     clickNum: clickNum,
@@ -163,8 +195,8 @@ export default function ShareAccount() {
               {...formItemLayout}
               form={form}
               initialValues={{
-                authority: "a",
-                alert: "接受"
+                permission: "1",
+                alarm: "1"
               }}
               name="form_in_modal"
               className="labelFrom"
@@ -177,24 +209,24 @@ export default function ShareAccount() {
                   {fromType==="添加子账号" &&
                   <div>
                   <Email />
-                  <Captcha value={setCaptchaValue} />
+                  <Captcha value={setCaptchaValueEmail} />
                   <Phone status={1} />
                   <Captcha value={setCaptchaValue} />
                   </div>
               }
-                  <Form.Item label="权限" name="authority">
+                  <Form.Item label="权限" name="permission">
                     <Radio.Group buttonStyle="solid">
-                      <Radio.Button value="a">只读</Radio.Button>
+                      <Radio.Button value="1">只读</Radio.Button>
                       <Tooltip placement="top" title="可读、可执行操作、不可下发任务">
-                        <Radio.Button value="b">部分权限</Radio.Button>
+                        <Radio.Button value="2">部分权限</Radio.Button>
                       </Tooltip>
-                      <Radio.Button value="d">同主账号权限</Radio.Button>
+                      <Radio.Button value="3">同主账号权限</Radio.Button>
                     </Radio.Group>
                   </Form.Item>
-                  <Form.Item label="短信或邮箱告警" name="alert">
+                  <Form.Item label="短信或邮箱告警" name="alarm">
                     <Radio.Group buttonStyle="solid">
-                      <Radio.Button value="接受">接受</Radio.Button>
-                      <Radio.Button value="不接受">不接受</Radio.Button>
+                      <Radio.Button value="1">接受</Radio.Button>
+                      <Radio.Button value="0">不接受</Radio.Button>
                     </Radio.Group>
                   </Form.Item>
                 </div>

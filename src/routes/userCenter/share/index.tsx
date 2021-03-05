@@ -56,7 +56,7 @@ export default function ShareAccount() {
       title: '操作',
       dataIndex: '',
       key: 'x',
-      render: (row: any) => <div><Dropdown overlay={menu} placement="bottomCenter"><Button style={{ margin: '0 10px 0 0' }} onMouseOver={() => over(row)}>编辑</Button></Dropdown><Button type="primary" danger size={"small"}>删除</Button></div>,
+      render: (row: any) => <div><Dropdown overlay={menu} placement="bottomCenter"><Button style={{ margin: '0 10px 0 0' }} onMouseOver={() => over(row)}>编辑</Button></Dropdown><Button type="primary" danger size={"small"} onClick={()=>deleteRow(row.id)}>删除</Button></div>,
     }
   ];
   const [visible, setVisible] = useState(false)
@@ -141,7 +141,6 @@ export default function ShareAccount() {
     } else {//编辑子账号
       if (ifPhone === 0) {
         value['sub_id'] = editId
-        console.log(value)
         axios.put('/sub_user', value).then((res: any) => {
           if (res.data.status === "200") {
             message.success(res.data.msg);
@@ -174,6 +173,18 @@ export default function ShareAccount() {
       }
     }
   }
+  const deleteRow = (id:number) => {
+    let params={sub_id:id}
+    {axios.delete('/sub_user', {params:params}).then((res: any) => {
+      if (res.data.status === "200") {
+        message.success(res.data.msg);
+      } else {
+        message.error(res.data.msg);
+      }
+    })
+  }
+}
+
   let madalValue = {
     clickNum: clickNum,
     visible: visible,

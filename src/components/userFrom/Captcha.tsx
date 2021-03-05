@@ -66,13 +66,31 @@ function Captcha(props: any) {
     <Form.Item {...buttonItemLayout}>
       <Row gutter={8}>
         <Col span={16}>
-          <Form.Item
-            name="code"
-            noStyle
-            rules={[{ required: true, message: '请输入您获得的验证码!' }]}
-          >
-            <Input placeholder="验证码" />
-          </Form.Item>
+          {props.value.type === 'child' ?
+            <div>
+              {props.value.test ?
+                <Form.Item
+                  name="code"
+                  noStyle
+                  rules={[{ required: true, message: '请输入您获得的验证码!' }]}
+                >
+                  <Input placeholder="验证码" />
+                </Form.Item> :
+                <Form.Item
+                  name="email_code"
+                  noStyle
+                  rules={[{ required: true, message: '请输入您获得的验证码!' }]}
+                >
+                  <Input placeholder="验证码" />
+                </Form.Item>
+              }</div>
+            : <Form.Item
+              name="code"
+              noStyle
+              rules={[{ required: true, message: '请输入您获得的验证码!' }]}
+            >
+              <Input placeholder="验证码" />
+            </Form.Item>}
         </Col>
         <Col span={8}>
           <Button type="primary" onClick={sendCode}>发送验证码</Button>

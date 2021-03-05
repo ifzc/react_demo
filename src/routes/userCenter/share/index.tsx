@@ -93,6 +93,7 @@ export default function ShareAccount() {
     setClickNum(clickNum + 1)
     setVisible(true)
     setFromType("添加子账号");
+    setIfPhone(0)
   }
   const editChildrenAccount = (menu: any) => {
     if (menu.key === '1') {
@@ -127,9 +128,9 @@ export default function ShareAccount() {
   );
   const getFromValue = (value: any) => {
     if (fromType === "添加子账号") {
-      let editValue=value
-      console.log(editValue)
-      axios.post('/sub_user', editValue).then((res: any) => {
+      value['phone_code']=value.code
+      delete value['code'];
+      axios.post('/sub_user', value).then((res: any) => {
         if (res.data.status === "200") {
           message.success(res.data.msg);
         } else {

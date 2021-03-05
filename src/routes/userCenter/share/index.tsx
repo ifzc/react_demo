@@ -15,31 +15,6 @@ const formItemLayout = {
   wrapperCol: { span: 18 },
 }
 export default function ShareAccount() {
-  const [visible, setVisible] = useState(false)
-  const [fromType, setFromType] = useState("添加子账号")
-  const [clickNum, setClickNum] = useState(0)
-  const [ifPhone, setIfPhone] = useState(0)
-  const [editId, setEditId] = useState(0)
-  //const [editType, setEditType] = useState(0)
-  const [form] = Form.useForm();
-  const setCaptchaValue = {
-    form: form,
-    fromType: "2",
-    type: "child",
-    ifPhone: ifPhone
-  }
-  const setCaptchaValueEmail = {
-    form: form,
-    fromType: "1",
-    type: "child",
-    ifPhone: ifPhone,
-    childEmailCode:true
-  }
-  if (fromType === "添加子账号") {
-    setCaptchaValue.fromType = "1"
-} else {
-    setCaptchaValue.fromType = "2"
-}
   //表格
   const LogTable = [
     {
@@ -81,11 +56,36 @@ export default function ShareAccount() {
       title: '操作',
       dataIndex: '',
       key: 'x',
-      render: (row:any) => <div><Dropdown overlay={menu} placement="bottomCenter"><Button style={{ margin: '0 10px 0 0' }} onMouseOver={()=>over(row)}>编辑</Button></Dropdown><Button type="primary" danger size={"small"}>删除</Button></div>,
+      render: (row: any) => <div><Dropdown overlay={menu} placement="bottomCenter"><Button style={{ margin: '0 10px 0 0' }} onMouseOver={() => over(row)}>编辑</Button></Dropdown><Button type="primary" danger size={"small"}>删除</Button></div>,
     }
   ];
+  const [visible, setVisible] = useState(false)
+  const [fromType, setFromType] = useState("添加子账号")
+  const [clickNum, setClickNum] = useState(0)
+  const [ifPhone, setIfPhone] = useState(0)
+  const [editId, setEditId] = useState(0)
+  //const [editType, setEditType] = useState(0)
+  const [form] = Form.useForm();
+  const setCaptchaValue = {
+    form: form,
+    fromType: "2",
+    type: "child",
+    ifPhone: ifPhone
+  }
+  const setCaptchaValueEmail = {
+    form: form,
+    fromType: "1",
+    type: "child",
+    ifPhone: ifPhone,
+    childEmailCode: true
+  }
+  if (fromType === "添加子账号") {
+    setCaptchaValue.fromType = "1"
+  } else {
+    setCaptchaValue.fromType = "2"
+  }
 
-  const over = (text:any) => {
+  const over = (text: any) => {
     setEditId(text.id)
   }
   //let num = 1
@@ -126,9 +126,10 @@ export default function ShareAccount() {
       </Menu.Item>
     </Menu>
   );
+
   const getFromValue = (value: any) => {
     if (fromType === "添加子账号") {
-      value['phone_code']=value.code
+      value['phone_code'] = value.code
       delete value['code'];
       axios.post('/sub_user', value).then((res: any) => {
         if (res.data.status === "200") {
@@ -137,42 +138,41 @@ export default function ShareAccount() {
           message.error(res.data.msg);
         }
       })
-    }else{//编辑子账号
-      if(ifPhone===0){
-      value['sub_id']=editId
-      console.log(value)
-      axios.put('/sub_user', value).then((res: any) => {
-        if (res.data.status === "200") {
-          message.success(res.data.msg);
-        } else {
-          message.error(res.data.msg);
-        }
-      })
-      }else{//编辑子账号 验证码
+    } else {//编辑子账号
+      if (ifPhone === 0) {
+        value['sub_id'] = editId
+        console.log(value)
+        axios.put('/sub_user', value).then((res: any) => {
+          if (res.data.status === "200") {
+            message.success(res.data.msg);
+          } else {
+            message.error(res.data.msg);
+          }
+        })
+      } else {//编辑子账号 验证码
 
-    let editCode={
-      sub_id:editId,
-      code:value.code,
-      message:'',
-      send_type:''
-    }
-    if(ifPhone===2){
-      editCode.message=value.phone
-      editCode.send_type='1'
-    }else{
-      editCode.message=value.email
-      editCode.send_type='2'
-    }
-    console.log(editCode)
-    axios.patch('/sub_user', editCode).then((res: any) => {
-      if (res.data.status === "200") {
-        message.success(res.data.msg);
-      } else {
-        message.error(res.data.msg);
+        let editCode = {
+          sub_id: editId,
+          code: value.code,
+          message: '',
+          send_type: ''
+        }
+        if (ifPhone === 2) {
+          editCode.message = value.phone
+          editCode.send_type = '1'
+        } else {
+          editCode.message = value.email
+          editCode.send_type = '2'
+        }
+        axios.patch('/sub_user', editCode).then((res: any) => {
+          if (res.data.status === "200") {
+            message.success(res.data.msg);
+          } else {
+            message.error(res.data.msg);
+          }
+        })
       }
-    })
-  }
-  }
+    }
   }
   let madalValue = {
     clickNum: clickNum,
@@ -207,14 +207,14 @@ export default function ShareAccount() {
                   <UserName status={1} />
                   <Password status={1} />
                   <ConfirmPassword status={1} />
-                  {fromType==="添加子账号" &&
-                  <div>
-                  <Email />
-                  <Captcha value={setCaptchaValueEmail} />
-                  <Phone status={1} />
-                  <Captcha value={setCaptchaValue} />
-                  </div>
-              }
+                  {fromType === "添加子账号" &&
+                    <div>
+                      <Email />
+                      <Captcha value={setCaptchaValueEmail} />
+                      <Phone status={1} />
+                      <Captcha value={setCaptchaValue} />
+                    </div>
+                  }
                   <Form.Item label="权限" name="permission">
                     <Radio.Group buttonStyle="solid">
                       <Radio.Button value="1">只读</Radio.Button>

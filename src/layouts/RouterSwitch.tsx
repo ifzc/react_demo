@@ -8,7 +8,7 @@ const UserInfo = lazy(() => import('../routes/userCenter/userInfo'))
 const UserSettings = lazy(() => import('../routes/userCenter/settings'))
 const UserLog = lazy(() => import('../routes/userCenter/log'))
 const ShareAccount = lazy(() => import('../routes/userCenter/share'))
-
+const AssetsTable = lazy(() => import('../routes/assets'))
 class RouterSwitch extends React.Component {
     render() {
         return (
@@ -22,9 +22,11 @@ class RouterSwitch extends React.Component {
                     <Route path='/user/settings' component={UserSettings} />
                     <Route path='/user/log' component={UserLog} />
                     <Route path='/user/share' component={ShareAccount} />
+                    <Route path='/assets' component={AssetsTable} />
                 </Switch>
             </Suspense>
         )
     }
 }
+
 export default RouterSwitch;

@@ -23,7 +23,8 @@ function Captcha(props: any) {
         }
       })
     } else if (props.value.type === "child") {//子账号验证码
-      if (props.value.ifPhone === 2) {//子账号手机号验证码
+      console.log(props.value.ifPhone)
+      if (props.value.ifPhone === 2 || props.value.fromType==="1") {//子账号手机号验证码
         let paramChildPhone = {
           phone: props.value.form.getFieldValue('phone'),
           type: props.value.fromType
@@ -35,7 +36,8 @@ function Captcha(props: any) {
             message.error(res.data.msg);
           }
         })
-      } else {//子账号邮箱验证码
+      } 
+      if (props.value.ifPhone === 1 || props.value.fromType==="1") {//子账号邮箱验证码
         let paramChildEmail = {
           email: props.value.form.getFieldValue('email'),
           type: props.value.fromType

@@ -1,0 +1,41 @@
+.open-box{
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+.open-box-top{
+    width: 600px;
+    margin: 40px 40px 20px 40px;
+    a{
+        padding-right: 40px;
+    }
+}
+h4{
+    font-size: 18px;
+}
+.open-box-bottom{
+    >img{
+        width: 100%;
+    }
+    .open-box-bottom-item{
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        >div{
+            width: 50%;
+            display: flex;
+            margin-top: 20px;
+            >img{
+                width: 36px;
+                height: 36px;
+            }
+            >div{
+                width: 210px;
+                margin: 0 20px;
+            }
+        }
+    }
+}
+#form_in_modal_email{
+    width: 300px;
+}

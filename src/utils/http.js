@@ -1,39 +1,31 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
-
+import { message } from 'antd';
 import 'nprogress/nprogress.css'
 
 // 状态码错误信息
-/* const codeMessage = {
+const codeMessage = {
   200: '服务器成功返回请求的数据。',
-  201: '新建或修改数据成功。',
-  202: '一个请求已经进入后台排队（异步任务）。',
-  204: '删除数据成功。',
-  400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
-  401: '用户没有权限（令牌、用户名、密码错误）。',
-  403: '用户得到授权，但是访问是被禁止的。',
-  404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
-  406: '请求的格式不可得。',
-  410: '请求的资源被永久删除，且不会再得到的。',
-  422: '当创建一个对象时，发生一个验证错误。',
-  500: '服务器发生错误，请检查服务器。',
-  502: '网关错误。',
-  503: '服务不可用，服务器暂时过载或维护。',
-  504: '网关超时。'
-} */
+  501: 'token已失效！'
+}
 
-// 添加一个请求拦截器，用于设置请求过渡状态
+
+// 配置 headers 相关
 axios.defaults.headers['Apollo-Token'] = localStorage.getItem('Token')
+// 添加一个请求拦截器，用于设置请求过渡状态
 axios.interceptors.request.use(
   (config) => {
-    console.log("request")
     // 请求开始，蓝色过渡滚动条开始出现
     let token=localStorage.getItem('Token')
+    if(window.location.pathname !== '/login'){
     if(token===null || token===undefined || token===""){
       window.location.reload()
     }else{
       NProgress.start()
     }
+  }else{
+    NProgress.start()
+  }
     return config
   },
   (error) => {
@@ -45,11 +37,27 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
-    // 配置 headers 相关
     NProgress.done()
+
+    if(response.data.status === "200"){
+      message.success(response.data.msg);
+    }else if(response.data.status === "501"){
+      message.error(response.data.msg);
+      localStorage.removeItem('Token')
+      window.location.reload()
+    }else{
+      message.error(response.data.msg);
+    }
+
     return response
   },
   (error) => {
+    let element = error.response.data.message
+    for (const i in element) {
+      if (element.hasOwnProperty.call(element, i)) {
+        message.error(element[i]);
+      }
+    }
     // 请求结束，蓝色过渡滚动条消失
     // 即使出现异常，也要调用关闭方法，否则一直处于加载状态很奇怪
     NProgress.done()

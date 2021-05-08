@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from '../../../utils/http'
-import { Layout, Card, List, Modal, Button, Form, Input, message } from 'antd';
+import { Layout, Card, List, Modal, Button, Form, Input } from 'antd';
 
 import UserCenter from '../../../components/userCenter/UserCenter';
 import { MailOutlined, MobileOutlined, LockOutlined } from '@ant-design/icons';
@@ -79,13 +79,10 @@ class SecuritySettings extends React.Component<any, any> {
 function CollectionsPage(props: any) {
     const [visible, setVisible] = useState(false);
     const onCreate = (values: Values) => {
-        console.log(props.titleType);
-        console.log("console.log(props.titleType);");
         if(props.titleType==="登录密码"){
         axios.post('/user', values).then((res: any) => {
             if (res.status === 200) {
                 if (res.data.status === "200") {
-                    message.success(res.data.msg);
                 }
             }
         })
@@ -93,7 +90,6 @@ function CollectionsPage(props: any) {
         axios.put('/user', values).then((res: any) => {
             if (res.status === 200) {
                 if (res.data.status === "200") {
-                    message.success(res.data.msg);
                 }
             }
         })
@@ -149,7 +145,6 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                         onCreate(values);
                     })
                     .catch(info => {
-                        console.log('Validate Failed:', info);
                     });
             }}
         >

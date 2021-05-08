@@ -1,8 +1,9 @@
 const initState = {
     loading:false,
-    token:false,
-    open:false,
-    children:false
+    token:null,
+    open:null,
+    children:null,
+    role:null
 }
 
 export default (state = initState, action) => {
@@ -15,6 +16,8 @@ export default (state = initState, action) => {
           return { ...state, open: action.value };
           case 'children':
           return { ...state, children: action.value };
+          case 'role':
+          return { ...state, role: action.value };
         default:
           return state
       }

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
+import store from '../store';
 import {
   message
 } from 'antd';
@@ -11,20 +12,26 @@ const codeMessage = {
   501: 'token已失效！'
 }
 
+let token = store.getState().token
+function change(){
+  token = store.getState().token
+  // 配置 headers 相关
+  axios.defaults.headers['Apollo-Token'] = token
+}
+//监听token变化
+store.subscribe(change);
 
-// 配置 headers 相关
-axios.defaults.headers['Apollo-Token'] = localStorage.getItem('Token')
+console.log(token)
 // 添加一个请求拦截器，用于设置请求过渡状态
 axios.interceptors.request.use(
   (config) => {
     // 请求开始，蓝色过渡滚动条开始出现
-    let token = localStorage.getItem('Token')
     if (window.location.pathname !== '/login') {
-      if (token === null || token === undefined || token === "") {
+      /* if (token === null || token === undefined || token === "") {
         window.location.reload()
-      } else {
+      } else { */
         NProgress.start()
-      }
+      //}
     } else {
       NProgress.start()
     }
@@ -45,8 +52,10 @@ axios.interceptors.response.use(
       message.success(response.data.msg);
     } else if (response.data.status === "501") {
       message.error(response.data.msg);
-      localStorage.removeItem('Token')
-      window.location.reload()
+      store.dispatch({
+        type: 'token',
+        value: null
+      });
     } else {
       message.error(response.data.msg);
     }

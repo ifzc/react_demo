@@ -56,9 +56,14 @@ export default function ShareAccount() {
       title: '操作',
       dataIndex: '',
       key: 'x',
-      render: (row: any) => <div><Dropdown overlay={menu} placement="bottomCenter"><Button style={{ margin: '0 10px 0 0' }} onMouseOver={() => over(row)}>编辑</Button></Dropdown><Button type="primary" danger size={"small"} onClick={()=>deleteRow(row.id)}>删除</Button></div>,
+      render: (row: any) => <div><Dropdown overlay={menu} placement="bottomCenter"><Button size={"small"} style={{ margin: '0 10px 0 0' }} onMouseOver={() => over(row)}>编辑</Button></Dropdown><Button type="primary" danger size={"small"} onClick={()=>deleteRow(row.id)}>删除</Button></div>,
     }
   ];
+  axios.get('/sub_user').then((res: any) => {
+    if (res.data.status === "200") {
+      console.log(res)
+    }
+  })
   const [visible, setVisible] = useState(false)
   const [fromType, setFromType] = useState("添加子账号")
   const [clickNum, setClickNum] = useState(0)
@@ -133,9 +138,6 @@ export default function ShareAccount() {
       delete value['code'];
       axios.post('/sub_user', value).then((res: any) => {
         if (res.data.status === "200") {
-          message.success(res.data.msg);
-        } else {
-          message.error(res.data.msg);
         }
       })
     } else {//编辑子账号
@@ -143,9 +145,6 @@ export default function ShareAccount() {
         value['sub_id'] = editId
         axios.put('/sub_user', value).then((res: any) => {
           if (res.data.status === "200") {
-            message.success(res.data.msg);
-          } else {
-            message.error(res.data.msg);
           }
         })
       } else {//编辑子账号 验证码
@@ -163,25 +162,13 @@ export default function ShareAccount() {
           editCode.message = value.email
           editCode.send_type = '2'
         }
-        axios.patch('/sub_user', editCode).then((res: any) => {
-          if (res.data.status === "200") {
-            message.success(res.data.msg);
-          } else {
-            message.error(res.data.msg);
-          }
-        })
+        axios.patch('/sub_user', editCode)
       }
     }
   }
   const deleteRow = (id:number) => {
     let params={sub_id:id}
-    {axios.delete('/sub_user', {params:params}).then((res: any) => {
-      if (res.data.status === "200") {
-        message.success(res.data.msg);
-      } else {
-        message.error(res.data.msg);
-      }
-    })
+    {axios.delete('/sub_user', {params:params})
   }
 }
 

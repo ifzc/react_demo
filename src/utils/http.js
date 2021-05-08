@@ -1,6 +1,8 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
-import { message } from 'antd';
+import {
+  message
+} from 'antd';
 import 'nprogress/nprogress.css'
 
 // 状态码错误信息
@@ -16,16 +18,16 @@ axios.defaults.headers['Apollo-Token'] = localStorage.getItem('Token')
 axios.interceptors.request.use(
   (config) => {
     // 请求开始，蓝色过渡滚动条开始出现
-    let token=localStorage.getItem('Token')
-    if(window.location.pathname !== '/login'){
-    if(token===null || token===undefined || token===""){
-      window.location.reload()
-    }else{
+    let token = localStorage.getItem('Token')
+    if (window.location.pathname !== '/login') {
+      if (token === null || token === undefined || token === "") {
+        window.location.reload()
+      } else {
+        NProgress.start()
+      }
+    } else {
       NProgress.start()
     }
-  }else{
-    NProgress.start()
-  }
     return config
   },
   (error) => {
@@ -39,13 +41,13 @@ axios.interceptors.response.use(
     // 请求结束，蓝色过渡滚动条消失
     NProgress.done()
 
-    if(response.data.status === "200"){
+    if (response.data.status === "200") {
       message.success(response.data.msg);
-    }else if(response.data.status === "501"){
+    } else if (response.data.status === "501") {
       message.error(response.data.msg);
       localStorage.removeItem('Token')
       window.location.reload()
-    }else{
+    } else {
       message.error(response.data.msg);
     }
 

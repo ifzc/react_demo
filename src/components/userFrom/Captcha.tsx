@@ -17,13 +17,10 @@ function Captcha(props: any) {
       }
       axios.post('/email', paramEmail).then((res: any) => {
         if (res.data.status === "200") {
-          message.success(res.data.msg);
-        } else {
-          message.error(res.data.msg);
+
         }
       })
     } else if (props.value.type === "child") {//子账号验证码
-      console.log(props.value.ifPhone)
       if (props.value.ifPhone === 2 || props.value.fromType==="1") {//子账号手机号验证码
         let paramChildPhone = {
           phone: props.value.form.getFieldValue('phone'),
@@ -32,8 +29,6 @@ function Captcha(props: any) {
         axios.post('/send_code', paramChildPhone).then((res: any) => {
           if (res.data.status === "200") {
             message.success(res.data.msg);
-          } else {
-            message.error(res.data.msg);
           }
         })
       } 
@@ -45,8 +40,6 @@ function Captcha(props: any) {
         axios.put('/send_code', paramChildEmail).then((res: any) => {
           if (res.data.status === "200") {
             message.success(res.data.msg);
-          } else {
-            message.error(res.data.msg);
           }
         })
       }
@@ -58,8 +51,6 @@ function Captcha(props: any) {
       axios.post('/send', paramPhone).then((res: any) => {
         if (res.data.status === "200") {
           message.success(res.data.msg);
-        } else {
-          message.error(res.data.msg);
         }
       })
     }

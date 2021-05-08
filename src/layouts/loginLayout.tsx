@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from '../utils/http'
 import './LoginLayout.scss'
-import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal, message } from 'antd';
+import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal } from 'antd';
 import UserName from '../components/userFrom/UserName'
 import Password from '../components/userFrom/Password'
 import ConfirmPassword from '../components/userFrom/ConfirmPassword'
@@ -118,8 +118,6 @@ function LoginFrom(tab: any) {
                 setQrImg(res.data.code_info.qrcode_url);
                 eventId = res.data.code_info.event_id;
                 qrLogob()
-            } else {
-                message.error(res.data.msg);
             }
         })
     }
@@ -129,7 +127,6 @@ function LoginFrom(tab: any) {
             if (res.data.status === "200") {
                 localStorage.setItem("Token", res.data.token);
                 window.location.reload()
-                message.success(res.data.msg);
             } else if (res.data.status === "201") {
                 statusAccount = "1";
                 tab.tab.changeActive(statusAccount)
@@ -155,7 +152,6 @@ function LoginFrom(tab: any) {
                         if (res.data.status === "200") {
                             localStorage.setItem("Token", res.data.token);
                             window.location.reload()
-                            message.success(res.data.msg);
                         }
                     }
                 })
@@ -166,7 +162,6 @@ function LoginFrom(tab: any) {
                         if (res.data.status === "200") {
                             localStorage.setItem("Token", res.data.token);
                             window.location.reload()
-                            message.success(res.data.msg);
                         }
                     }
                 })
@@ -176,9 +171,7 @@ function LoginFrom(tab: any) {
                 axios.post('/register', values).then((res: any) => {
                     if (res.data.status === "200") {
                         localStorage.setItem("Token", res.data.token);
-                        message.success(res.data.msg);
-                    } else {
-                        message.error(res.data.msg);
+                        window.location.reload()
                     }
                 })
             } else {
@@ -187,9 +180,6 @@ function LoginFrom(tab: any) {
                 axios.post('/bind', values).then((res: any) => {
                     if (res.data.status === "200") {
                         localStorage.setItem("Token", res.data.token);
-                        message.success(res.data.msg);
-                    } else {
-                        message.error(res.data.msg);
                     }
                 })
             }
@@ -201,9 +191,6 @@ function LoginFrom(tab: any) {
             if(res.status === 200){
             if (res.data.status === "200") {
                 localStorage.setItem("Token", res.data.token);
-                message.success(res.data.msg);
-            } else {
-                message.error(res.data.msg);
             }
             }
         })
@@ -215,9 +202,6 @@ function LoginFrom(tab: any) {
                 if (res.data.status === "200") {
                     console.log(res.data);
                     localStorage.setItem("Token", res.data.token);
-                    message.success(res.data.msg);
-                } else {
-                    message.error(res.data.msg);
                 }
 
             })
@@ -226,9 +210,6 @@ function LoginFrom(tab: any) {
                 console.log(res);
                 if (res.data.status === "200") {
                     console.log(res.data);
-                    message.success(res.data.msg);
-                } else {
-                    message.error(res.data.msg);
                 }
 
             })

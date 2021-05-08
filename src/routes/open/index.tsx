@@ -16,10 +16,8 @@ export default function OpenAgent() {
     const [form] = Form.useForm();
 
     const getFromValue = (value: any) => {
-        console.log('model表单值', value)
         axios.post('/open',value).then((res: any) => {
             if (res.data.status === "200") {
-                message.success(res.data.msg);
                 history.push("/home");
             }
         })

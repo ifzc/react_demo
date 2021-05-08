@@ -151,7 +151,7 @@ function LoginFrom(tab: any) {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
                             localStorage.setItem("Token", res.data.token);
-                            window.location.reload()
+                            setTimeout(function(){window.location.reload()},0)
                         }
                     }
                 })
@@ -161,7 +161,7 @@ function LoginFrom(tab: any) {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
                             localStorage.setItem("Token", res.data.token);
-                            window.location.reload()
+                            setTimeout(function(){window.location.reload()},0)
                         }
                     }
                 })

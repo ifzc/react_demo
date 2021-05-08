@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import { useHistory } from "react-router-dom";
 import axios from '../utils/http'
+import store from '../store';
 import './LoginLayout.scss'
 import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal } from 'antd';
 import UserName from '../components/userFrom/UserName'
@@ -103,6 +105,7 @@ function LoginFromCard() {
 //from
 let dysUid = "";
 function LoginFrom(tab: any) {
+    const history = useHistory();
     const [visible, setVisible] = useState(false);
     const [fromType, setFromType] = useState("免密登录");
     const [manner, setManner] = useState(true);
@@ -125,8 +128,11 @@ function LoginFrom(tab: any) {
         let event_id = { event_id: eventId }
         axios.post('/code', event_id).then((res: any) => {
             if (res.data.status === "200") {
-                localStorage.setItem("Token", res.data.token);
-                window.location.reload()
+                store.dispatch({
+                    type: 'token',
+                    value: res.data.token
+                })
+                history.push("/user/info");
             } else if (res.data.status === "201") {
                 statusAccount = "1";
                 tab.tab.changeActive(statusAccount)
@@ -150,8 +156,11 @@ function LoginFrom(tab: any) {
                 axios.post('/login', values).then((res: any) => {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
-                            localStorage.setItem("Token", res.data.token);
-                            setTimeout(function(){window.location.reload()},0)
+                            store.dispatch({
+                                type: 'token',
+                                value: res.data.token
+                            })
+                            history.push("/user/info");
                         }
                     }
                 })
@@ -160,8 +169,11 @@ function LoginFrom(tab: any) {
                 axios.put('/bind', values).then((res: any) => {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
-                            localStorage.setItem("Token", res.data.token);
-                            setTimeout(function(){window.location.reload()},0)
+                            store.dispatch({
+                                type: 'token',
+                                value: res.data.token
+                            })
+                            history.push("/user/info");
                         }
                     }
                 })
@@ -170,8 +182,11 @@ function LoginFrom(tab: any) {
             if (tab.tab.tabRegistered === "注册") {
                 axios.post('/register', values).then((res: any) => {
                     if (res.data.status === "200") {
-                        localStorage.setItem("Token", res.data.token);
-                        window.location.reload()
+                        store.dispatch({
+                            type: 'token',
+                            value: res.data.token
+                        })
+                        history.push("/user/info");
                     }
                 })
             } else {
@@ -179,7 +194,11 @@ function LoginFrom(tab: any) {
                 console.log(dysUid)
                 axios.post('/bind', values).then((res: any) => {
                     if (res.data.status === "200") {
-                        localStorage.setItem("Token", res.data.token);
+                        store.dispatch({
+                            type: 'token',
+                            value: res.data.token
+                        })
+                        history.push("/user/info");
                     }
                 })
             }
@@ -190,7 +209,11 @@ function LoginFrom(tab: any) {
         axios.post(url, values).then((res: any) => {
             if(res.status === 200){
             if (res.data.status === "200") {
-                localStorage.setItem("Token", res.data.token);
+                store.dispatch({
+                    type: 'token',
+                    value: res.data.token
+                })
+                history.push("/user/info");
             }
             }
         })
@@ -201,7 +224,11 @@ function LoginFrom(tab: any) {
                 console.log(res);
                 if (res.data.status === "200") {
                     console.log(res.data);
-                    localStorage.setItem("Token", res.data.token);
+                    store.dispatch({
+                        type: 'token',
+                        value: res.data.token
+                    })
+                    history.push("/user/info");
                 }
 
             })
@@ -214,7 +241,6 @@ function LoginFrom(tab: any) {
 
             })
         }
-        console.log('弹出层', values);
         setVisible(false);
     };
 

@@ -28,11 +28,9 @@ class BasicLayout extends React.Component<any, any> {
         });
     }
     onCollapse = (collapsed: any) => {
-        console.log(collapsed);
         this.setState({ collapsed });
     };
     render() {
-        console.log(localStorage.getItem('Token'))
         const { collapsed } = this.state;
         return (
             <Layout style={{ minHeight: '100vh' }}>

@@ -1,4 +1,5 @@
 import React from 'react'
+import store from '../store';
 import { Layout, Menu, Breadcrumb } from 'antd'
 import { Router, Link } from "react-router-dom"
 import {
@@ -63,7 +64,7 @@ class BasicLayout extends React.Component<any, any> {
                                 </Menu.Item>
                                 <SubMenu key="sub1" title="User">
                                     <Menu.Item key="/Personal/BasicData"><Link to="/user/info">个人资料</Link></Menu.Item>
-                                    <Menu.Item onClick={()=>{localStorage.removeItem('Token');window.location.reload()}}><Link to="/login">退出</Link></Menu.Item>
+                                    <Menu.Item onClick={()=>{ store.dispatch({type: 'token',value: null});}}><Link to="/login">退出</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>
                         </Header>

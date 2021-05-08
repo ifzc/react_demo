@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from '../../utils/http'
-import { Form, Input, Row, Col, Button, message } from 'antd';
+import { Form, Input, Row, Col, Button } from 'antd';
 
 const buttonItemLayout =
 {
@@ -28,7 +28,6 @@ function Captcha(props: any) {
         }
         axios.post('/send_code', paramChildPhone).then((res: any) => {
           if (res.data.status === "200") {
-            message.success(res.data.msg);
           }
         })
       } 
@@ -39,7 +38,6 @@ function Captcha(props: any) {
         }
         axios.put('/send_code', paramChildEmail).then((res: any) => {
           if (res.data.status === "200") {
-            message.success(res.data.msg);
           }
         })
       }
@@ -50,7 +48,6 @@ function Captcha(props: any) {
       }
       axios.post('/send', paramPhone).then((res: any) => {
         if (res.data.status === "200") {
-          message.success(res.data.msg);
         }
       })
     }

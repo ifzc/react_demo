@@ -128,10 +128,10 @@ function LoginFrom(tab: any) {
         let event_id = { event_id: eventId }
         axios.post('/code', event_id).then((res: any) => {
             if (res.data.status === "200") {
-                store.dispatch({
-                    type: 'token',
-                    value: res.data.token
-                })
+                store.dispatch({type: 'token',value: res.data.token})
+                store.dispatch({type: 'role',value: res.data.role})
+                store.dispatch({type: 'open',value: res.data.user_status})
+                store.dispatch({type: 'children',value: res.data.sub_user})
                 history.push("/user/info");
             } else if (res.data.status === "201") {
                 statusAccount = "1";
@@ -156,10 +156,10 @@ function LoginFrom(tab: any) {
                 axios.post('/login', values).then((res: any) => {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
-                            store.dispatch({
-                                type: 'token',
-                                value: res.data.token
-                            })
+                            store.dispatch({type: 'token',value: res.data.token})
+                            store.dispatch({type: 'role',value: res.data.role})
+                            store.dispatch({type: 'open',value: res.data.user_status})
+                            store.dispatch({type: 'children',value: res.data.sub_user})
                             history.push("/user/info");
                         }
                     }
@@ -169,10 +169,10 @@ function LoginFrom(tab: any) {
                 axios.put('/bind', values).then((res: any) => {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
-                            store.dispatch({
-                                type: 'token',
-                                value: res.data.token
-                            })
+                            store.dispatch({type: 'token',value: res.data.token})
+                            store.dispatch({type: 'role',value: res.data.role})
+                            store.dispatch({type: 'open',value: res.data.user_status})
+                            store.dispatch({type: 'children',value: res.data.sub_user})
                             history.push("/user/info");
                         }
                     }
@@ -182,10 +182,10 @@ function LoginFrom(tab: any) {
             if (tab.tab.tabRegistered === "注册") {
                 axios.post('/register', values).then((res: any) => {
                     if (res.data.status === "200") {
-                        store.dispatch({
-                            type: 'token',
-                            value: res.data.token
-                        })
+                        store.dispatch({type: 'token',value: res.data.token})
+                        store.dispatch({type: 'role',value: res.data.role})
+                        store.dispatch({type: 'open',value: res.data.user_status})
+                        store.dispatch({type: 'children',value: res.data.sub_user})
                         history.push("/user/info");
                     }
                 })
@@ -194,10 +194,10 @@ function LoginFrom(tab: any) {
                 console.log(dysUid)
                 axios.post('/bind', values).then((res: any) => {
                     if (res.data.status === "200") {
-                        store.dispatch({
-                            type: 'token',
-                            value: res.data.token
-                        })
+                        store.dispatch({type: 'token',value: res.data.token})
+                        store.dispatch({type: 'role',value: res.data.role})
+                        store.dispatch({type: 'open',value: res.data.user_status})
+                        store.dispatch({type: 'children',value: res.data.sub_user})
                         history.push("/user/info");
                     }
                 })
@@ -209,10 +209,10 @@ function LoginFrom(tab: any) {
         axios.post(url, values).then((res: any) => {
             if(res.status === 200){
             if (res.data.status === "200") {
-                store.dispatch({
-                    type: 'token',
-                    value: res.data.token
-                })
+                store.dispatch({type: 'token',value: res.data.token})
+                store.dispatch({type: 'role',value: res.data.role})
+                store.dispatch({type: 'open',value: res.data.user_status})
+                store.dispatch({type: 'children',value: res.data.sub_user})
                 history.push("/user/info");
             }
             }
@@ -224,10 +224,10 @@ function LoginFrom(tab: any) {
                 console.log(res);
                 if (res.data.status === "200") {
                     console.log(res.data);
-                    store.dispatch({
-                        type: 'token',
-                        value: res.data.token
-                    })
+                    store.dispatch({type: 'token',value: res.data.token})
+                    store.dispatch({type: 'role',value: res.data.role})
+                    store.dispatch({type: 'open',value: res.data.user_status})
+                    store.dispatch({type: 'children',value: res.data.sub_user})
                     history.push("/user/info");
                 }
 

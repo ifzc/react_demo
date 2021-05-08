@@ -40,7 +40,7 @@ axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
     NProgress.done()
-
+    console.log(response)
     if (response.data.status === "200") {
       message.success(response.data.msg);
     } else if (response.data.status === "501") {
@@ -55,11 +55,15 @@ axios.interceptors.response.use(
   },
   (error) => {
     let element = error.response.data.message
+    if(error.response.status === 429){
+      message.error(element);
+    }else{
     for (const i in element) {
       if (element.hasOwnProperty.call(element, i)) {
         message.error(element[i]);
       }
     }
+  }
     // 请求结束，蓝色过渡滚动条消失
     // 即使出现异常，也要调用关闭方法，否则一直处于加载状态很奇怪
     NProgress.done()

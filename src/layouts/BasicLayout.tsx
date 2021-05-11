@@ -17,6 +17,12 @@ const { SubMenu } = Menu;
 function BasicLayout() {
     const [collapsed, setCollapsed] = useState(false);
     const [theme, setTheme] = useState('dark');
+    const [open, setOpen] = useState(store.getState().open);
+function change(){
+    setOpen(store.getState().open)
+}
+
+store.subscribe(change);
 
     const changeTheme = (value: any) => {
         setTheme(value)
@@ -29,9 +35,13 @@ function BasicLayout() {
                 <Router history={createBrowserHistory()} >
                     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
                         <div className="logo" id="logo" />
+                        {open !== "0" ?
                         <Menu theme="dark" defaultSelectedKeys={['/dashboard']} mode="inline">
                             <Menu.Item key="/dashboard" icon={<PieChartOutlined />}>
-                                <Link to="/dashboard">统计图</Link>
+                                <Link to="/dashboard">仪表盘</Link>
+                            </Menu.Item>
+                            <Menu.Item key="/assets" icon={<PieChartOutlined />}>
+                                <Link to="/assets">资产列表</Link>
                             </Menu.Item>
                             <SubMenu key="/user" icon={<UserOutlined />} title="用户中心">
                                 <Menu.Item key="/user/info">
@@ -40,6 +50,22 @@ function BasicLayout() {
                                     <Link to="/user/settings">安全设置</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
+                        :
+                        <Menu theme="dark" defaultSelectedKeys={['/agent']} mode="inline">
+                            <Menu.Item key="1" icon={<PieChartOutlined />}>
+                                <Link to="/agent">仪表盘</Link>
+                            </Menu.Item>
+                            <Menu.Item key="2" icon={<PieChartOutlined />}>
+                                <Link to="/agent">资产列表</Link>
+                            </Menu.Item>
+                            <SubMenu key="3" icon={<UserOutlined />} title="用户中心">
+                                <Menu.Item key="3-1">
+                                    <Link to="agent">用户信息</Link></Menu.Item>
+                                <Menu.Item key="3-2">
+                                    <Link to="agent">安全设置</Link></Menu.Item>
+                            </SubMenu>
+                        </Menu>
+}
                     </Sider>
                     <Layout className="site-layout">
                         <Header className="site-layout-background" style={{ padding: 0 }} >

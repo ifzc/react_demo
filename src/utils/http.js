@@ -20,18 +20,12 @@ function change(){
 }
 //监听token变化
 store.subscribe(change);
-
-console.log(token)
 // 添加一个请求拦截器，用于设置请求过渡状态
 axios.interceptors.request.use(
   (config) => {
     // 请求开始，蓝色过渡滚动条开始出现
     if (window.location.pathname !== '/login') {
-      /* if (token === null || token === undefined || token === "") {
-        window.location.reload()
-      } else { */
         NProgress.start()
-      //}
     } else {
       NProgress.start()
     }

@@ -10,14 +10,16 @@ const UserSettings = lazy(() => import('../routes/userCenter/settings'))
 const UserLog = lazy(() => import('../routes/userCenter/log'))
 const ShareAccount = lazy(() => import('../routes/userCenter/share'))
 const AssetsTable = lazy(() => import('../routes/assets'))
-class RouterSwitch extends React.Component {
-    render() {
+/* const TodoList = lazy(() => import('../routes/assets/test')) */
+
+function RouterSwitch() {
         return (
             <Suspense fallback={<div className="suspense-box"><Spin size="large" /></div>}>
                 <Switch>
                     <Route path='/dashboard' exact render={() => (
                         <Redirect to='/dashboard' />
                     )} />
+                    {/* <Route path='/to' component={TodoList} /> */}
                     <Route path='/assets' component={AssetsTable} />
                     <Route path='/dashboard' component={Dashboard} />
                     <Route path='/user/info' component={UserInfo} />
@@ -28,7 +30,6 @@ class RouterSwitch extends React.Component {
                 </Switch>
             </Suspense>
         )
-    }
 }
 
 export default RouterSwitch;

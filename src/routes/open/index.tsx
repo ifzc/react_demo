@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from "react-router-dom";
 import './index.scss'
-import { Button, Divider, Form, Input, message } from 'antd';
+import { Button, Divider, Form, Input } from 'antd';
 import ModalFrom from '../../components/userFrom/Modal'
 import axios from '../../utils/http'
 import Captcha from '../../components/userFrom/Captcha'
@@ -18,7 +18,7 @@ export default function OpenAgent() {
     const getFromValue = (value: any) => {
         axios.post('/open',value).then((res: any) => {
             if (res.data.status === "200") {
-                history.push("/home");
+                history.push("/dashboard");
             }
         })
     }

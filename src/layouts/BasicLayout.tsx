@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState }from 'react'
 import store from '../store';
 import { Layout, Menu, Breadcrumb } from 'antd'
 import { Router, Link } from "react-router-dom"
@@ -14,31 +14,22 @@ import './BasicLayout.css'
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-class BasicLayout extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
+function BasicLayout() {
+    const [collapsed, setCollapsed] = useState(false);
+    const [theme, setTheme] = useState('dark');
 
-        this.state = {
-            collapsed: false,
-            theme: 'dark',
-        };
+    const changeTheme = (value: any) => {
+        setTheme(value)
     }
-    changeTheme = (value: any) => {
-        this.setState({
-            theme: value ? 'dark' : 'light',
-        });
-    }
-    onCollapse = (collapsed: any) => {
-        this.setState({ collapsed });
+    const onCollapse = (collapsed: any) => {
+        setCollapsed(collapsed);
     };
-    render() {
-        const { collapsed } = this.state;
         return (
             <Layout style={{ minHeight: '100vh' }}>
                 <Router history={createBrowserHistory()} >
-                    <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
+                    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
                         <div className="logo" id="logo" />
-                        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                        <Menu theme="dark" defaultSelectedKeys={['/dashboard']} mode="inline">
                             <Menu.Item key="/dashboard" icon={<PieChartOutlined />}>
                                 <Link to="/dashboard">统计图</Link>
                             </Menu.Item>
@@ -83,6 +74,5 @@ class BasicLayout extends React.Component<any, any> {
             </Layout>
         );
     }
-}
 
 export default BasicLayout

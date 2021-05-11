@@ -110,6 +110,18 @@ function LoginFrom(tab: any) {
     const [fromType, setFromType] = useState("免密登录");
     const [manner, setManner] = useState(true);
     const [qrImg, setQrImg] = useState("");
+
+    const storeInfo = (res:any) =>{
+        store.dispatch({type: 'token',value: res.data.token})
+                store.dispatch({type: 'role',value: res.data.role})
+                store.dispatch({type: 'open',value: res.data.user_status})
+                store.dispatch({type: 'children',value: res.data.sub_user})
+                if(res.data.user_status === "0"){//未开通apollo
+                    history.push("/agent");
+                }else{
+                    history.push("/user/info");
+                }
+    }
     //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
 
     let eventId = "";
@@ -126,13 +138,10 @@ function LoginFrom(tab: any) {
     }
     const qrLogob = () => {
         let event_id = { event_id: eventId }
+        //扫码登录
         axios.post('/code', event_id).then((res: any) => {
             if (res.data.status === "200") {
-                store.dispatch({type: 'token',value: res.data.token})
-                store.dispatch({type: 'role',value: res.data.role})
-                store.dispatch({type: 'open',value: res.data.user_status})
-                store.dispatch({type: 'children',value: res.data.sub_user})
-                history.push("/user/info");
+                storeInfo(res)
             } else if (res.data.status === "201") {
                 statusAccount = "1";
                 tab.tab.changeActive(statusAccount)
@@ -156,24 +165,17 @@ function LoginFrom(tab: any) {
                 axios.post('/login', values).then((res: any) => {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
-                            store.dispatch({type: 'token',value: res.data.token})
-                            store.dispatch({type: 'role',value: res.data.role})
-                            store.dispatch({type: 'open',value: res.data.user_status})
-                            store.dispatch({type: 'children',value: res.data.sub_user})
-                            history.push("/user/info");
+                            storeInfo(res)
                         }
                     }
                 })
             } else {
+                //绑定多因素
                 values.dys_uid = dysUid
                 axios.put('/bind', values).then((res: any) => {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
-                            store.dispatch({type: 'token',value: res.data.token})
-                            store.dispatch({type: 'role',value: res.data.role})
-                            store.dispatch({type: 'open',value: res.data.user_status})
-                            store.dispatch({type: 'children',value: res.data.sub_user})
-                            history.push("/user/info");
+                            storeInfo(res)
                         }
                     }
                 })
@@ -182,23 +184,16 @@ function LoginFrom(tab: any) {
             if (tab.tab.tabRegistered === "注册") {
                 axios.post('/register', values).then((res: any) => {
                     if (res.data.status === "200") {
-                        store.dispatch({type: 'token',value: res.data.token})
-                        store.dispatch({type: 'role',value: res.data.role})
-                        store.dispatch({type: 'open',value: res.data.user_status})
-                        store.dispatch({type: 'children',value: res.data.sub_user})
-                        history.push("/user/info");
+                        storeInfo(res)
                     }
                 })
             } else {
+                //注册并绑定多因素
                 values.dys_uid = dysUid
                 console.log(dysUid)
                 axios.post('/bind', values).then((res: any) => {
                     if (res.data.status === "200") {
-                        store.dispatch({type: 'token',value: res.data.token})
-                        store.dispatch({type: 'role',value: res.data.role})
-                        store.dispatch({type: 'open',value: res.data.user_status})
-                        store.dispatch({type: 'children',value: res.data.sub_user})
-                        history.push("/user/info");
+                        storeInfo(res)
                     }
                 })
             }
@@ -209,11 +204,7 @@ function LoginFrom(tab: any) {
         axios.post(url, values).then((res: any) => {
             if(res.status === 200){
             if (res.data.status === "200") {
-                store.dispatch({type: 'token',value: res.data.token})
-                store.dispatch({type: 'role',value: res.data.role})
-                store.dispatch({type: 'open',value: res.data.user_status})
-                store.dispatch({type: 'children',value: res.data.sub_user})
-                history.push("/user/info");
+                storeInfo(res)
             }
             }
         })
@@ -223,12 +214,7 @@ function LoginFrom(tab: any) {
             axios.post('/free_login', values).then((res: any) => {
                 console.log(res);
                 if (res.data.status === "200") {
-                    console.log(res.data);
-                    store.dispatch({type: 'token',value: res.data.token})
-                    store.dispatch({type: 'role',value: res.data.role})
-                    store.dispatch({type: 'open',value: res.data.user_status})
-                    store.dispatch({type: 'children',value: res.data.sub_user})
-                    history.push("/user/info");
+                    storeInfo(res)
                 }
 
             })

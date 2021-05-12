@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from '../../../utils/http'
-import { Card, Layout, Table, Button, Form, Radio, Tooltip, Dropdown, Menu, message } from 'antd';
+import { Card, Layout, Table, Button, Form, Radio, Tooltip, Dropdown, Menu } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
 import ModalFrom from '../../../components/userFrom/Modal'
 import UserName from '../../../components/userFrom/UserName'

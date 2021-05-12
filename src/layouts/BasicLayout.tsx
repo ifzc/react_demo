@@ -16,17 +16,12 @@ const { SubMenu } = Menu;
 
 function BasicLayout() {
     const [collapsed, setCollapsed] = useState(false);
-    const [theme, setTheme] = useState('dark');
     const [open, setOpen] = useState(store.getState().open);
 function change(){
     setOpen(store.getState().open)
 }
 
 store.subscribe(change);
-
-    const changeTheme = (value: any) => {
-        setTheme(value)
-    }
     const onCollapse = (collapsed: any) => {
         setCollapsed(collapsed);
     };

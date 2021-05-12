@@ -41,7 +41,6 @@ axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
     NProgress.done()
-    console.log(response)
     if (response.data.status === "200") {
       message.success(response.data.msg);
     } else if (response.data.status === "501") {
@@ -57,6 +56,8 @@ axios.interceptors.response.use(
     return response
   },
   (error) => {
+    //有错误状态值时
+    if(error.response){
     let element = error.response.data.message
     if(error.response.status === 429){
       message.error(element);
@@ -67,6 +68,9 @@ axios.interceptors.response.use(
       }
     }
   }
+}else{
+  message.error("服务器错误，请稍后重试");
+}
     // 请求结束，蓝色过渡滚动条消失
     // 即使出现异常，也要调用关闭方法，否则一直处于加载状态很奇怪
     NProgress.done()

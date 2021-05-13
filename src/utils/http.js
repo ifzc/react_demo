@@ -41,15 +41,15 @@ axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
     NProgress.done()
-    if (response.data.status === "200") {
+    if (response.data.status === "200" && response.data.msg) {
       message.success(response.data.msg);
-    } else if (response.data.status === "501") {
+    } else if (response.data.status === "501" && response.data.msg) {
       message.error(response.data.msg);
       store.dispatch({
         type: 'token',
         value: null
       });
-    } else {
+    } else if(response.data.msg) {
       message.error(response.data.msg);
     }
 
@@ -81,6 +81,6 @@ axios.interceptors.response.use(
 
 axios.defaults.withCredentials = true
 axios.defaults.timeout = 100000
-axios.defaults.baseURL = "http://139.217.130.227:8081/api/auth";
+axios.defaults.baseURL = "http://139.217.130.227/api/auth";
 
 export default axios

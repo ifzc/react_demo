@@ -83,6 +83,7 @@ function CollectionsPage(props: any) {
         axios.post('/user', values).then((res: any) => {
             if (res.status === 200) {
                 if (res.data.status === "200") {
+                    setVisible(false);
                 }
             }
         })
@@ -90,11 +91,11 @@ function CollectionsPage(props: any) {
         axios.put('/user', values).then((res: any) => {
             if (res.status === 200) {
                 if (res.data.status === "200") {
+                    setVisible(false);
                 }
             }
         })
     }
-        setVisible(false);
     }
     return (
         <div>
@@ -154,7 +155,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 name="form_in_modal"
             >
                 <Form.Item
-                            name="old_password"
+                            name="password"
                             label="原密码"
                             rules={[{ required: true, message: '请输入原密码!' }]}
                         >

@@ -73,15 +73,15 @@ export default function ShareAccount() {
   const [form] = Form.useForm();
   const setCaptchaValue = {
     form: form,
-    fromType: "2",
+    fromType: "1",
     type: "child",
-    ifPhone: ifPhone
+    ifPhone: 2
   }
   const setCaptchaValueEmail = {
     form: form,
     fromType: "1",
     type: "child",
-    ifPhone: ifPhone,
+    ifPhone: 1,
     childEmailCode: true
   }
   if (fromType === "添加子账号") {

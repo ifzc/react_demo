@@ -69,17 +69,18 @@ export default function ShareAccount() {
   const [clickNum, setClickNum] = useState(0)
   const [ifPhone, setIfPhone] = useState(0)
   const [editId, setEditId] = useState(0)
-  //const [editType, setEditType] = useState(0)
+  const [ifEdit, setIfEdit] = useState("1")
+  const [ifEditPhone, setIfEditPhone] = useState(2)
   const [form] = Form.useForm();
   const setCaptchaValue = {
     form: form,
-    fromType: "1",
+    fromType: ifEdit,
     type: "child",
-    ifPhone: 2
+    ifPhone: ifEditPhone
   }
   const setCaptchaValueEmail = {
     form: form,
-    fromType: "1",
+    fromType: ifEdit,
     type: "child",
     ifPhone: 1,
     childEmailCode: true
@@ -99,12 +100,17 @@ export default function ShareAccount() {
     setVisible(true)
     setFromType("添加子账号");
     setIfPhone(0)
+    setIfEditPhone(2)
   }
   const editChildrenAccount = (menu: any) => {
     if (menu.key === '1') {
       setIfPhone(1)
+      setIfEdit("2")
+      setIfEditPhone(1)
     } else if (menu.key === '2') {
       setIfPhone(2)
+      setIfEdit("2")
+      setIfEditPhone(2)
     } else {
       setIfPhone(0)
     }

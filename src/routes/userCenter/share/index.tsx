@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from '../../../utils/http'
 import { Card, Layout, Table, Button, Form, Radio, Tooltip, Dropdown, Menu } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
@@ -34,23 +34,25 @@ export default function ShareAccount() {
     },
     {
       title: '是否接收告警',
-      dataIndex: 'is',
-      key: 'is',
+      dataIndex: 'alarm',
+      key: 'alarm',
+      render: (row: any) => row.alarm === 1 ? <div>接受</div> : <div>不接受</div>,
     },
     {
       title: '权限',
-      dataIndex: 'co',
-      key: 'co',
+      dataIndex: 'permission',
+      key: 'permission',
+      render: (row: any) => row.permission === 1 ? <div>只读</div> : row.permission === 2 ? <div>部分权限</div> : <div>同主账号权限</div>,
     },
     {
       title: '更新时间',
-      dataIndex: 'time1',
-      key: 'time1',
+      dataIndex: 'update_time',
+      key: 'update_time',
     },
     {
       title: '创建时间',
-      key: 'time2',
-      dataIndex: 'time2',
+      key: 'creat_time',
+      dataIndex: 'creat_time',
     },
     {
       title: '操作',
@@ -59,19 +61,34 @@ export default function ShareAccount() {
       render: (row: any) => <div><Dropdown overlay={menu} placement="bottomCenter"><Button size={"small"} style={{ margin: '0 10px 0 0' }} onMouseOver={() => over(row)}>编辑</Button></Dropdown><Button type="primary" danger size={"small"} onClick={()=>deleteRow(row.id)}>删除</Button></div>,
     }
   ];
-  axios.get('/sub_user').then((res: any) => {
-    if (res.data.status === "200") {
-      console.log(res)
-    }
-  })
+  const [dataList, setDataList] = useState([])
   const [visible, setVisible] = useState(false)
   const [fromType, setFromType] = useState("添加子账号")
   const [clickNum, setClickNum] = useState(0)
   const [ifPhone, setIfPhone] = useState(0)
-  const [editId, setEditId] = useState(0)
+  const [editRowValue, setRowValue] = useState({
+    email: "",
+    id: 0,
+    name: "",
+    permission: "1",
+    alarm: "1",
+    phone: "",})
   const [ifEdit, setIfEdit] = useState("1")
   const [ifEditPhone, setIfEditPhone] = useState(2)
   const [form] = Form.useForm();
+  const getList = () =>{ 
+    axios.get('/sub_user').then((res: any) => {
+      if (res.data.status === "200") {
+        setDataList(res.data.sub_user_info)
+      }
+    })
+  }
+
+  function Example() {
+    useEffect(() => getList(), []);
+    return null;
+  }
+  Example()
   const setCaptchaValue = {
     form: form,
     fromType: ifEdit,
@@ -92,15 +109,27 @@ export default function ShareAccount() {
   }
 
   const over = (text: any) => {
-    setEditId(text.id)
+    setRowValue(text)
   }
   //let num = 1
   const addChildrenAccount = () => {
+    setRowValue({
+      email: "",
+      id: 0,
+      name: "",
+      permission: "1",
+      alarm: "1",
+      phone: "",})
     setClickNum(clickNum + 1)
     setVisible(true)
     setFromType("添加子账号");
     setIfPhone(0)
     setIfEditPhone(2)
+    axios.get('/sub_user',{params:{id:editRowValue.id}}).then((res: any) => {
+      if (res.data.status === "200") {
+        setRowValue(res.data)
+      }
+    })
   }
   const editChildrenAccount = (menu: any) => {
     if (menu.key === '1') {
@@ -144,19 +173,21 @@ export default function ShareAccount() {
       delete value['code'];
       axios.post('/sub_user', value).then((res: any) => {
         if (res.data.status === "200") {
+          getList()
         }
       })
     } else {//编辑子账号
       if (ifPhone === 0) {
-        value['sub_id'] = editId
+        value['sub_id'] = editRowValue.id
         axios.put('/sub_user', value).then((res: any) => {
           if (res.data.status === "200") {
+            getList()
           }
         })
       } else {//编辑子账号 验证码
 
         let editCode = {
-          sub_id: editId,
+          sub_id: editRowValue.id,
           code: value.code,
           message: '',
           send_type: ''
@@ -193,16 +224,13 @@ export default function ShareAccount() {
         <Content style={{ margin: '16px' }}>
           <Card style={{ textAlign: 'left' }}>
             <Button type="primary" style={{ float: 'right', margin: '0 0 20px 0' }} onClick={addChildrenAccount}>添加子账号</Button>
-            <Table rowKey="id" columns={LogTable} dataSource={data} />
+            <Table rowKey="id" columns={LogTable} dataSource={dataList} />
           </Card>
           <ModalFrom value={madalValue}>
             <Form
               {...formItemLayout}
               form={form}
-              initialValues={{
-                permission: "1",
-                alarm: "1"
-              }}
+              initialValues={editRowValue}
               name="form_in_modal"
               className="labelFrom"
             >
@@ -221,17 +249,17 @@ export default function ShareAccount() {
                   }
                   <Form.Item label="权限" name="permission">
                     <Radio.Group buttonStyle="solid">
-                      <Radio.Button value="1">只读</Radio.Button>
+                      <Radio.Button value={1}>只读</Radio.Button>
                       <Tooltip placement="top" title="可读、可执行操作、不可下发任务">
-                        <Radio.Button value="2">部分权限</Radio.Button>
+                        <Radio.Button value={2}>部分权限</Radio.Button>
                       </Tooltip>
-                      <Radio.Button value="3">同主账号权限</Radio.Button>
+                      <Radio.Button value={3}>同主账号权限</Radio.Button>
                     </Radio.Group>
                   </Form.Item>
                   <Form.Item label="短信或邮箱告警" name="alarm">
                     <Radio.Group buttonStyle="solid">
-                      <Radio.Button value="1">接受</Radio.Button>
-                      <Radio.Button value="0">不接受</Radio.Button>
+                      <Radio.Button value={1}>接受</Radio.Button>
+                      <Radio.Button value={0}>不接受</Radio.Button>
                     </Radio.Group>
                   </Form.Item>
                 </div>
@@ -254,28 +282,3 @@ export default function ShareAccount() {
     </Layout>
   );
 }
-
-const data = [
-  {
-    id: 1,
-    name: 'name',
-    phone: '18545612356',
-    email: '18681810490@163.com',
-    is: '接收',
-    co: '	同主账号权限',
-    time1: '	2020-11-27 16:32:45',
-    time2: '2020-11-27 16:27:15',
-    operating: 'operating',
-  },
-  {
-    id: 2,
-    name: 'ceshi2',
-    phone: '14545454545',
-    email: 'xieshaodong@duoyinsu.com',
-    is: '不接收',
-    co: '只读',
-    time1: '2020-12-10 14:13:10',
-    time2: '2020-11-27 16:55:49',
-    operating: 'operating',
-  },
-];

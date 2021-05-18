@@ -4,7 +4,7 @@ import { Form, Input } from 'antd';
 function Phone(props: any) {
     return (
         <div>
-        { props === 1 ?
+        { props.status === 1 ?
             <Form.Item
                 name="phone"
                 label="手机号"

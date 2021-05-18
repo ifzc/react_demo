@@ -41,25 +41,28 @@ axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
     NProgress.done()
-    if (response.data.status === "200" && response.data.msg) {
+    if(response.data.msg){
+    if (response.data.status === "200") {
       message.success(response.data.msg);
-    } else if (response.data.status === "501" && response.data.msg) {
+    } else if (response.data.status === "501") {
       message.error(response.data.msg);
       store.dispatch({
         type: 'token',
         value: null
       });
-    } else if(response.data.msg) {
+    }else if(response.data.msg.status === "604"){
+      message.error(response.data.msg.msg);
+    } else if(!response.data.msg.status) {
       message.error(response.data.msg);
     }
-
+  }
     return response
   },
   (error) => {
     //有错误状态值时
     if(error.response){
     let element = error.response.data.message
-    if(error.response.status === 429){
+    if(error.response.status === 429 || error.response.status === 500){
       message.error(element);
     }else{
     for (const i in element) {

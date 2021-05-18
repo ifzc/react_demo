@@ -89,7 +89,7 @@ export default function ShareAccount() {
     return null;
   }
   Example()
-  
+
   //编辑row信息
   const getEditRow = () =>{
     axios.get('/sub_user',{params:{id:editRowValue.id}}).then((res: any) => {
@@ -214,13 +214,22 @@ export default function ShareAccount() {
           editCode.message = value.email
           editCode.send_type = '2'
         }
-        axios.patch('/sub_user', editCode)
+        axios.patch('/sub_user', editCode).then((res: any) => {
+          if (res.data.status === "200") {
+            getList()
+          }
+        })
       }
     }
   }
+  //删除列
   const deleteRow = (id:number) => {
     let params={sub_id:id}
-    {axios.delete('/sub_user', {params:params})
+    {axios.delete('/sub_user', {params:params}).then((res: any) => {
+      if (res.data.status === "200") {
+        getList()
+      }
+    })
   }
 }
 

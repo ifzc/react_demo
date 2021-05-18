@@ -87,9 +87,13 @@ function LoginFromCard() {
         setActiveKey(key)
     }
     const changeActive = (key: any) => {
+        if(key !== "3"){
         setActiveKey(key)
         setTabRegistered("注册新账号")
         setTabLogin("绑定已有账号")
+        }else{
+            setActiveKey("1")
+        }
     }
     const loginTab = { fromKey: 1, changeActive: changeActive, tabLogin: tabLogin }
     const registeredTab = { fromKey: 2, changeActive: changeActive, tabRegistered: tabRegistered }
@@ -142,20 +146,22 @@ function LoginFrom(tab: any) {
         axios.post('/code', event_id).then((res: any) => {
             if (res.data.status === "200") {
                 storeInfo(res)
-            } else if (res.data.status === "201") {
+            } else if (res.data.status === "201") {//未注册平台账号扫码登录 
+                setManner(true)
                 statusAccount = "1";
                 tab.tab.changeActive(statusAccount)
                 dysUid = res.data.dys_uid
             }
-            //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
+            //注册过平台账号第一次扫码登录
             else if (res.data.status === "202") {
                 statusAccount = "2";
                 tab.tab.changeActive(statusAccount)
                 dysUid = res.data.dys_uid
                 console.log("202")
+            }else if(res.data.msg.status !== "604"){
+                setTimeout((function () { qrLogob() }), 2000);
             }
         })
-        setTimeout((function () { qrLogob() }), 2000);
     }
     let statusAccount;
     const onFinish = (values: any) => {
@@ -184,7 +190,8 @@ function LoginFrom(tab: any) {
             if (tab.tab.tabRegistered === "注册") {
                 axios.post('/register', values).then((res: any) => {
                     if (res.data.status === "200") {
-                        storeInfo(res)
+                        tab.tab.changeActive("3");
+                        setManner(false);
                     }
                 })
             } else {
@@ -222,7 +229,7 @@ function LoginFrom(tab: any) {
             axios.post('/forget', values).then((res: any) => {
                 console.log(res);
                 if (res.data.status === "200") {
-                    console.log(res.data);
+                tab.tab.changeActive("3")
                 }
 
             })

@@ -7,12 +7,12 @@ export default function ModalFrom(params: any) {
     }, [params.value.clickNum])
 
     const onCancel = () => {
-        params.value.from.resetFields();
+        //params.value.from.resetFields();
         setVisible(false)
     }
     const onCreate = (value: any) => {
         params.value.getFromValue(value)
-        params.value.from.resetFields();
+        //params.value.from.resetFields();
         setVisible(false)
     }
     return (

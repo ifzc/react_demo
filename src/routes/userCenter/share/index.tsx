@@ -36,13 +36,13 @@ export default function ShareAccount() {
       title: '是否接收告警',
       dataIndex: 'alarm',
       key: 'alarm',
-      render: (row: any) => row.alarm === 1 ? <div>接受</div> : <div>不接受</div>,
+      render: (row: any) => row === 1 ? <div>接受</div> : <div>不接受</div>,
     },
     {
       title: '权限',
       dataIndex: 'permission',
       key: 'permission',
-      render: (row: any) => row.permission === 1 ? <div>只读</div> : row.permission === 2 ? <div>部分权限</div> : <div>同主账号权限</div>,
+      render: (row: any) => row === 1 ? <div>只读</div> : row === 2 ? <div>部分权限</div> : <div>同主账号权限</div>,
     },
     {
       title: '更新时间',

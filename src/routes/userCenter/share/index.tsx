@@ -89,6 +89,16 @@ export default function ShareAccount() {
     return null;
   }
   Example()
+  
+  //编辑row信息
+  const getEditRow = () =>{
+    axios.get('/sub_user',{params:{id:editRowValue.id}}).then((res: any) => {
+      if (res.data.status === "200") {
+        setRowValue(res.data)
+      }
+    })
+  }
+
   const setCaptchaValue = {
     form: form,
     fromType: ifEdit,
@@ -109,6 +119,7 @@ export default function ShareAccount() {
   }
 
   const over = (text: any) => {
+    //getEditRow()
     setRowValue(text)
   }
   //let num = 1
@@ -125,10 +136,11 @@ export default function ShareAccount() {
     setFromType("添加子账号");
     setIfPhone(0)
     setIfEditPhone(2)
-    axios.get('/sub_user',{params:{id:editRowValue.id}}).then((res: any) => {
-      if (res.data.status === "200") {
-        setRowValue(res.data)
-      }
+    //清空表单值
+    form.setFieldsValue({
+      name:"",
+      phone: "",
+      email: ""
     })
   }
   const editChildrenAccount = (menu: any) => {
@@ -146,10 +158,13 @@ export default function ShareAccount() {
     setFromType("编辑子账号");
     setVisible(true)
     setClickNum(clickNum + 1)
-    //清空表单值
+    //设置表单值
     form.setFieldsValue({
-      permission: "",
-      alarm: ""
+      name:editRowValue.name,
+      permission: editRowValue.permission,
+      alarm: editRowValue.alarm,
+      phone: editRowValue.phone,
+      email: editRowValue.email
     })
   }
   //编辑菜单
@@ -230,7 +245,10 @@ export default function ShareAccount() {
             <Form
               {...formItemLayout}
               form={form}
-              initialValues={editRowValue}
+              initialValues={{
+                permission: "1",
+                alarm: "1"
+              }}
               name="form_in_modal"
               className="labelFrom"
             >

@@ -33,7 +33,7 @@ const UserInfo=()=> {
                             <p>手 机：<span>{info.phone}</span></p>
                             <p>邮 箱：<span>{info.email}</span></p>
                             <p>token ：<span>{info.token}</span></p>
-                            <p>授权类型：<span>{info.status}</span></p>
+                            <p>授权类型：{info.status ==='0' ? <span>正式版</span> : <span>试用版</span>}</p>
                             <p>授权台数：<span>{info.license_num}</span></p>
                             <p>剩余台数：<span>{info.num}</span></p>
                             <p>过期时间：<span>{info.expired_time}</span></p>

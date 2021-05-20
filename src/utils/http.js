@@ -41,7 +41,7 @@ axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
     NProgress.done()
-    if(response.data.msg){
+    if(response.data.msg && response.config.method !== "get"){
     if (response.data.status === "200") {
       message.success(response.data.msg);
     } else if (response.data.status === "501") {

@@ -1,5 +1,3 @@
-import React from 'react';
-import { List, Avatar, Space } from 'antd';
 import './index.scss';
 
 export default function Introduction() {

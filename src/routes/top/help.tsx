@@ -4,12 +4,11 @@ import './index.scss';
 
 const { Link } = Anchor;
 const { Sider, Content } = Layout;
-export default function helpDocument() {
-
+export default function HelpDocument() {
     return (
-        <Layout>
-            <Sider style={{ background: "#fff", position: "fixed" }}><div style={{ position: "fixed", width: "200px" }}>
-                <Anchor affix={false}>
+        <Layout className="helpIndex">
+            <Sider style={{ background: "#fff",position: "fixed", width: "200px",height:"100%" }}><div>
+                <Anchor affix={false} targetOffset={80}>
                     <Link href={"#content-details"} title="产品详情" />
                     <Link href={"#content-guide"} title="使用指南" />
                     <Link href="#content-problem" title="问题指引">
@@ -31,9 +30,9 @@ export default function helpDocument() {
                 </Anchor></div></Sider>
             <Content>
                 <div id="content">
-                    <div id="content-details">产品详情</div>
-                    <div id="content-guide">使用指南</div>
-                    <div id="content-problem">问题指引</div>
+                    <div id="content-details"><h4 className="blue"><a href="/introduction">产品详情</a></h4></div>
+                    <div id="content-guide"><h4 className="blue">使用指南</h4></div>
+                    <div id="content-problem"><h4>问题指引</h4></div>
                     <div id="content-problem-first">
                         <h4>Q1.服务器被入侵有哪些危害?</h4>
                         <div className="answer">

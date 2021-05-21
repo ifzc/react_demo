@@ -55,15 +55,16 @@ store.subscribe(change);
                             </Menu.Item>
                             <SubMenu key="3" icon={<UserOutlined />} title="用户中心">
                                 <Menu.Item key="3-1">
-                                    <Link to="agent">用户信息</Link></Menu.Item>
+                                    <Link to="/agent">用户信息</Link></Menu.Item>
                                 <Menu.Item key="3-2">
-                                    <Link to="agent">安全设置</Link></Menu.Item>
+                                    <Link to="/agent">安全设置</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
 }
                     </Sider>
                     <Layout className="site-layout">
                         <Header className="site-layout-background" style={{ padding: 0 }} >
+                        {open !== "0" ?
                             <Menu mode="horizontal" style={{ float: 'right' }}>
                                 <Menu.Item key="/Page7">
                                     <Link to="/Page7">{<BellOutlined />}</Link>
@@ -79,6 +80,23 @@ store.subscribe(change);
                                     <Menu.Item onClick={()=>{ store.dispatch({type: 'token',value: null});}}><Link to="/login">退出</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>
+                            :
+                            <Menu mode="horizontal" style={{ float: 'right' }}>
+                                <Menu.Item key="01">
+                                    <Link to="/agent">{<BellOutlined />}</Link>
+                                </Menu.Item>
+                                <Menu.Item key="02">
+                                    <Link to="/agent">数据大屏</Link>
+                                </Menu.Item>
+                                <Menu.Item key="03">
+                                    <Link to="/agent">帮助文档</Link>
+                                </Menu.Item>
+                                <SubMenu key="04" title="User">
+                                    <Menu.Item key="04-1"><Link to="/agent">个人资料</Link></Menu.Item>
+                                    <Menu.Item onClick={()=>{ store.dispatch({type: 'token',value: null});}}><Link to="/login">退出</Link></Menu.Item>
+                                </SubMenu>
+                            </Menu>
+}
                         </Header>
                         <Content style={{ margin: '0 16px' }}>
                             <Breadcrumb style={{ margin: '16px 0' }}>

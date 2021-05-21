@@ -10,9 +10,9 @@ export default function Introduction() {
             <h2>1、产品概述</h2>
             <h3>1.1产品简介</h3>
             <p>阿波罗主机安全Agent，是安识科技推出的一款多平台兼容的服务器安全运维管理产品。通过安装在服务器上的轻量级Agent插件，与云端安全中心的规则联动，实时感知和防御入侵事件，结合灵活严谨的问题处理能力，保障服务器的安全。</p>
-            <img src="/static/images/agent/introduce01.png" />
+            <img src="/images/introduction/introduce01.png" />
             <h3>1.2核心优势</h3>
-            <img src="/static/images/agent/introduce02.png" />
+            <img src="/images/introduction/introduce02.png" />
             <h3>1.3功能特性</h3>
             <h4>1.3.1资产清点</h4>
             <p>统一管理已安装agent插件的所有服务器，随时查看安全状态。可实现端口监听、账号管理、进程详情查阅、软件管理。</p>
@@ -41,7 +41,7 @@ export default function Introduction() {
             <h2>2、产品功能</h2>
             <h3>2.1功能及版本参数</h3>
             <p>下表是平台-主机安全Agent的功能列表和版本参数：</p>
-            {/* <table style={{width:"100%;"}}>
+            <table style={{width:"100%;"}}>
 			<tr> 
 				<th style={{width:"100px"}}>模块</th>
 				<th style={{width:"100px"}}>功能点</th>
@@ -53,14 +53,14 @@ export default function Introduction() {
 				<td>根据云端扫描引擎结果，实时多维度展示被保护资产安全状况，提供清晰快捷的处理入口。</td>
 			</tr>
 			<tr>
-				<th rowspan="8">资产指纹</th>
+				<th rowSpan={8}>资产指纹</th>
 			</tr>
 			<tr>
 				<td>主机管理</td>
 				<td>自动化清点主机指纹，主机基本信息和安全情况；漏洞，风险，威胁可视化。</td>
 			</tr>
 			<tr>
-				<td rowspan="7">资产清点</td>
+				<td rowSpan={7}>资产清点</td>
 				<td>端口管理：对于端口监听信息的收集和呈现，对于变动进行记录。</td>
 			</tr>
 			<tr><td>进程管理：进程信息的收集和呈现，便于自主清点和发现合法和异常进程。</td> </tr>
@@ -69,29 +69,29 @@ export default function Introduction() {
 			<tr><td>日志管理：对进程，端口，用户，系统登录和网络连接的相关日志进行收集和呈现。</td></tr>
 			<tr><td>操作审计：对服务器的命令执行操作进行收集和呈现，便于自主清点和发现合法和异常操作。</td></tr>
 			<tr>
-				<th rowspan="7">安全防御</th>
+				<th rowSpan={7}>安全防御</th>
 			</tr>
 			<tr>
-				<td rowspan="2">漏洞管理</td>
+				<td rowSpan={2}>漏洞管理</td>
 				<td>linux软件漏洞，对标vce官方漏洞库，自动检测并提供修复方案，结合平台执行处理。</td>
 			</tr>
 			<tr><td>web漏洞，利用生态力量及时更新漏洞库，自动检测并提供修复方案，结合平台执行处理。</td></tr>
 			<tr>
-				<td rowspan="4">漏洞管理</td>
+				<td rowSpan={4}>漏洞管理</td>
 				<td>账号安全核查 （操作系统账号，中间件账号，数据库账号，登录日志，访问控制）</td>
 			</tr>
 			<tr><td>系统配置核查 （操作系统，中间件，数据库，关键目录，补丁，访问控制，资源控制）</td></tr>
 			<tr><td>数据库风险核查 （账号，加密存储，日志，备份，补丁，访问控制，资源控制）</td></tr>
 			<tr><td>合规对标核查报告</td></tr>
 			<tr>
-				<th rowspan="13">入侵检测</th>
+				<th rowSpan={13}>入侵检测</th>
 			</tr>
 			<tr>
 				<td>网站后门</td>
 				<td>webshell查杀，同时兼有定时查杀和实时防护扫描策略，支持常见的php、jsp等后门文件类型。</td>
 			</tr>
 			<tr>
-				<td rowspan="5">异常登陆</td>
+				<td rowSpan={5}>异常登陆</td>
 				<td>异地登录提醒，对在非常用地登陆的事件进行警告并处理。</td>
 			</tr>
 			<tr><td>非白名单IP登陆提醒，配置白名单ip,对非白名单ip的事件进行警告并处理。</td></tr>
@@ -99,7 +99,7 @@ export default function Introduction() {
 			<tr><td>非法时间登陆提醒，配置合法登陆时间后，对非合法事件登陆进行警告并处理。</td></tr>
 			<tr><td>暴力破解拦截登录，对密码暴力破解行为进行系统拦截。</td></tr>
 			<tr>
-				<td rowspan="6">主机异常</td>
+				<td rowSpan={6}>主机异常</td>
 				<td>服务器内存cpu异常监控。</td>
 			</tr>
 			<tr><td>进程异常行为：反弹Shell、本地提权、JAVA进程执行CMD命令、bash异常文件下载等。</td></tr>
@@ -107,7 +107,7 @@ export default function Introduction() {
 			<tr><td>异常网络连接：C&C肉鸡检测、恶意病毒源连接下载等。</td></tr>
 			<tr><td>敏感文件篡改：系统及应用的关键文件被黑客篡改。</td></tr>
 			<tr><td>异常账号：黑客入侵后创建隐藏账号、公钥账号等。</td></tr>
-		</table> */}
+		</table>
 
             <h3>2.2功能说明</h3>
             <h4>2.2.1仪表盘</h4>

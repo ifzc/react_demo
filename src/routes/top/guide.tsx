@@ -8,7 +8,7 @@ const { Sider, Content } = Layout;
 export default function Guide() {
     return (
         <Layout className="guideIndex">
-            <Sider style={{ background: "#fff", position: "fixed", width: "235px",height: "100%" }}><div>
+            <Sider style={{ position: "fixed",height: "100%" }} width={210}><div className="guide-sider">
                 <Anchor affix={false} targetOffset={80}>
                     <Link href={"#introduction"} title="1、产品简介" />
                     <Link href="#started" title="2、快速入门">
@@ -47,7 +47,7 @@ export default function Guide() {
                     </Link>
                 </Anchor></div></Sider>
             <Content>
-<div className="guide-content">
+<div className="guide-content"  style={{ background: "#fff" }}>
 	<h1 className="guide-title">使用指南</h1>
 	<h1 id="introduction">1、产品简介</h1>
 	<p>主机安全Agent提供试用功能，您可以通过试用体验主机安全Agent为您的服务器带来的强大防护能力。</p>

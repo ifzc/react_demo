@@ -51,9 +51,18 @@ h4 {
 }
 //
 .guideIndex{
+    .ant-menu,
+    .guide-sider,
+    .ant-anchor-wrapper,
+    .ant-layout-sider {
+        background: #fff;
+    }
+    .ant-layout-sider{
+    box-shadow: 0 0 8px 0.2px #c1c1c1;
+}
     .guide-content{
     padding: 10px 20px;
-    margin-left: 200px;
+    margin-left: 225px;
     }
     img{
         margin: 0 20px 10px 20px;

@@ -6,7 +6,7 @@ import TagGroup from '../../components/table/Tag'
 import ModalFrom from '../../components/userFrom/Modal'
 const data = [
     {
-        key: 1,
+        id: 1,
         hostname: 'Edward King 1',
         age: 32,
         address: `London, Park Lane no.1`,
@@ -19,7 +19,7 @@ const data = [
         hosttype: "宿主机"
     },
     {
-        key: 2,
+        id: 2,
         hostname: 'Edward King 1',
         age: 32,
         address: `London, Park Lane no.1`,
@@ -134,7 +134,8 @@ export default function AssetsTable() {
     const [fromType, setFromType] = useState("编辑标签")
     const [clickNum, setClickNum] = useState(0)
     const [buttonD, setButtonD] = useState(true)
-    const [tag, setTag] = useState({ add: [''], history: [''] })
+    const [tag, setTag] = useState({ already:[''], add: [''], history: [''] })
+    const [editId,setId] = useState([0])
     const [form] = Form.useForm();
 
     const getFromValue = (value: any) => {
@@ -144,10 +145,12 @@ export default function AssetsTable() {
     const addAssetsTag = (title: string, showTag: boolean) => {
         if (!showTag) {
             console.log(1)
-            setTag({ add: [], history: ['Tage1', 'Tage2'] })
+            setTag({ already:[], add: [], history: ['Tage1', 'Tage2'] })
+            console.log(tag)
         } else {
             console.log(2)
-            setTag({ add: ['Tage1', 'Tage2', 'Tage3'], history: ['Tage1', 'Tage2'] })
+            setTag({ already:['Tage3'], add: ['Tage1', 'Tage2', 'Tage3'], history: ['Tage1'] })
+            console.log(tag)
         }
         setClickNum(clickNum + 1)
         setVisible(true)
@@ -175,11 +178,10 @@ export default function AssetsTable() {
     const changeSize = (size: number) => {
         console.log("size", size)
     }
-    const selectedChange = (key: Array<number>, row: any) => {
-        console.log('key', key)
-        console.log('row', row)
-        if (key.length !== 0) {
+    const selectedChange = (id: Array<number>, row: any) => {
+        if (id.length !== 0) {
             setButtonD(false)
+            setId(id)
         } else {
             setButtonD(true)
         }
@@ -192,7 +194,10 @@ export default function AssetsTable() {
         changeSize: changeSize,
         selectedChange: selectedChange
     }
-
+//type 0:可删除不可添加，1：可删除可添加，2：不可删除不可添加
+    let alreadyTag={tags:tag.already,type:0}
+    let addTag={tags:tag.add,type:1}
+    let historyTag={tags:tag.history,type:2}
     return (
         <div>
             <TableOptional props={assetsTable} />
@@ -208,8 +213,9 @@ export default function AssetsTable() {
                     name="form_in_modal"
                     className="labelFrom"
                 >
-                    <Form.Item label="标签" name="label"><TagGroup tags={tag.add} /></Form.Item>
-                    <Form.Item label="历史标签" name="labelH"><TagGroup tags={tag.history} /></Form.Item>
+                    <Form.Item label="● 当前资源已有标签（若选择多个资源则显示其共有标签，删除只影响共有标签）" name="label"><TagGroup tags={alreadyTag} /></Form.Item>
+                    <Form.Item label="● 新增标签" name="label"><TagGroup tags={addTag} /></Form.Item>
+                    <Form.Item label="● 历史标签" name="labelH"><TagGroup tags={historyTag} /></Form.Item>
                 </Form>
             </ModalFrom>
         </div>

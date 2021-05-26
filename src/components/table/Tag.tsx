@@ -3,12 +3,23 @@ import { Tag, Input, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 interface Props {
-    tags:Array<string>
+    tags:{
+    tags:Array<string>,
+    type:number
+    }
 }
-
+enum Direction {
+    tags= '父级传过来的tag',
+        inputVisible= '是否点击+NewTag',
+        inputValue= '新增tag值',
+        editInputIndex= '编辑input的index',
+        editInputValue= '编辑input的值',
+}
 export default class TagGroup extends React.Component<Props> {
     state = {
-        tags: this.props.tags,
+        tags: this.props.tags.tags,
+        type:this.props.tags.type,
+        closable:true,
         inputVisible: false,
         inputValue: '',
         editInputIndex: -1,
@@ -52,8 +63,19 @@ export default class TagGroup extends React.Component<Props> {
             input.focus()
         }
     }
+    tagClick = (e:any) =>{
+        console.log(e)
+    }
+    componentDidMount() {
+        if(this.state.type===2){
+            this.setState({ closable: false });
+        }else{
+            this.setState({ closable: true });
+        }
+      }
     render() {
-        const { tags, inputVisible, inputValue, editInputIndex, editInputValue } = this.state;
+        const { tags, type, closable, inputVisible, inputValue, editInputIndex, editInputValue } = this.state;
+        console.log(typeof type)
         return (
             <>
                 {tags.map((tag, index) => {
@@ -75,7 +97,7 @@ export default class TagGroup extends React.Component<Props> {
                         <Tag
                             className="edit-tag"
                             key={tag}
-                            closable
+                            closable={closable}
                             onClose={() => this.handleClose(tag)}
                         >
                             <span
@@ -86,11 +108,13 @@ export default class TagGroup extends React.Component<Props> {
                                         e.preventDefault();
                                     }
                                 }}
+                                onClick={(e)=>this.tagClick(e)}
                             >
                                 {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                             </span>
                         </Tag>
                     );
+
                     return isLongTag ? (
                         <Tooltip title={tag} key={tag}>
                             {tagElem}
@@ -99,7 +123,12 @@ export default class TagGroup extends React.Component<Props> {
                             tagElem
                         );
                 })}
-                {inputVisible && (
+                {type===0 &&
+                <p style={{margin:0,textAlign:"center",fontWeight:"bold"}}>暂无</p>
+    }
+                {type ===1 &&
+                <div style={{display:"inline-block"}}>
+                {inputVisible ? 
                     <Input
                         ref={this.saveInputRef}
                         type="text"
@@ -110,12 +139,14 @@ export default class TagGroup extends React.Component<Props> {
                         onBlur={this.handleInputConfirm}
                         onPressEnter={this.handleInputConfirm}
                     />
-                )}
-                {!inputVisible && (
+                :
                     <Tag className="site-tag-plus" onClick={this.showInput}>
                         <PlusOutlined /> New Tag
                     </Tag>
-                )}
+                }
+                </div>
+            }
+                
             </>
         );
     }

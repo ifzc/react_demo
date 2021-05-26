@@ -28,7 +28,7 @@ store.subscribe(change);
         return (
             <Layout style={{ minHeight: '100vh' }}>
                 <Router history={createBrowserHistory()} >
-                    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+                    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} style={{ position: 'fixed',height: '100vh',overflow: 'auto',zIndex:2  }}>
                         <div className="logo" id="logo" />
                         {open !== "0" ?
                         <Menu theme="dark" defaultSelectedKeys={['/dashboard']} mode="inline">
@@ -62,8 +62,9 @@ store.subscribe(change);
                         </Menu>
 }
                     </Sider>
-                    <Layout className="site-layout">
-                        <Header className="site-layout-background" style={{ padding: 0 }} >
+                    <Layout className="site-layout" style={{ marginLeft: 200 }}>
+                        <Header style={{ position: "fixed",width:"100%",zIndex:1,right:0}} className="site-layout-background">
+                            <div >
                         {open !== "0" ?
                             <Menu mode="horizontal" style={{ float: 'right' }}>
                                 <Menu.Item key="/Page7">
@@ -96,14 +97,14 @@ store.subscribe(change);
                                     <Menu.Item onClick={()=>{ store.dispatch({type: 'token',value: null});}}><Link to="/login">退出</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>
-}
+}</div>
                         </Header>
-                        <Content style={{ margin: '0 16px' }}>
+                        <Content style={{ margin: '64px 16px 0 16px' }}>
                             <Breadcrumb style={{ margin: '16px 0' }}>
                                 {/* <Breadcrumb.Item>User</Breadcrumb.Item>
                                 <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
                             </Breadcrumb>
-                            <div className="site-layout-background" style={{ minHeight: 360 }}>
+                            <div className="site-layout-background">
                                 <RouterSwitch />
                             </div>
                         </Content>

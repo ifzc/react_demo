@@ -1,0 +1,43 @@
+.detail{
+.ant-tabs-nav-list{
+    width: 70%;
+    .ant-tabs-tab{
+        font-size: 16px;
+    }
+}
+.detail-list-title{
+    position: relative;
+    padding-left: 10px;
+    line-height: 18px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.detail-list-title::before {
+    content: "";
+    width: 3px;
+    height: 18px;
+    background: #00a0ff;
+    border-radius: 5px;
+    position: absolute;
+    left: 2px;
+    top: 0px;
+}
+//基本信息
+.detail-basic{
+    display: flex;
+    padding: 20px;
+    div{
+        width: 45%;
+    }
+.detail-basic-info tr td:nth-of-type(1){
+    text-align: right;
+    
+}
+}
+
+//监控信息
+.detail-monitor{
+    border-top: 1px solid #d7d7d7;
+}
+
+}

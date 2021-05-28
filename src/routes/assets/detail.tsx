@@ -1,17 +1,47 @@
-import { Tabs, Card } from 'antd';
+import React, { useState }from 'react'
+import { Tabs, Card,DatePicker, Button  } from 'antd';
+import moment from 'moment';
+
 import './index.scss'
 import Bar from '../../components/echart/bar';
 import Line from '../../components/echart/line';
 
 const { TabPane } = Tabs;
+const { RangePicker } = DatePicker;
 
 export default function AssetsDetail() {
+  const [lineXdata,setLineXdata]=useState([
+    '2009/6/12 2:00', '2009/6/12 3:00', '2009/6/12 4:00', '2009/6/12 5:00', '2009/6/12 6:00', '2009/6/12 7:00', '2009/6/12 8:00', '2009/6/12 9:00', '2009/6/12 10:00', '2009/6/12 11:00', '2009/6/12 12:00', '2009/6/12 13:00', '2009/6/12 14:00', '2009/6/12 15:00', '2009/6/12 16:00', '2009/6/12 17:00', '2009/6/12 18:00', '2009/6/12 19:00', '2009/6/12 20:00', '2009/6/12 21:00'])
     const callback = (key:string) => {
         console.log(key);
       }
-      let data={
-        xdata: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        ydata: [120, 200, 150, 80, 70, 110, 130]
+      let barData={
+        legend:[],
+        xdata: ['用户信息', '软件清单', '监听端口', '运行进程', 'web站点', '数据库信息', '组件信息', '共享文件'],
+        ydata: [0, 417, 20, 27, 11, 12, 12, 0]
+      }
+      let lineDataCpu={
+        legend:['cpu使用率'],
+        xdata: lineXdata,
+        ydata: [[10,20,40,0,30,100,80,90,10,20,40,0,30,100,80,90,60,2,5,100]]
+      }
+      let lineDataAccessNetwork={
+        legend:['出网','入网'],
+        xdata: lineXdata,
+        ydata: [[10,20,40,0,30,100,80,90,10,20,40,0,30,100,80,90,60,2,5,100],[100,200,400,0,300,100,80,90,100,200,400,0,300,100,80,90,6,20,50,100]]
+      }
+      let lineDataRam={
+        legend:['内存占用'],
+        xdata: lineXdata,
+        ydata:[[10,20,40,0,30,100,80,90,10,20,40,0,30,100,80,90,60,2,5,100]]
+      }
+      let lineDataDisk={
+        legend:['磁盘使用'],
+        xdata: lineXdata,
+        ydata: [[10,20,40,0,30,100,80,90,10,20,40,0,30,100,80,90,60,2,5,100]]
+      }
+      const onChange = () =>{
+
       }
     return(
         <Tabs defaultActiveKey="1" onChange={callback} className="detail">
@@ -87,22 +117,37 @@ export default function AssetsDetail() {
             </table>
       </div>
       <div className="detail-basic-right">
-      <Bar data={data}/>
+      <Bar data={barData}/>
       </div>
   </div>
   <div className="detail-monitor">
+    <div className="detail-monitor-top">
   <p className="detail-list-title">监控信息</p>
+  <p>
+    <a href="##">设置告警规则</a>
+    <a href="##">查看告警规则</a>
+    <RangePicker
+      ranges={{
+        '最近一周': [moment().startOf('month'), moment().endOf('month')],
+      }}
+      showTime
+      format="YYYY/MM/DD HH:mm:ss"
+      onChange={onChange}
+    />
+    <Button type="primary" size="small">查询</Button>
+  </p>
+  </div>
   <Card>
-    <Line/>
+    <Line data={lineDataCpu}/>
   </Card>
   <Card>
-  出入网
+  <Line data={lineDataAccessNetwork}/>
   </Card>
   <Card>
-  内存
+  <Line data={lineDataRam}/>
   </Card>
   <Card>
-  磁盘
+  <Line data={lineDataDisk}/>
   </Card>
   </div>
     </TabPane>

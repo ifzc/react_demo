@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState }from 'react'
 // import {Card} from 'antd';
 //不是按需加载的话文件太大
 //import echarts from 'echarts'
@@ -13,6 +13,17 @@ import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 
 export default function Line(prop:any) {
+    console.log(prop)
+      var lineSeries:any =[]
+    for (let i = 0; i < prop.data.ydata.length; i++) {
+        const element = prop.data.ydata[i];
+        lineSeries.push({
+            name: prop.data.legend[i],
+            smooth: true,
+            type: 'line',
+            data: element
+          })
+    }
         // 绘制图表
         const getOption=()=>{
             let option = {
@@ -26,7 +37,7 @@ export default function Line(prop:any) {
                 },
                 legend: {
                   x: 'left',
-                  data: ['cpu使用率']
+                  data: prop.data.legend
                 },
                 calculable: true,
                 dataZoom: {
@@ -38,28 +49,22 @@ export default function Line(prop:any) {
                 xAxis: [{
                   type: 'category',
                   boundaryGap: false,
-                  data:  [
-                    '2009/6/12 2:00', '2009/6/12 3:00', '2009/6/12 4:00', '2009/6/12 5:00', '2009/6/12 6:00', '2009/6/12 7:00', '2009/6/12 8:00', '2009/6/12 9:00', '2009/6/12 10:00', '2009/6/12 11:00', '2009/6/12 12:00', '2009/6/12 13:00', '2009/6/12 14:00', '2009/6/12 15:00', '2009/6/12 16:00', '2009/6/12 17:00', '2009/6/12 18:00', '2009/6/12 19:00', '2009/6/12 20:00', '2009/6/12 21:00']
+                  data:  prop.data.xdata
                 }],
                 yAxis: [{
                   type: 'value',
                   scale: true,
-                  max: 100,
-                  min: 0,
+                  /* max: 100,
+                  min: 0, */
                   splitNumber: 2,
                 }],
-                series: [{
-                  name: 'cpu使用率',
-                  smooth: true,
-                  type: 'line',
-                  data: [10,20,40,0,30,100,80,90,10,20,40,0,30,100,80,90,60,2,5,100]
-                },],
+                series: lineSeries,
               };
         return option
         }
 
     return ( 
-        <div title="折线图表之一" style={{width:'100%'}}>
+        <div style={{width:'100%'}}>
         <ReactEcharts option={getOption()} theme="Imooc" style={{height:'228px',width:'100%'}}/>
     </div>
     );

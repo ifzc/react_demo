@@ -26,18 +26,33 @@
 .detail-basic{
     display: flex;
     padding: 20px;
-    div{
-        width: 45%;
+
+    .detail-basic-left{
+        width: 40%;
     }
-.detail-basic-info tr td:nth-of-type(1){
-    text-align: right;
-    
+    .detail-basic-right{
+        width: 60%;
+    }
+.detail-basic-info{
+    tr td {
+        padding: 3px 0 ;
+    }
+    tr td:nth-of-type(1){
+        text-align: right;
+        min-width: 70px;
+    }
 }
 }
 
 //监控信息
 .detail-monitor{
     border-top: 1px solid #d7d7d7;
+    .detail-list-title{
+        margin-top: 16px;
+    }
+    .ant-card{
+        margin-top: 16px;
+    }
 }
 
 }

@@ -1,5 +1,7 @@
 import { Tabs, Card } from 'antd';
 import './index.scss'
+import Bar from '../../components/echart/bar';
+import Line from '../../components/echart/line';
 
 const { TabPane } = Tabs;
 
@@ -7,12 +9,16 @@ export default function AssetsDetail() {
     const callback = (key:string) => {
         console.log(key);
       }
+      let data={
+        xdata: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        ydata: [120, 200, 150, 80, 70, 110, 130]
+      }
     return(
         <Tabs defaultActiveKey="1" onChange={callback} className="detail">
     <TabPane tab="基本信息" key="1">
     <div className="detail-basic">
-      <p className="detail-list-title">基本信息</p>
       <div className="detail-basic-left">
+      <p className="detail-list-title">基本信息</p>
       <table className="detail-basic-info">
               <tr>
                 <td>主机名：</td>
@@ -80,12 +86,14 @@ export default function AssetsDetail() {
               </tr>
             </table>
       </div>
-      <div className="detail-basic-right">y</div>
+      <div className="detail-basic-right">
+      <Bar data={data}/>
+      </div>
   </div>
   <div className="detail-monitor">
   <p className="detail-list-title">监控信息</p>
   <Card>
-    cpu
+    <Line/>
   </Card>
   <Card>
   出入网

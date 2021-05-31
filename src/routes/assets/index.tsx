@@ -203,7 +203,7 @@ export default function AssetsTable() {
             setAdd(tag)
         }
     }
-    let assetsTable = {
+    let advancedTable = {
         count: 11,
         columns: columns,
         data: data,
@@ -218,7 +218,7 @@ export default function AssetsTable() {
     let historyTag={tags:history,type:2,tagChange:tagChange}
     return (
         <div>
-            <TableOptional props={assetsTable} />
+            <TableOptional props={advancedTable} />
             <div className="table-button">
                 <Button disabled={buttonD} onClick={() => addAssetsTag('编辑标签', true)}>编辑标签</Button>
                 <Button disabled={buttonD} onClick={() => addAssetsTag('编辑负责人', true)}>编辑负责人</Button>

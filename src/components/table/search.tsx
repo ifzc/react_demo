@@ -4,8 +4,8 @@ import moment from 'moment';
 const { RangePicker } = DatePicker;
 
 export default function SearchForm(prop:any){
-    console.log(prop.data.inputList)
   const [form] = Form.useForm();
+
   let fromInput=''
   let htmlI = document.createElement('div')
   for (let i = 0; i < prop.data.inputList.length; i++) {
@@ -13,20 +13,26 @@ export default function SearchForm(prop:any){
       fromInput+=<Form.Item label={element.label} name={element.name}><Input placeholder={element.placeholder} /></Form.Item>
   }
   htmlI.append(fromInput)
-  const onChange = () =>{
 
+//提交表单且数据验证成功后回调事件
+const onFinish = (values: any) => {
+  prop.data.searchCondition(values)
 }
+const onReset = () => {
+  form.resetFields();
+};
   return (
       <Form
         layout='inline'
         form={form}
+        onFinish={onFinish}
       >
         {
           prop.data.inputList.map((item:any, index:number) => {
             return <Form.Item key={index} label={item.label} name={item.name}><Input placeholder={item.placeholder} /></Form.Item>
           })
         }
-        <Form.Item label="">
+        <Form.Item label="" name="time">
         <RangePicker
       ranges={{
         '最近一周': [moment().subtract('days', 6), moment()],
@@ -35,14 +41,13 @@ export default function SearchForm(prop:any){
       }}
       showTime
       format="YYYY/MM/DD HH:mm:ss"
-      onChange={onChange}
     />
         </Form.Item>
         <Form.Item>
-          <Button type="primary">查询</Button>
+          <Button type="primary" htmlType="submit">查询</Button>
         </Form.Item>
         <Form.Item>
-          <Button>重置</Button>
+          <Button onClick={onReset}>重置</Button>
         </Form.Item>
       </Form>
   );

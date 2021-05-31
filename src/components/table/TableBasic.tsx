@@ -8,7 +8,7 @@ export default function TableBasic(params: any) {
     }
     return (
         <div>
-            <Table columns={params.props.columns} dataSource={params.props.data} pagination={false} />
+            <Table columns={params.props.columns} dataSource={params.props.data} pagination={false} rowKey="id"/>
             {!params.props.isShow &&
                 <PaginationNum change={changeSize} />
             }

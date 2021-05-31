@@ -1,6 +1,7 @@
 import React, { useState }from 'react'
 import { Tabs, Card,DatePicker, Button  } from 'antd';
 import moment from 'moment';
+import FingerprintDetail from './fingerprint';
 
 import './index.scss'
 import Bar from '../../components/echart/bar';
@@ -128,7 +129,9 @@ export default function AssetsDetail() {
     <a href="##">查看告警规则</a>
     <RangePicker
       ranges={{
-        '最近一周': [moment().startOf('month'), moment().endOf('month')],
+        '最近一周': [moment().subtract('days', 6), moment()],
+        '最近一个月': [moment().subtract('days', 30), moment()],
+        '最近三个月': [moment().subtract('days', 90), moment()],
       }}
       showTime
       format="YYYY/MM/DD HH:mm:ss"
@@ -152,7 +155,7 @@ export default function AssetsDetail() {
   </div>
     </TabPane>
     <TabPane tab="指纹信息" key="2">
-      Content of Tab Pane 2
+      <FingerprintDetail/>
     </TabPane>
     <TabPane tab="漏洞信息" key="3">
       Content of Tab Pane 3

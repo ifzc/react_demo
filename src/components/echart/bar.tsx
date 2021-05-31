@@ -26,13 +26,13 @@ export default function Bar(prop:any) {
             },
             xAxis: {
                 type: 'category',
-                data: ['用户信息', '软件清单', '监听端口', '运行进程', 'web站点', '数据库信息', '组件信息', '共享文件']
+                data: prop.data.xdata
             },
             yAxis: {
                 type: 'value'
             },
             series: [{
-                data: [0, 417, 20, 27, 11, 12, 12, 0],
+                data: prop.data.ydata,
                 type: 'bar',
                  label: {
                 show: true,

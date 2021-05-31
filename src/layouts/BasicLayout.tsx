@@ -1,6 +1,6 @@
 import React, { useState }from 'react'
 import store from '../store';
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { Layout, Menu, Breadcrumb, Card } from 'antd'
 import { Router, Link } from "react-router-dom"
 import {
     PieChartOutlined,
@@ -104,9 +104,9 @@ store.subscribe(change);
                                 {/* <Breadcrumb.Item>User</Breadcrumb.Item>
                                 <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
                             </Breadcrumb>
-                            <div className="site-layout-background">
+                            <Card className="site-layout-background">
                                 <RouterSwitch />
-                            </div>
+                            </Card>
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
                     </Layout>

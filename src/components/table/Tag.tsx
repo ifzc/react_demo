@@ -5,7 +5,8 @@ import { PlusOutlined } from '@ant-design/icons';
 interface Props {
     tags:{
     tags:Array<string>,
-    type:number
+    type:number,
+    tagChange:any
     }
 }
 enum Direction {
@@ -29,8 +30,9 @@ export default class TagGroup extends React.Component<Props> {
     handleClose = (removedTag: any) => {
         const tags = this.state.tags.filter(tag => tag !== removedTag);
         console.log(tags);
+        console.log(this.state.type);
         this.setState({ tags });
-
+        this.props.tags.tagChange(tags,this.state.type)
     };
 
     showInput = () => {
@@ -48,8 +50,10 @@ export default class TagGroup extends React.Component<Props> {
             tags = [...tags, inputValue];
         }
         console.log(tags);
+        console.log(this.state.type);
+        this.props.tags.tagChange(tags,this.state.type)
         this.setState({
-            tags,
+            tags:tags,
             inputVisible: false,
             inputValue: '',
         });
@@ -63,8 +67,10 @@ export default class TagGroup extends React.Component<Props> {
             input.focus()
         }
     }
-    tagClick = (e:any) =>{
-        console.log(e)
+    //点击标签事件--运用在历史标签上
+    tagClick = (tag:string,type:number) =>{
+        console.log(tag,type)
+        this.props.tags.tagChange(tag,type)
     }
     componentDidMount() {
         if(this.state.type===2){
@@ -75,7 +81,6 @@ export default class TagGroup extends React.Component<Props> {
       }
     render() {
         const { tags, type, closable, inputVisible, inputValue, editInputIndex, editInputValue } = this.state;
-        console.log(typeof type)
         return (
             <>
                 {tags.map((tag, index) => {
@@ -108,7 +113,7 @@ export default class TagGroup extends React.Component<Props> {
                                         e.preventDefault();
                                     }
                                 }}
-                                onClick={(e)=>this.tagClick(e)}
+                                onClick={(e)=>this.tagClick(tag,type)}
                             >
                                 {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                             </span>
@@ -123,8 +128,10 @@ export default class TagGroup extends React.Component<Props> {
                             tagElem
                         );
                 })}
-                {type===0 &&
+                {type===0 && tags.length<=0 ?
                 <p style={{margin:0,textAlign:"center",fontWeight:"bold"}}>暂无</p>
+                :
+                ''
     }
                 {type ===1 &&
                 <div style={{display:"inline-block"}}>

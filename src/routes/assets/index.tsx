@@ -134,23 +134,28 @@ export default function AssetsTable() {
     const [fromType, setFromType] = useState("编辑标签")
     const [clickNum, setClickNum] = useState(0)
     const [buttonD, setButtonD] = useState(true)
-    const [tag, setTag] = useState({ already:[''], add: [''], history: [''] })
+    const [already, setAlready] = useState([''])
+    const [add, setAdd] = useState([''])
+    const [history, setHistory] = useState([''])
     const [editId,setId] = useState([0])
     const [form] = Form.useForm();
 
     const getFromValue = (value: any) => {
         console.log('model表单值', value)
+        console.log(already,add)
     }
     //编辑标签 负责人
     const addAssetsTag = (title: string, showTag: boolean) => {
         if (!showTag) {
             console.log(1)
-            setTag({ already:[], add: [], history: ['Tage1', 'Tage2'] })
-            console.log(tag)
+            setAlready([])
+            setAdd([])
+            setHistory(['Tage1', 'Tage2'])
         } else {
             console.log(2)
-            setTag({ already:['Tage3'], add: ['Tage1', 'Tage2', 'Tage3'], history: ['Tage1'] })
-            console.log(tag)
+            setAlready(['Tage3'])
+            setAdd([])
+            setHistory(['Tage1', 'Tage2'])
         }
         setClickNum(clickNum + 1)
         setVisible(true)
@@ -186,18 +191,31 @@ export default function AssetsTable() {
             setButtonD(true)
         }
     }
+
+    const tagChange = (tag:Array<string>,type:number) =>{
+        console.log("asset")
+        console.log(tag,type)
+        if(type === 0){
+            setAlready(tag)
+        }else if(type === 1){
+        setAdd(tag)
+        }else{
+            setAdd(tag)
+        }
+    }
     let assetsTable = {
         count: 11,
         columns: columns,
         data: data,
         columnsStateMap: columnsStateMap,
         changeSize: changeSize,
-        selectedChange: selectedChange
+        selectedChange: selectedChange,
+        ifRowSelection:true
     }
 //type 0:可删除不可添加，1：可删除可添加，2：不可删除不可添加
-    let alreadyTag={tags:tag.already,type:0}
-    let addTag={tags:tag.add,type:1}
-    let historyTag={tags:tag.history,type:2}
+    let alreadyTag={tags:already,type:0,tagChange:tagChange}
+    let addTag={tags:add,type:1,tagChange:tagChange}
+    let historyTag={tags:history,type:2,tagChange:tagChange}
     return (
         <div>
             <TableOptional props={assetsTable} />
@@ -213,7 +231,7 @@ export default function AssetsTable() {
                     name="form_in_modal"
                     className="labelFrom"
                 >
-                    <Form.Item label="● 当前资源已有标签（若选择多个资源则显示其共有标签，删除只影响共有标签）" name="label"><TagGroup tags={alreadyTag} /></Form.Item>
+                    <Form.Item label="● 当前资源已有标签（若选择多个资源则显示其共有标签，删除只影响共有标签）" name="labelA"><TagGroup tags={alreadyTag} /></Form.Item>
                     <Form.Item label="● 新增标签" name="label"><TagGroup tags={addTag} /></Form.Item>
                     <Form.Item label="● 历史标签" name="labelH"><TagGroup tags={historyTag} /></Form.Item>
                 </Form>

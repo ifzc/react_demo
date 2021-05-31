@@ -23,18 +23,23 @@ export default function TableOptional(params: any) {
     const onChange = (selectedRowKeys: any, selectedRows: any) => {
         params.props.selectedChange(selectedRowKeys, selectedRows)
     }
-
-    const rowSelection = {
-        onChange: onChange,
-        selections: [
-            Table.SELECTION_ALL,
-            Table.SELECTION_INVERT]
+    //控制是否可选择
+    let rowSelection = {}
+    if(params.props.ifRowSelection){
+        rowSelection = {
+            onChange: onChange,
+            selections: [
+                Table.SELECTION_ALL,
+                Table.SELECTION_INVERT]
+        }
+    }else{
+        rowSelection=false
     }
 
     return (
         <div>
             <ProTable
-                rowKey="key"
+                rowKey="id"
                 columns={params.props.columns}
                 columnsStateMap={columnsStateMap}
                 rowSelection={rowSelection}

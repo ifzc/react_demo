@@ -1,7 +1,6 @@
 import React, { useState }from 'react'
-import { Tabs, Card, Button  } from 'antd';
+import { Tabs,Button } from 'antd';
 import SearchForm from '../../components/table/search';
-import TableBasic from '../../components/table/TableBasic'
 import TableOptional from '../../components/table/TableOptional'
 
 import './index.scss'
@@ -9,37 +8,55 @@ import './index.scss'
 const { TabPane } = Tabs;
 
 export default function FingerprintDetail() {
-
+  const [data, setData] = useState([])
+  const [info, setInfo] = useState({columns:[],columnsMap:{},ifExpand:false})
+  //列表相关
+  let columnsStateMap = {}
     const callback = (key:string) => {
         console.log(key);
+        if(key==="用户信息"){
+          setData(userInfoData)
+          columnsStateMap={
+            password_last_time: {
+                show: false,
+                order: 2,
+            }, password_expiration_time: {
+                show: false,
+                order: 2,
+            }, get_time: {
+                show: false,
+                order: 2,
+            }
+        }
+          setInfo({columns:userInfoColumns,columnsMap:columnsStateMap,ifExpand:false})
+        }else if(key==="软件清单"){
+          setData(softwareListData)
+          columnsStateMap={
+            type: {
+                show: false,
+                order: 2,
+            },get_time: {
+                show: false,
+                order: 2,
+            }
+        }
+          setInfo({columns:softwareListColumns,columnsMap:columnsStateMap,ifExpand:true})
+        }
       }
       //换页
       const changeSize=(value:any)=>{
         console.log(value)
         }
-      
-      //列表相关
-    const columnsStateMap = {
-        password_last_time: {
-            show: false,
-            order: 2,
-        }, password_expiration_time: {
-            show: false,
-            order: 2,
-        }, get_time: {
-            show: false,
-            order: 2,
-        }
-    }
 
       let advancedTable = {
-        count: 11,
-        columns: userInfoColumns,
-        data: userInfoData,
-        columnsStateMap: columnsStateMap,
+        count: 11,//条数
+        columns: info.columns,
+        data: data,
+        columnsStateMap: info.columnsMap,
         changeSize: changeSize,
         selectedChange: null,
-        ifRowSelection:false
+        ifRowSelection:false,
+        ifExpand:info.ifExpand
     }
     //查询接口
     const searchCondition =(val:any)=>{
@@ -50,43 +67,43 @@ export default function FingerprintDetail() {
     let userInfo={inputList:[{placeholder:"用户名/shell",label:"用户搜索",name:"keyword"}],searchCondition:searchCondition}
       
     return(
-        <Tabs defaultActiveKey="1" onChange={callback} className="detail">
-    <TabPane tab="用户信息" key="1">
+        <Tabs defaultActiveKey="用户信息" onChange={callback} className="detail">
+    <TabPane tab="用户信息" key="用户信息">
       <SearchForm data={userInfo}/>
       <TableOptional props={advancedTable} />
     </TabPane>
-    <TabPane tab=" 软件清单" key="2">
-      Content of Tab Pane 3
+    <TabPane tab=" 软件清单" key="软件清单">
+    <TableOptional props={advancedTable} />
     </TabPane>
-    <TabPane tab="监听端口" key="3">
+    <TabPane tab="监听端口" key="监听端口">
       Content of Tab Pane 1
     </TabPane>
-    <TabPane tab="运行进程" key="4">
+    <TabPane tab="运行进程" key="运行进程">
       Content of Tab Pane 2
     </TabPane>
-    <TabPane tab=" 运行服务" key="5">
+    <TabPane tab=" 运行服务" key="运行服务">
       Content of Tab Pane 3
     </TabPane>
-    <TabPane tab=" web站点" key="6">
+    <TabPane tab=" web站点" key="web站点">
       Content of Tab Pane 1
     </TabPane>
-    <TabPane tab="数据库信息" key="7">
+    <TabPane tab="数据库信息" key="数据库信息">
       Content of Tab Pane 2
     </TabPane>
-    <TabPane tab="日志信息" key="8">
+    <TabPane tab="日志信息" key="日志信息">
       Content of Tab Pane 3
     </TabPane>
-    <TabPane tab="补丁信息" key="9">
+    <TabPane tab="补丁信息" key="补丁信息">
       Content of Tab Pane 1
     </TabPane>
-    <TabPane tab=" 共享文件" key="10">
+    <TabPane tab=" 共享文件" key="共享文件">
       Content of Tab Pane 2
     </TabPane>
   </Tabs>
     )
 }
 
-const userInfoData = [
+const userInfoData:any = [
   {
       id: 1,
       username: 'Administrator',
@@ -114,7 +131,7 @@ const userInfoData = [
       update_time: "2020-01-09 16:15:35",
   }
 ];
-const userInfoColumns = [
+const userInfoColumns:any = [
   {
       title: '用户名',
       dataIndex: 'username',
@@ -170,5 +187,100 @@ const userInfoColumns = [
       title: '更新时间',
       dataIndex: 'update_time',
       key: 'update_time',
+  }
+];
+//软件清单
+const softwareListData:any = [
+  {
+      id: 1,
+      name: 'Microsoft SQL Server Management Studio - 17.8.1',
+      status: '启用',
+      producer: `Microsoft Corporation`,
+      version: "14.0.17277.0	",
+      type: "-",
+      size: "	3014MB",
+      installation_path: '2020-01-09 16:15:35',
+      installation_time: "2020-01-09 16:15:35",
+      get_time: "2020-01-09 16:15:35",
+      update_time: "2020-01-09 16:15:35",
+  },
+  {
+      id: 2,
+      name: 'Guest',
+      status: '禁用',
+      producer: `Microsoft Corporation`,
+      version: "14.0.23026.0",
+      type: "-",
+      size: "	3014MB",
+      installation_path: '2020-01-09 16:15:35',
+      installation_time: "2020-01-09 16:15:35",
+      get_time: "2020-01-09 16:15:35",
+      update_time: "2020-01-09 16:15:35",
+  }
+];
+//查看安装路径
+const viewPath=(path:string)=>{
+        console.log(path)
+}
+const softwareListColumns:any = [
+  {
+      title: '名称',
+      dataIndex: 'name',
+      key: 'name'
+  },
+  {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      filters: true,
+      onFilter: true,
+      width: 80,
+      valueEnum: {
+          启用: { text: '启用', status: 'Default' },
+          禁用: { text: '禁用', status: 'Success' },
+      },
+  },
+  {
+      title: '产商',
+      dataIndex: 'producer',
+      key: 'producer',
+  },
+  {
+      title: '版本',
+      dataIndex: 'version',
+      key: 'version',
+  }, {
+      title: '类型',
+      dataIndex: 'type',
+      key: 'type',
+  },
+  {
+      title: '大小',
+      dataIndex: 'size',
+      key: 'size'
+  },
+  {
+      title: '安装路径',
+      dataIndex: 'installation_path',
+      key: 'installation_path',
+      colSpan: 2,
+      render: () => {},
+  },{
+    title: '安装时间',
+    dataIndex: 'installation_time',
+    key: 'installation_time',
+    colSpan: 1
+},
+  {
+      title: '获取时间',
+      dataIndex: 'get_time',
+      key: 'get_time',
+      colSpan: 1
+  },
+  {
+      title: '更新时间',
+      dataIndex: 'update_time',
+      key: 'update_time',
+      colSpan: 1
   }
 ];

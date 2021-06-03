@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Table } from 'antd';
+import { Space, Table, Button } from 'antd';
 import type { ColumnsState } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import PaginationNum from './Pagination'
@@ -42,6 +42,13 @@ export default function TableOptional(params: any) {
                 rowKey="id"
                 columns={params.props.columns}
                 columnsStateMap={columnsStateMap}
+                expandable={
+                    params.props.ifExpand && {
+                      expandedRowRender: (record: any) => <p>{record.installation_path}</p>,
+                      expandIconColumnIndex:"6",//ant-table-row-expand-icon-cell
+                      expandIcon: ({ expanded, onExpand, record }) => <Button type="primary" size="small" onClick={e => onExpand(record, e)}>查看</Button>
+                    }
+                  }
                 rowSelection={rowSelection}
                 tableAlertRender={({ selectedRowKeys, onCleanSelected }) => (
                     <Space size={24}>

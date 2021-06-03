@@ -2,6 +2,9 @@ import React, { useState }from 'react'
 import { Tabs, Card,DatePicker, Button  } from 'antd';
 import moment from 'moment';
 import FingerprintDetail from './fingerprint';
+import TableBasic from '../../components/table/TableBasic'
+import TableOptional from '../../components/table/TableOptional'
+import SearchForm from '../../components/table/search';
 
 import './index.scss'
 import Bar from '../../components/echart/bar';
@@ -11,11 +14,18 @@ const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
 export default function AssetsDetail() {
+  //查询接口
+  const searchCondition =(val:any)=>{
+    console.log(val)
+  }
+  const [basicData, setBasicData] = useState([])
+  const [basicInfo, setBasicInfo] = useState({columns:[]})
+  const [optionalData, setOptionalData] = useState([])
+  const [optionalInfo, setOptionalInfo] = useState({columns:[],columnsMap:{}})
+  //引用查询条件
+  const [userInfo, setUserInfo] = useState({})
   const [lineXdata,setLineXdata]=useState([
     '2009/6/12 2:00', '2009/6/12 3:00', '2009/6/12 4:00', '2009/6/12 5:00', '2009/6/12 6:00', '2009/6/12 7:00', '2009/6/12 8:00', '2009/6/12 9:00', '2009/6/12 10:00', '2009/6/12 11:00', '2009/6/12 12:00', '2009/6/12 13:00', '2009/6/12 14:00', '2009/6/12 15:00', '2009/6/12 16:00', '2009/6/12 17:00', '2009/6/12 18:00', '2009/6/12 19:00', '2009/6/12 20:00', '2009/6/12 21:00'])
-    const callback = (key:string) => {
-        console.log(key);
-      }
       let barData={
         legend:[],
         xdata: ['用户信息', '软件清单', '监听端口', '运行进程', 'web站点', '数据库信息', '组件信息', '共享文件'],
@@ -44,6 +54,63 @@ export default function AssetsDetail() {
       const onChange = () =>{
 
       }
+       //列表相关
+  let columnsStateMap = {}
+      const callback = (key:string) => {
+       if(key==="4"){
+        setBasicData(baselineCheckData)
+        setBasicInfo({columns:baselineCheckColumns})
+        setUserInfo({inputList:[{placeholder:"请输入",label:"搜索条件：",name:"keyword"}],searchCondition:searchCondition})
+       } else if(key==="5"){
+        columnsStateMap={
+          get_time: {show: false,order: 2,}}
+        setOptionalData(weakPasswordData)
+        setOptionalInfo({columns:weakPasswordColumns,columnsMap:columnsStateMap})
+        setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
+       } else if(key==="6"){
+        setBasicData(abnormalLoginData)
+        setBasicInfo({columns:abnormalLoginColumns})
+        setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
+       } else if(key==="7"){
+        setBasicData(bruteForceData)
+        setBasicInfo({columns:bruteForceColumns})
+        setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
+       } else if(key==="8"){
+        setBasicData(websiteBackdoorData)
+        setBasicInfo({columns:websiteBackdoorColumns})
+        setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
+       } else if(key==="9"){
+        setBasicData(reverseShellData)
+        setBasicInfo({columns:reverseShellColumns})
+        setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
+       } else if(key==="10"){
+        setBasicData(trojanDetectionData)
+        setBasicInfo({columns:trojanDetectionColumns})
+        setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
+       } else if(key==="11"){
+        setBasicData(suspiciousBehaviorData)
+        setBasicInfo({columns:suspiciousBehaviorColumns})
+        setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
+       }
+      }
+      const changeSize=(value:any)=>{
+        console.log(value)
+        }
+      let basicTransferInfo={
+        columns:basicInfo.columns,
+        data:basicData,
+        changeSize:changeSize,
+        isShow:false
+      }
+      let optionalTransferInfo = {
+        count: 11,//条数
+        columns: optionalInfo.columns,
+        data: optionalData,
+        columnsStateMap: optionalInfo.columnsMap,
+        changeSize: changeSize,
+        selectedChange: null,
+        ifRowSelection:false
+    }
     return(
         <Tabs defaultActiveKey="1" onChange={callback} className="detail">
     <TabPane tab="基本信息" key="1">
@@ -161,29 +228,658 @@ export default function AssetsDetail() {
       Content of Tab Pane 3
     </TabPane>
     <TabPane tab="基线检查" key="4">
-      Content of Tab Pane 1
+    <SearchForm data={userInfo}/>
+    <TableBasic props={basicTransferInfo}/>
     </TabPane>
     <TabPane tab="弱密码检查" key="5">
-      Content of Tab Pane 2
+    <SearchForm data={userInfo}/>
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab="异常登录" key="6">
-      Content of Tab Pane 3
+    <SearchForm data={userInfo}/>
+    <TableBasic props={basicTransferInfo}/>
     </TabPane>
     <TabPane tab="暴力破解" key="7">
-      Content of Tab Pane 1
+    <SearchForm data={userInfo}/>
+    <TableBasic props={basicTransferInfo}/>
     </TabPane>
     <TabPane tab="网站后门" key="8">
-      Content of Tab Pane 2
+    <SearchForm data={userInfo}/>
+    <TableBasic props={basicTransferInfo}/>
     </TabPane>
     <TabPane tab="反弹shell" key="9">
-      Content of Tab Pane 3
+    <SearchForm data={userInfo}/>
+    <TableBasic props={basicTransferInfo}/>
     </TabPane>
     <TabPane tab="木马检测" key="10">
-      Content of Tab Pane 1
+    <SearchForm data={userInfo}/>
+    <TableBasic props={basicTransferInfo}/>
     </TabPane>
     <TabPane tab="可疑行为" key="11">
-      Content of Tab Pane 2
+    <SearchForm data={userInfo}/>
+    <TableBasic props={basicTransferInfo}/>
     </TabPane>
   </Tabs>
     )
 }
+
+  //基线检查
+  const baselineCheckData:any = [
+    {
+      id: '1',
+      middleware: 'operating',
+      required_items: "是",
+      conform_baseline:"符合",
+      get_time: '2020-2-20',
+    },
+    {
+      id: '2',
+      middleware: '中间件',
+      required_items: "必须项",
+      conform_baseline:"符合基线",
+      get_time: '2020-2-20',
+    }
+  ];
+  const baselineCheckColumns:any = [
+    {
+      title: '中间件',
+      dataIndex: 'middleware',
+      key: 'middleware',
+    },
+    {
+      title: '必须项',
+      dataIndex: 'required_items',
+      key: 'required_items',
+      filters: [
+        {
+          text: '是',
+          value: '是',
+        },
+        {
+          text: '否',
+          value: '否',
+        }
+      ]
+    },
+    {
+      title: '符合基线',
+      dataIndex: 'conform_baseline',
+      key: 'conform_baseline',
+      filters: [
+        {
+          text: '符合',
+          value: '符合',
+        },
+        {
+          text: '不符合',
+          value: '不符合',
+        }
+      ]
+    },
+    {
+      title: '操作',
+      dataIndex: 'operating',
+      key: 'operating',
+    },
+    {
+      title: '获取时间',
+      key: 'get_time',
+      dataIndex: 'get_time',
+      /* render: (text:any, record:any) => (
+        <Space size="middle">
+          <a href="##">Invite {record.name}</a>
+          <a href="##">Delete</a>
+        </Space>
+      ), */
+    },
+  ];
+  //弱密码检查
+const weakPasswordData:any = [
+  {
+    id: 1,
+    level: 'Guest',
+    status:'55508',
+    type: `udp`,
+    weak_info: "-",
+    account_status:'-',
+    operating: '-',
+    get_time: "2020-01-09 16:15:35",
+    update_time:"2020-01-09 16:15:30"
+},
+  {
+      id: 2,
+      level: '等级',
+      status:'状态',
+      type: '中间件类型',
+      weak_info: "弱密码账号/密码",
+      account_status:'账号状态',
+      operating: '操作',
+      get_time: "获取时间",
+      update_time:"更新时间"
+  }
+];
+
+const weakPasswordColumns:any = [
+  {
+      title: '等级',
+      dataIndex: 'level',
+      key: 'level',
+      filters: true,
+      onFilter: true,
+      width: 120,
+      valueEnum: {
+        低危: { text: '低危', status: 'Default' },
+        中危: { text: '中危', status: 'info' },
+        高危: { text: '高危', status: 'Warning' },
+        严重: { text: '严重', status: 'Success' },
+      }
+  },
+  {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      filters: true,
+      onFilter: true,
+      width: 120,
+      valueEnum: {
+        待修复: { text: '待修复', status: 'Warning' },
+        已修复: { text: '已修复', status: 'Success' },
+        未修复: { text: '未修复', status: 'Default' },
+      }
+  },
+   {
+    title: '中间件类型',
+    dataIndex: 'type',
+    key: 'type'
+},{
+  title: '弱密码账号/密码',
+  dataIndex: 'weak_info',
+  key: 'weak_info'
+},
+{
+  title: '账号状态',
+  dataIndex: 'account_status',
+  key: 'account_status'
+},
+{
+title: '操作',
+dataIndex: 'operating',
+key: 'operating'
+},{
+  title: '获取时间',
+  dataIndex: 'get_time',
+  key: 'get_time',
+  colSpan: 1
+},{
+  title: '更新时间',
+  dataIndex: 'update_time',
+  key: 'update_time',
+  colSpan: 1
+}
+]
+ //异常登录
+ const abnormalLoginData:any = [
+  {
+    id: '1',
+    level: 'operating',
+    status: "待确认是",
+    user:"符合",
+    ip:"-",
+    operating:"-",
+    login_time: '2020-2-20',
+  },
+  {
+    id: '2',
+    level: '等级',
+    status: "状态",
+    user:"用户",
+    ip:"登录源IP",
+    operating:"操作",
+    login_time: '2020-2-20',
+  }
+];
+const abnormalLoginColumns:any = [
+  {
+    title: '等级',
+      dataIndex: 'level',
+      key: 'level',
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    filters: [
+      {
+        text: '待确认',
+        value: '待确认',
+      },
+      {
+        text: '已确认',
+        value: '已确认',
+      },
+      {
+        text: '已忽略',
+        value: '已忽略',
+      },
+    ]
+  },
+  {
+    title: '用户',
+    dataIndex: 'user',
+    key: 'user',
+  },
+  {
+    title: '登录源IP',
+    dataIndex: 'ip',
+    key: 'ip',
+  },
+  {
+    title: '操作',
+    dataIndex: 'operating',
+    key: 'operating',
+  },
+  {
+    title: '登录时间',
+    key: 'login_time',
+    dataIndex: 'login_time',
+  },
+];
+ // 暴力破解
+ const bruteForceData:any = [
+  {
+    id: '1',
+    level: 'operating',
+    status: "待确认是",
+    user:"符合",
+    ip:"-",
+    operating:"-",
+    get_time: '2020-2-20',
+  },
+  {
+    id: '2',
+    level: '等级',
+    status: "状态",
+    user:"用户",
+    ip:"登录源IP",
+    operating:"操作",
+    get_time: '2020-2-20',
+  }
+];
+const bruteForceColumns:any = [
+  {
+    title: '等级',
+      dataIndex: 'level',
+      key: 'level',
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+  },
+  {
+    title: '用户',
+    dataIndex: 'user',
+    key: 'user',
+  },
+  {
+    title: '攻击源IP',
+    dataIndex: 'ip',
+    key: 'ip',
+  },
+  {
+    title: '操作',
+    dataIndex: 'operating',
+    key: 'operating',
+  },
+  {
+    title: '获取时间',
+    key: 'get_time',
+    dataIndex: 'get_time',
+  },
+];
+ //网站后门
+ const websiteBackdoorData:any = [
+  {
+    id: '1',
+    level: 'operating',
+    status: "待确认是",
+    download:"符合",
+    file_path:"-",
+    operating:"-",
+    get_time: '2020-2-20',
+    update_time:""
+  },
+  {
+    id: '2',
+    level: '等级',
+    status: "状态",
+    download:"下载",
+    file_path:"文件路径",
+    operating:"操作",
+    get_time: '获取时间',
+    update_time:"更新时间"
+  }
+];
+const websiteBackdoorColumns:any = [
+  {
+    title: '等级',
+      dataIndex: 'level',
+      key: 'level',
+      filters: [
+        {
+          text: '严重',
+          value: '严重',
+        },
+        {
+          text: '高危',
+          value: '高危',
+        },
+        {
+          text: '中危',
+          value: '中危',
+        },
+        {
+          text: '低危',
+          value: '低危',
+        },
+      ]
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    filters: [
+      {
+        text: '待处理',
+        value: '待处理',
+      },
+      {
+        text: '已处理',
+        value: '已处理',
+      },
+      {
+        text: '已忽略',
+        value: '已忽略',
+      },
+    ]
+  },
+  {
+    title: '下载',
+    dataIndex: 'download',
+    key: 'download',
+  },
+  {
+    title: '文件路径',
+    dataIndex: 'file_path',
+    key: 'file_path',
+  },
+  {
+    title: '操作',
+    dataIndex: 'operating',
+    key: 'operating',
+  },
+  {
+    title: '获取时间',
+    dataIndex: 'get_time',
+    key: 'get_time',
+  },{
+    title: '更新时间',
+    dataIndex: 'update_time',
+    key: 'update_time',
+  }
+];
+ //反弹shell
+ const reverseShellData:any = [
+  {
+    id: '1',
+    level: 'operating',
+    status: "待确认是",
+    target_host:"符合",
+    user:"-",
+    process_name:"-",
+    operating:"-",
+    get_time: '2020-2-20',
+  },
+  {
+    id: '2',
+    level: '等级',
+    status: "状态",
+    target_host:"目标主机",
+    user:"用户",
+    process_name:"进程名称",
+    operating:"操作",
+    get_time: '获取时间',
+  }
+];
+const reverseShellColumns:any = [
+  {
+    title: '等级',
+      dataIndex: 'level',
+      key: 'level',
+      filters: [
+        {
+          text: '严重',
+          value: '严重',
+        },
+        {
+          text: '高危',
+          value: '高危',
+        },
+        {
+          text: '中危',
+          value: '中危',
+        },
+        {
+          text: '低危',
+          value: '低危',
+        },
+      ]
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    filters: [
+      {
+        text: '待处理',
+        value: '待处理',
+      },
+      {
+        text: '已处理',
+        value: '已处理',
+      },
+      {
+        text: '已忽略',
+        value: '已忽略',
+      },
+    ]
+  },
+  {
+    title: '目标主机',
+    dataIndex: 'target_host',
+    key: 'target_host',
+  },
+  {
+    title: '用户',
+    dataIndex: 'user',
+    key: 'user',
+  },
+  {
+    title: '进程名称',
+    dataIndex: 'process_name',
+    key: 'process_name',
+  },
+  {
+    title: '操作',
+    dataIndex: 'operating',
+    key: 'operating',
+  },
+  {
+    title: '获取时间',
+    dataIndex: 'get_time',
+    key: 'get_time',
+  }
+];
+//木马检测
+const trojanDetectionData:any = [
+  {
+    id: '1',
+    name:"-",
+    level: 'operating',
+    status: "待确认",
+
+    get_time: '2020-2-20',
+  },
+  {
+    id: '2',
+    name:"木马名称",
+    level: '等级',
+    status: "状态",
+    operating:"操作",
+    get_time: '获取时间',
+  }
+];
+const trojanDetectionColumns:any = [
+  {
+    title: '木马名称',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: '等级',
+      dataIndex: 'level',
+      key: 'level',
+      filters: [
+        {
+          text: '严重',
+          value: '严重',
+        },
+        {
+          text: '高危',
+          value: '高危',
+        },
+        {
+          text: '中危',
+          value: '中危',
+        },
+        {
+          text: '低危',
+          value: '低危',
+        },
+      ]
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    filters: [
+      {
+        text: '待处理',
+        value: '待处理',
+      },
+      {
+        text: '已处理',
+        value: '已处理',
+      },
+      {
+        text: '已忽略',
+        value: '已忽略',
+      },
+    ]
+  },
+  {
+    title: '操作',
+    dataIndex: 'operating',
+    key: 'operating',
+  },
+  {
+    title: '获取时间',
+    dataIndex: 'get_time',
+    key: 'get_time',
+  }
+];
+//可疑行为
+const suspiciousBehaviorData:any = [
+  {
+    id: '1',
+    behavior:"-",
+    name:"-",
+    level: 'operating',
+    status: "待确认",
+
+    get_time: '2020-2-20',
+  },
+  {
+    id: '2',
+    behavior:"可疑行为",
+    name:"规则名称",
+    level: '等级',
+    status: "状态",
+    operating:"操作",
+    get_time: '获取时间',
+  }
+];
+const suspiciousBehaviorColumns:any = [
+  {
+    title: '可疑行为',
+    dataIndex: 'behavior',
+    key: 'behavior',
+  },
+  {
+    title: '规则名称',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: '等级',
+      dataIndex: 'level',
+      key: 'level',
+      filters: [
+        {
+          text: '严重',
+          value: '严重',
+        },
+        {
+          text: '高危',
+          value: '高危',
+        },
+        {
+          text: '中危',
+          value: '中危',
+        },
+        {
+          text: '低危',
+          value: '低危',
+        },
+      ]
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    filters: [
+      {
+        text: '待处理',
+        value: '待处理',
+      },
+      {
+        text: '已处理',
+        value: '已处理',
+      },
+      {
+        text: '已忽略',
+        value: '已忽略',
+      },
+    ]
+  },
+  {
+    title: '操作',
+    dataIndex: 'operating',
+    key: 'operating',
+  },
+  {
+    title: '获取时间',
+    dataIndex: 'get_time',
+    key: 'get_time',
+  }
+];

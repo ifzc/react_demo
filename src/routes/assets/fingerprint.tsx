@@ -15,7 +15,7 @@ export default function FingerprintDetail() {
   const [data, setData] = useState(userInfoData)
   const [info, setInfo] = useState({columns:userInfoColumns,columnsMap:{},ifExpand:false})
    //引用查询条件
-  const [userInfo, setUserInfo] = useState({inputList:[{placeholder:"用户名/shell",label:"用户搜索",name:"keyword"}],searchCondition:searchCondition})
+  const [userInfo, setUserInfo] = useState({inputList:[{placeholder:"用户名/shell",label:"用户搜索：",name:"keyword"}],searchCondition:searchCondition})
   //列表相关
   let columnsStateMap = {}
 
@@ -90,7 +90,7 @@ export default function FingerprintDetail() {
         console.log(value)
         }
 
-      let advancedTable = {
+      let optionalTransferInfo = {
         count: 11,//条数
         columns: info.columns,
         data: data,
@@ -98,7 +98,7 @@ export default function FingerprintDetail() {
         changeSize: changeSize,
         selectedChange: null,
         ifRowSelection:false,
-        ifExpand:info.ifExpand
+        ifExpand:info.ifExpand//是否可展开
     }
     
       
@@ -106,44 +106,44 @@ export default function FingerprintDetail() {
         <Tabs defaultActiveKey="用户信息" onChange={callback} className="detail">
     <TabPane tab="用户信息" key="用户信息">
       <SearchForm data={userInfo}/>
-      <TableOptional props={advancedTable} />
+      <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab=" 软件清单" key="软件清单">
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab="监听端口" key="监听端口">
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab="运行进程" key="运行进程">
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab=" 运行服务" key="运行服务">
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab=" web站点" key="web站点">
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab="数据库信息" key="数据库信息">
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab="日志信息" key="日志信息">
     <div>只看非空IP</div>
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab="补丁信息" key="补丁信息">
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab=" 共享文件" key="共享文件">
     <SearchForm data={userInfo}/>
-    <TableOptional props={advancedTable} />
+    <TableOptional props={optionalTransferInfo} />
     </TabPane>
   </Tabs>
     )

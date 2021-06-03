@@ -71,20 +71,20 @@ export default function FingerprintDetail() {
         } else if(key==="日志信息"){
           setData(logInfoData)
           columnsStateMap={}
-          setUserInfo({inputList:[{placeholder:"数据库名称/类型/端口/安装路径",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"请输入",label:"日志搜索：",name:"keyword"}],searchCondition:searchCondition})
           setInfo({columns:logInfoColumns,columnsMap:columnsStateMap,ifExpand:false})
         } else if(key==="补丁信息"){
-          setData(logInfoData)
+          setData(patchInfoData)
           columnsStateMap={get_time: {show: false,order: 2}}
           setUserInfo({inputList:[{placeholder:"请输入",label:"补丁搜索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:logInfoColumns,columnsMap:columnsStateMap,ifExpand:false})
-        }else if(key==="补丁信息"){
+          setInfo({columns:patchInfoColumns,columnsMap:columnsStateMap,ifExpand:false})
+        }else if(key==="共享文件"){
           setData(sharedFileData)
           columnsStateMap={}
           setUserInfo({inputList:[{placeholder:"请输入",label:"文件搜索：",name:"keyword"}],searchCondition:searchCondition})
           setInfo({columns:sharedFileColumns,columnsMap:columnsStateMap,ifExpand:false})
         }
-      }//patchInfoData
+      }//patchInfoData patchInfoColumns sharedFileData sharedFileColumns
       //换页
       const changeSize=(value:any)=>{
         console.log(value)
@@ -191,8 +191,8 @@ const userInfoColumns:any = [
       onFilter: true,
       width: 80,
       valueEnum: {
-          启用: { text: '启用', status: 'Default' },
-          禁用: { text: '禁用', status: 'Success' },
+          启用: { text: '启用', status: 'Success' },
+          禁用: { text: '禁用', status: 'Error' },
       },
   },
   {
@@ -282,8 +282,8 @@ const softwareListColumns:any = [
       onFilter: true,
       width: 80,
       valueEnum: {
-          启用: { text: '启用', status: 'Default' },
-          禁用: { text: '禁用', status: 'Success' },
+          启用: { text: '启用', status: 'Success' },
+          禁用: { text: '禁用', status: 'Error' },
       },
   },
   {
@@ -349,7 +349,7 @@ const listeningPortData:any = [
       port:'55508',
       protocol: `udp`,
       process: "360rp.exe",
-      status: '在线',
+      status: '离线',
       risk: "安全",
       get_time: "2020-01-09 16:15:35",
       update_time: "2020-01-09 16:15:35",
@@ -384,8 +384,8 @@ const listeningPortColumns:any = [
     onFilter: true,
     width: 100,
     valueEnum: {
-        在线: { text: '在线', status: 'Default' },
-        离线: { text: '离线', status: 'Success' },
+        在线: { text: '在线', status: 'Success' },
+        离线: { text: '离线', status: 'Error' },
     }
 },{
   title: '风险',
@@ -395,7 +395,7 @@ const listeningPortColumns:any = [
   onFilter: true,
   width: 120,
   valueEnum: {
-    存在风险: { text: '存在风险', status: 'Default' },
+    存在风险: { text: '存在风险', status: 'Error' },
     安全: { text: '安全', status: 'Success' },
   }
 },
@@ -420,7 +420,7 @@ const runningProcessData:any = [
       process_name:'445',
       process_path: `udp`,
       md5: "svchost.exe",
-      status: '在线',
+      status: '终止',
       detail: "存在风险",
       get_time: "2020-01-09 16:15:35",
       update_time: "2020-01-09 16:15:35",
@@ -431,7 +431,7 @@ const runningProcessData:any = [
       process_name:'55508',
       process_path: `udp`,
       md5: "360rp.exe",
-      status: '在线',
+      status: '运行',
       detail: "安全",
       get_time: "2020-01-09 16:15:35",
       update_time: "2020-01-09 16:15:35",
@@ -462,6 +462,10 @@ const runningProcessColumns:any = [
     title: '进程状态',
     dataIndex: 'status',
     key: 'status',
+    valueEnum: {
+      终止: { text: '终止', status: 'Error' },
+      运行: { text: '运行', status: 'Success' },
+    }
 },{
   title: '启动详情',
   dataIndex: 'detail',
@@ -815,10 +819,10 @@ const patchInfoColumns:any = [
       onFilter: true,
       width: 120,
       valueEnum: {
-        低危: { text: '低危', status: 'Default' },
-        中危: { text: '中危', status: 'info' },
+        低危: { text: '低危', status: 'Success' },
+        中危: { text: '中危', status: 'Default' },
         高危: { text: '高危', status: 'Warning' },
-        严重: { text: '严重', status: 'Success' },
+        严重: { text: '严重', status: 'Error' },
       }
 },{
   title: '状态',

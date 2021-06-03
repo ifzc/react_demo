@@ -294,10 +294,12 @@ export default function AssetsDetail() {
         {
           text: '是',
           value: '是',
+          status: 'success'
         },
         {
           text: '否',
           value: '否',
+          status: 'Default'
         }
       ]
     },
@@ -309,10 +311,12 @@ export default function AssetsDetail() {
         {
           text: '符合',
           value: '符合',
+          status: 'Success'
         },
         {
           text: '不符合',
           value: '不符合',
+          status: 'Error'
         }
       ]
     },
@@ -340,6 +344,7 @@ const weakPasswordData:any = [
     level: 'Guest',
     status:'55508',
     type: `udp`,
+    port:"-",
     weak_info: "-",
     account_status:'-',
     operating: '-',
@@ -351,6 +356,7 @@ const weakPasswordData:any = [
       level: '等级',
       status:'状态',
       type: '中间件类型',
+      port:"中间件端口",
       weak_info: "弱密码账号/密码",
       account_status:'账号状态',
       operating: '操作',
@@ -384,13 +390,18 @@ const weakPasswordColumns:any = [
       valueEnum: {
         待修复: { text: '待修复', status: 'Warning' },
         已修复: { text: '已修复', status: 'Success' },
-        未修复: { text: '未修复', status: 'Default' },
+        未修复: { text: '已忽略', status: 'Default' },
       }
   },
    {
     title: '中间件类型',
     dataIndex: 'type',
     key: 'type'
+},
+{
+ title: '中间件端口',
+ dataIndex: 'port',
+ key: 'port'
 },{
   title: '弱密码账号/密码',
   dataIndex: 'weak_info',
@@ -859,12 +870,12 @@ const suspiciousBehaviorColumns:any = [
     key: 'status',
     filters: [
       {
-        text: '待处理',
-        value: '待处理',
+        text: '待确认',
+        value: '待确认',
       },
       {
-        text: '已处理',
-        value: '已处理',
+        text: '已确认',
+        value: '已确认',
       },
       {
         text: '已忽略',

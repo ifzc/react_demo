@@ -13,7 +13,7 @@ export default function FingerprintDetail() {
     console.log(val)
   }
   const [data, setData] = useState(userInfoData)
-  const [info, setInfo] = useState({columns:userInfoColumns,columnsMap:{},ifExpand:false})
+  const [info, setInfo] = useState({columns:userInfoColumns,columnsMap:{},ifExpand:false,name:"",index:"0"})
    //引用查询条件
   const [userInfo, setUserInfo] = useState({inputList:[{placeholder:"用户名/shell",label:"用户搜索：",name:"keyword"}],searchCondition:searchCondition})
   //列表相关
@@ -28,61 +28,61 @@ export default function FingerprintDetail() {
             password_last_time: {show: false,order: 2,}, password_expiration_time: {show: false,order: 2,},
             get_time: {show: false,order: 2,}}
           setUserInfo({inputList:[{placeholder:"用户名/shell",label:"用户搜索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:userInfoColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:userInfoColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         }else if(key==="软件清单"){
           setData(softwareListData)
           columnsStateMap={
             type: {show: false,order: 2,},get_time: {show: false,order: 2,}}
           setUserInfo({inputList:[{placeholder:"请输入",label:"软件搜索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:softwareListColumns,columnsMap:columnsStateMap,ifExpand:true})
+          setInfo({columns:softwareListColumns,columnsMap:columnsStateMap,ifExpand:true,name:"installation_path",index:"6"})
         }else if(key==="监听端口"){
           setData(listeningPortData)
           columnsStateMap={
             get_time: {show: false,order: 2,}}
           setUserInfo({inputList:[{placeholder:"端口/进程名",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:listeningPortColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:listeningPortColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="运行进程"){
           setData(runningProcessData)
           columnsStateMap={
             get_time: {show: false,order: 2,}}
           setUserInfo({inputList:[{placeholder:"进程名/进程ID/路径/文件md5",label:"进程搜索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:runningProcessColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:runningProcessColumns,columnsMap:columnsStateMap,ifExpand:true,name:"detail",index:"6"})
         } else if(key==="运行服务"){
           setData(runningServiceData)
           columnsStateMap={
             display_name: {show: false,order: 2,},description: {show: false,order: 2,},
             group_name: {show: false,order: 2,},service_user: {show: false,order: 2,}}
           setUserInfo({inputList:[{placeholder:"请输入",label:"服务搜索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:runningServiceColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:runningServiceColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="web站点"){
           setData(webSiteData)
           columnsStateMap={
             site_path: {show: false,order: 2,},log_path: {show: false,order: 2,},
             get_time: {show: false,order: 2,}}
           setUserInfo({inputList:[{placeholder:"域名/端口",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:webSiteColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:webSiteColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="数据库信息"){
           setData(databaseInfoData)
           columnsStateMap={
             aystem_log_path: {show: false,order: 2,},error_log_path: {show: false,order: 2,},
             get_time: {show: false,order: 2,}}
           setUserInfo({inputList:[{placeholder:"数据库名称/类型/端口/安装路径",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:databaseInfoColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:databaseInfoColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="日志信息"){
           setData(logInfoData)
           columnsStateMap={}
           setUserInfo({inputList:[{placeholder:"请输入",label:"日志搜索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:logInfoColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:logInfoColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="补丁信息"){
           setData(patchInfoData)
           columnsStateMap={get_time: {show: false,order: 2}}
           setUserInfo({inputList:[{placeholder:"请输入",label:"补丁搜索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:patchInfoColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:patchInfoColumns,columnsMap:columnsStateMap,ifExpand:true,name:"link",index:"5"})
         }else if(key==="共享文件"){
           setData(sharedFileData)
           columnsStateMap={}
           setUserInfo({inputList:[{placeholder:"请输入",label:"文件搜索：",name:"keyword"}],searchCondition:searchCondition})
-          setInfo({columns:sharedFileColumns,columnsMap:columnsStateMap,ifExpand:false})
+          setInfo({columns:sharedFileColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         }
       }//patchInfoData patchInfoColumns sharedFileData sharedFileColumns
       //换页
@@ -98,7 +98,9 @@ export default function FingerprintDetail() {
         changeSize: changeSize,
         selectedChange: null,
         ifRowSelection:false,
-        ifExpand:info.ifExpand//是否可展开
+        ifExpand:info.ifExpand,//是否可展开
+        name:info.name,
+        index:info.index
     }
     
       
@@ -245,7 +247,7 @@ const softwareListData:any = [
       version: "14.0.17277.0	",
       type: "-",
       size: "	3014MB",
-      installation_path: '2020-01-09 16:15:35',
+      installation_path: '1',
       installation_time: "2020-01-09 16:15:35",
       get_time: "2020-01-09 16:15:35",
       update_time: "2020-01-09 16:15:35",
@@ -258,7 +260,7 @@ const softwareListData:any = [
       version: "14.0.23026.0",
       type: "-",
       size: "	3014MB",
-      installation_path: '2020-01-09 16:15:35',
+      installation_path: '2',
       installation_time: "2020-01-09 16:15:35",
       get_time: "2020-01-09 16:15:35",
       update_time: "2020-01-09 16:15:35",
@@ -309,7 +311,7 @@ const softwareListColumns:any = [
       title: '安装路径',
       dataIndex: 'installation_path',
       key: 'installation_path',
-      colSpan: 2,
+      width:100,
       render: () => {},
   },{
     title: '安装时间',
@@ -469,7 +471,9 @@ const runningProcessColumns:any = [
 },{
   title: '启动详情',
   dataIndex: 'detail',
-  key: 'detail'
+  key: 'detail',
+  width: 100,
+  render: () => {},
 },
   {
       title: '获取时间',
@@ -839,6 +843,8 @@ const patchInfoColumns:any = [
   title: '支持链接',
   dataIndex: 'link',
   key: 'link',
+  width: 100,
+  render: () => {},
 },{
   title: '获取时间',
   dataIndex: 'get_time',

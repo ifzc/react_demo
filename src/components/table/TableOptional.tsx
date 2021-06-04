@@ -5,12 +5,12 @@ import ProTable from '@ant-design/pro-table';
 import PaginationNum from './Pagination'
 
 export default function TableOptional(params: any) {
-
     useEffect(() => {
         setColumnsStateMap(params.props.columnsStateMap)
     }, [params])
 
     const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({});
+    const [test, setTest] = useState(params.props.name);
     //分页
     const changeSize = (size: any) => {
         params.props.changeSize(size)
@@ -35,7 +35,6 @@ export default function TableOptional(params: any) {
     }else{
         rowSelection=false
     }
-
     return (
         <div>
             <ProTable
@@ -44,9 +43,9 @@ export default function TableOptional(params: any) {
                 columnsStateMap={columnsStateMap}
                 expandable={
                     params.props.ifExpand && {
-                      expandedRowRender: (record: any) => <p>{record.installation_path}</p>,
-                      expandIconColumnIndex:"6",//ant-table-row-expand-icon-cell
-                      expandIcon: ({ expanded, onExpand, record }) => <Button type="primary" size="small" onClick={e => onExpand(record, e)}>查看</Button>
+                      expandedRowRender: (record: any) => <p>{record[params.props.name]}</p>,
+                      expandIconColumnIndex:params.props.index,//ant-table-row-expand-icon-cell
+                      expandIcon: ({ expanded, onExpand, record }) => <Button type="primary" size="small" onClick={e =>onExpand(record, e)}>查看</Button>
                     }
                   }
                 rowSelection={rowSelection}

@@ -19,7 +19,7 @@ export default function AssetsDetail() {
     console.log(val)
   }
   const [basicData, setBasicData] = useState([])
-  const [basicInfo, setBasicInfo] = useState({columns:[]})
+  const [basicInfo, setBasicInfo] = useState({columns:[],ifExpand:false,name:"",index:"0"})
   const [optionalData, setOptionalData] = useState([])
   const [optionalInfo, setOptionalInfo] = useState({columns:[],columnsMap:{}})
   //引用查询条件
@@ -59,7 +59,7 @@ export default function AssetsDetail() {
       const callback = (key:string) => {
        if(key==="4"){
         setBasicData(baselineCheckData)
-        setBasicInfo({columns:baselineCheckColumns})
+        setBasicInfo({columns:baselineCheckColumns,ifExpand:false,name:"",index:"0"})
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索条件：",name:"keyword"}],searchCondition:searchCondition})
        } else if(key==="5"){
         columnsStateMap={
@@ -69,27 +69,27 @@ export default function AssetsDetail() {
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
        } else if(key==="6"){
         setBasicData(abnormalLoginData)
-        setBasicInfo({columns:abnormalLoginColumns})
+        setBasicInfo({columns:abnormalLoginColumns,ifExpand:false,name:"",index:"0"})
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
        } else if(key==="7"){
         setBasicData(bruteForceData)
-        setBasicInfo({columns:bruteForceColumns})
+        setBasicInfo({columns:bruteForceColumns,ifExpand:false,name:"",index:"0"})
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
        } else if(key==="8"){
         setBasicData(websiteBackdoorData)
-        setBasicInfo({columns:websiteBackdoorColumns})
+        setBasicInfo({columns:websiteBackdoorColumns,ifExpand:true,name:"file_path",index:"4"})
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
        } else if(key==="9"){
         setBasicData(reverseShellData)
-        setBasicInfo({columns:reverseShellColumns})
+        setBasicInfo({columns:reverseShellColumns,ifExpand:false,name:"",index:"0"})
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
        } else if(key==="10"){
         setBasicData(trojanDetectionData)
-        setBasicInfo({columns:trojanDetectionColumns})
+        setBasicInfo({columns:trojanDetectionColumns,ifExpand:false,name:"",index:"0"})
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
        } else if(key==="11"){
         setBasicData(suspiciousBehaviorData)
-        setBasicInfo({columns:suspiciousBehaviorColumns})
+        setBasicInfo({columns:suspiciousBehaviorColumns,ifExpand:false,name:"",index:"0"})
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
        }
       }
@@ -100,7 +100,10 @@ export default function AssetsDetail() {
         columns:basicInfo.columns,
         data:basicData,
         changeSize:changeSize,
-        isShow:false
+        isShow:false,
+        ifExpand:basicInfo.ifExpand,//是否可展开
+        name:basicInfo.name,
+        index:basicInfo.index
       }
       let optionalTransferInfo = {
         count: 11,//条数
@@ -623,6 +626,8 @@ const websiteBackdoorColumns:any = [
     title: '文件路径',
     dataIndex: 'file_path',
     key: 'file_path',
+    width: 100,
+    render: () => {},
   },
   {
     title: '操作',

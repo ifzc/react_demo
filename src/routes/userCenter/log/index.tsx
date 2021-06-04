@@ -72,7 +72,7 @@ const FormLayoutDemo = () => {
     {
       title: '获取时间',
       key: '3',
-      dataIndex: 'getTime',
+      dataIndex: 'get_time',
       /* render: (text:any, record:any) => (
         <Space size="middle">
           <a href="##">Invite {record.name}</a>
@@ -87,18 +87,18 @@ const FormLayoutDemo = () => {
       key: '1',
       operating: 'operating',
       ip: "duoyinsu",
-      getTime: '2020-2-20',
+      get_time: '2020-2-20',
     },
     {
       key: '2',
       operating: 'operating',
       ip: "duoyinsu",
-      getTime: '2020-2-20',
+      get_time: '2020-2-20',
     },
     {
       key: '3',
       operating: 'operating',
       ip: "duoyinsu",
-      getTime: '2020-2-20',
+      get_time: '2020-2-20',
     },
   ];

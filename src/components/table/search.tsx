@@ -29,7 +29,7 @@ const onReset = () => {
       >
         {
           prop.data.inputList.map((item:any, index:number) => {
-            return <Form.Item key={index} label={item.label} name={item.name}><Input placeholder={item.placeholder} /></Form.Item>
+            return <Form.Item key={index} label={item.label} name={item.name}><Input placeholder={item.placeholder} className="searchInput"/></Form.Item>
           })
         }
         <Form.Item label="" name="time">

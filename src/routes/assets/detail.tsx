@@ -24,6 +24,7 @@ export default function AssetsDetail() {
   const [optionalInfo, setOptionalInfo] = useState({columns:[],columnsMap:{}})
   //引用查询条件
   const [userInfo, setUserInfo] = useState({})
+  //x轴数据
   const [lineXdata,setLineXdata]=useState([
     '2009/6/12 2:00', '2009/6/12 3:00', '2009/6/12 4:00', '2009/6/12 5:00', '2009/6/12 6:00', '2009/6/12 7:00', '2009/6/12 8:00', '2009/6/12 9:00', '2009/6/12 10:00', '2009/6/12 11:00', '2009/6/12 12:00', '2009/6/12 13:00', '2009/6/12 14:00', '2009/6/12 15:00', '2009/6/12 16:00', '2009/6/12 17:00', '2009/6/12 18:00', '2009/6/12 19:00', '2009/6/12 20:00', '2009/6/12 21:00'])
       let barData={
@@ -54,8 +55,9 @@ export default function AssetsDetail() {
       const onChange = () =>{
 
       }
-       //列表相关
+       //列表-隐藏列
   let columnsStateMap = {}
+  //tab切换
       const callback = (key:string) => {
        if(key==="4"){
         setBasicData(baselineCheckData)
@@ -93,26 +95,28 @@ export default function AssetsDetail() {
         setUserInfo({inputList:[{placeholder:"请输入",label:"搜索：",name:"keyword"}],searchCondition:searchCondition})
        }
       }
+      //分页
       const changeSize=(value:any)=>{
         console.log(value)
         }
+        //
       let basicTransferInfo={
         columns:basicInfo.columns,
         data:basicData,
         changeSize:changeSize,
         isShow:false,
         ifExpand:basicInfo.ifExpand,//是否可展开
-        name:basicInfo.name,
-        index:basicInfo.index
+        name:basicInfo.name,//展开数据名
+        index:basicInfo.index//展开数据所在列
       }
       let optionalTransferInfo = {
         count: 11,//条数
         columns: optionalInfo.columns,
         data: optionalData,
-        columnsStateMap: optionalInfo.columnsMap,
+        columnsStateMap: optionalInfo.columnsMap,//隐藏列
         changeSize: changeSize,
-        selectedChange: null,
-        ifRowSelection:false
+        selectedChange: null,//选择改变方法
+        ifRowSelection:false//是否可选择
     }
     return(
         <Tabs defaultActiveKey="1" onChange={callback} className="detail">

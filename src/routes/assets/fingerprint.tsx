@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Tabs, Menu, Dropdown } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { Tabs } from 'antd';
 import SearchForm from '../../components/table/search';
 import TableOptional from '../../components/table/TableOptional'
+import SelectTable from '../../components/table/SelectTable'
 
 import './index.scss'
 
@@ -166,6 +166,15 @@ export default function FingerprintDetail() {
   )
 }
 
+const getValue = (i:number,n:any)=> {//i-第几个下拉选择 n-传给后端值
+  console.log(searchListForm)
+  if (i === 0) {
+    menuFirst = n
+  } else {
+    menuSecond = n
+  }
+}
+
 const userInfoData: any = [
   {
     id: 1,
@@ -194,43 +203,6 @@ const userInfoData: any = [
     update_time: "2020-01-09 16:15:35",
   }
 ];
-function SelectTable(params: any) {
-  console.log(searchListForm)//搜索表单值
-  const [test, setTest] = useState("全部")
-  const handleMenuClick = (e: any) => {
-    setTest(e.key)
-    params.list.map((item: any, index: number) => {
-      if (index > 0 && item[0] === e.key) {
-        if (params.list[0] === 0) {
-          menuFirst = item[1]
-        } else {
-          menuSecond = item[1]
-        }
-      }
-    })
-
-
-  }
-  const handleMenuClickC = (e: any) => {
-    console.log(e)
-  }
-  const userInfoMenu = (
-    <Menu onClick={handleMenuClick}>
-      {
-        params.list.map((item: any, index: number) => {
-          if (index > 0) {
-            return <Menu.Item key={item[0]} onClick={() => handleMenuClickC(item[1])}>{item[0]}</Menu.Item>
-          }
-        })
-      }
-    </Menu>
-  );
-  return (<Dropdown overlay={userInfoMenu}>
-    <span className="ant-dropdown-link">
-      ({test}) <DownOutlined />
-    </span>
-  </Dropdown>)
-}
 
 const userInfoColumns: any = [
   {
@@ -242,7 +214,7 @@ const userInfoColumns: any = [
     title: () => (
       <span>
         {'状态'}
-        <SelectTable list={[0, ['全部', 11], ['启用', 12], ['禁用', 13]]} />
+        <SelectTable list={[0,getValue, ['全部', 11], ['启用', 12], ['禁用', 13]]} />
       </span>
     ),
     dataIndex: 'status',
@@ -437,7 +409,7 @@ const listeningPortColumns: any = [
     title: () => (
       <span>
         {'状态'}
-        <SelectTable list={[0, ['全部', 110], ['在线', 120], ['离线', 130]]} />
+        <SelectTable list={[0,getValue, ['全部', 110], ['在线', 120], ['离线', 130]]} />
       </span>
     ),
     dataIndex: 'status',
@@ -450,7 +422,7 @@ const listeningPortColumns: any = [
     title: () => (
       <span>
         {'风险'}
-        <SelectTable list={[1, ['全部', 112], ['存在风险', 120], ['安全', 132]]} />
+        <SelectTable list={[1,getValue, ['全部', 112], ['存在风险', 120], ['安全', 132]]} />
       </span>
     ),
     dataIndex: 'risk',
@@ -809,7 +781,7 @@ const logInfoColumns: any = [
     title: () => (
       <span>
         {'事件等级'}
-        <SelectTable list={[0, ['全部', 110], ['信息', 120], ['错误', 130], ['警告', 120], ['提醒', 130]]} />
+        <SelectTable list={[0,getValue, ['全部', 110], ['信息', 120], ['错误', 130], ['警告', 120], ['提醒', 140]]} />
       </span>
     ),
     dataIndex: 'level',

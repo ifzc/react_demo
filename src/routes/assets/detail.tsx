@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Tabs, Card, DatePicker, Button, Radio, Menu, Dropdown } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { Tabs, Card, DatePicker, Button, Radio } from 'antd';
 import moment from 'moment';
 import FingerprintDetail from './fingerprint';
 import TableBasic from '../../components/table/TableBasic'
@@ -10,11 +9,12 @@ import SearchForm from '../../components/table/search';
 import './index.scss'
 import Bar from '../../components/echart/bar';
 import Line from '../../components/echart/line';
+import SelectTable from '../../components/table/SelectTable'
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-let searchListForm = ''
+let searchListForm = ""
 let menuFirst = ""
 let menuSecond = ""
 
@@ -22,6 +22,12 @@ export default function AssetsDetail() {
   //查询接口
   const searchCondition = (val: any) => {
     console.log(val)
+    console.log(menuFirst,menuSecond)
+    searchListForm = val
+  }
+  //重置
+  const searchReset = () => {
+    searchListForm = ""
   }
   const [basicData, setBasicData] = useState([])
   const [basicInfo, setBasicInfo] = useState({ columns: [], ifExpand: false, name: "", index: "0" })
@@ -70,43 +76,43 @@ export default function AssetsDetail() {
       }
       setOptionalData(loopholeInfoData)
       setOptionalInfo({ columns: loopholeInfoColumns, columnsMap: columnsStateMap })
-      setUserInfo({ inputList: [{ placeholder: "请输入漏洞名称", label: "漏洞搜索：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入漏洞名称", label: "漏洞搜索：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     }
     if (key === "4") {
       setBasicData(baselineCheckData)
       setBasicInfo({ columns: baselineCheckColumns, ifExpand: false, name: "", index: "0" })
-      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索条件：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索条件：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     } else if (key === "5") {
       columnsStateMap = {
         get_time: { show: false, order: 2, }
       }
       setOptionalData(weakPasswordData)
       setOptionalInfo({ columns: weakPasswordColumns, columnsMap: columnsStateMap })
-      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     } else if (key === "6") {
       setBasicData(abnormalLoginData)
       setBasicInfo({ columns: abnormalLoginColumns, ifExpand: false, name: "", index: "0" })
-      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     } else if (key === "7") {
       setBasicData(bruteForceData)
       setBasicInfo({ columns: bruteForceColumns, ifExpand: false, name: "", index: "0" })
-      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     } else if (key === "8") {
       setBasicData(websiteBackdoorData)
       setBasicInfo({ columns: websiteBackdoorColumns, ifExpand: true, name: "file_path", index: "4" })
-      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     } else if (key === "9") {
       setBasicData(reverseShellData)
       setBasicInfo({ columns: reverseShellColumns, ifExpand: false, name: "", index: "0" })
-      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     } else if (key === "10") {
       setBasicData(trojanDetectionData)
       setBasicInfo({ columns: trojanDetectionColumns, ifExpand: false, name: "", index: "0" })
-      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     } else if (key === "11") {
       setBasicData(suspiciousBehaviorData)
       setBasicInfo({ columns: suspiciousBehaviorColumns, ifExpand: false, name: "", index: "0" })
-      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition })
+      setUserInfo({ inputList: [{ placeholder: "请输入", label: "搜索：", name: "keyword" }], searchCondition: searchCondition,searchReset: searchReset })
     }
   }
   //分页
@@ -311,43 +317,14 @@ export default function AssetsDetail() {
     </Tabs>
   )
 }
-
-function SelectTable(params: any) {
-  console.log(searchListForm)//搜索表单值
-  const [test, setTest] = useState("全部")
-  const handleMenuClick = (e: any) => {
-    setTest(e.key)
-    params.list.map((item: any, index: number) => {
-      if (index > 0 && item[0] === e.key) {
-        if (params.list[0] === 0) {
-          menuFirst = item[1]
-        } else {
-          menuSecond = item[1]
-        }
-      }
-    })
-
-
+const getValue = (i:number,n:any)=> {//i-第几个下拉选择 n-传给后端值
+  console.log(searchListForm)
+  console.log(i,n)
+  if (i === 0) {
+    menuFirst = n
+  } else {
+    menuSecond = n
   }
-  const handleMenuClickC = (e: any) => {
-    console.log(e)
-  }
-  const userInfoMenu = (
-    <Menu onClick={handleMenuClick}>
-      {
-        params.list.map((item: any, index: number) => {
-          if (index > 0) {
-            return <Menu.Item key={item[0]} onClick={() => handleMenuClickC(item[1])}>{item[0]}</Menu.Item>
-          }
-        })
-      }
-    </Menu>
-  );
-  return (<Dropdown overlay={userInfoMenu}>
-    <span className="ant-dropdown-link">
-      ({test}) <DownOutlined />
-    </span>
-  </Dropdown>)
 }
 
 //漏洞信息
@@ -414,7 +391,7 @@ const loopholeInfoColumns: any = [
     title: () => (
       <span>
         {'紧急程度'}
-        <SelectTable list={[0, ['全部', 1], ['必须修复', 2], ['暂缓操作', 3], ['无需操作', 4]]} />
+        <SelectTable list={[0,getValue, ['全部', 1], ['必须修复', 2], ['暂缓操作', 3], ['无需操作', 4]]} />
       </span>
     ),
     dataIndex: 'urgent_degree',

@@ -187,7 +187,7 @@ const userInfoData:any = [
       update_time: "2020-01-09 16:15:35",
   }
 ];
-function Teste(params:any) {
+function SelectTable(params:any) {
   console.log(searchListForm)//搜索表单值
   const [test, setTest] = useState("全部")  
 const handleMenuClick=(e:any)=>{
@@ -235,7 +235,7 @@ const userInfoColumns:any = [
       title: () => (
         <span>
           {'状态'}
-          <Teste list={[0,['全部',11],['启用',12],['禁用',13]]}/>
+          <SelectTable list={[0,['全部',11],['启用',12],['禁用',13]]}/>
         </span>
       ),
       dataIndex: 'status',
@@ -430,7 +430,7 @@ const listeningPortColumns:any = [
     title: () => (
       <span>
         {'状态'}
-        <Teste list={[0,['全部',110],['在线',120],['离线',130]]}/>
+        <SelectTable list={[0,['全部',110],['在线',120],['离线',130]]}/>
       </span>
     ),
     dataIndex: 'status',
@@ -443,7 +443,7 @@ const listeningPortColumns:any = [
   title: () => (
     <span>
       {'风险'}
-      <Teste list={[1,['全部',112],['存在风险',120],['安全',132]]}/>
+      <SelectTable list={[1,['全部',112],['存在风险',120],['安全',132]]}/>
     </span>
   ),
   dataIndex: 'risk',
@@ -802,7 +802,7 @@ const logInfoColumns:any = [
       title: () => (
         <span>
           {'事件等级'}
-          <Teste list={[0,['全部',110],['信息',120],['错误',130],['警告',120],['提醒',130]]}/>
+          <SelectTable list={[0,['全部',110],['信息',120],['错误',130],['警告',120],['提醒',130]]}/>
         </span>
       ),
       dataIndex: 'level',

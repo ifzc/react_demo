@@ -1,5 +1,6 @@
 import React, { useState }from 'react'
-import { Tabs, Card,DatePicker, Button  } from 'antd';
+import { Tabs, Card,DatePicker, Button, Radio, Menu, Dropdown  } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import FingerprintDetail from './fingerprint';
 import TableBasic from '../../components/table/TableBasic'
@@ -12,6 +13,10 @@ import Line from '../../components/echart/line';
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
+
+let searchListForm=''
+let menuFirst=""
+let menuSecond=""
 
 export default function AssetsDetail() {
   //查询接口
@@ -59,6 +64,13 @@ export default function AssetsDetail() {
   let columnsStateMap = {}
   //tab切换
       const callback = (key:string) => {
+        if(key==="3"){
+          columnsStateMap={
+            get_time: {show: false,order: 2,}}
+          setOptionalData(loopholeInfoData)
+          setOptionalInfo({columns:loopholeInfoColumns,columnsMap:columnsStateMap})
+          setUserInfo({inputList:[{placeholder:"请输入漏洞名称",label:"漏洞搜索：",name:"keyword"}],searchCondition:searchCondition})
+         }
        if(key==="4"){
         setBasicData(baselineCheckData)
         setBasicInfo({columns:baselineCheckColumns,ifExpand:false,name:"",index:"0"})
@@ -232,7 +244,35 @@ export default function AssetsDetail() {
       <FingerprintDetail/>
     </TabPane>
     <TabPane tab="漏洞信息" key="3">
-      Content of Tab Pane 3
+    <SearchForm data={userInfo}/>
+    <div style={{marginTop:"20px"}}>
+      <span>漏洞等级：</span>
+    <Radio.Group buttonStyle="solid">
+    <Radio.Button value={0}>全部</Radio.Button>
+                      <Radio.Button value={1}>严重</Radio.Button>
+                        <Radio.Button value={2}>高危</Radio.Button>
+                        <Radio.Button value={3}>中危</Radio.Button>
+                      <Radio.Button value={4}>低危</Radio.Button>
+                    </Radio.Group>
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                    <span>漏洞状态：</span>
+                    <Radio.Group buttonStyle="solid">
+                      <Radio.Button value={1}>待修复</Radio.Button>
+                        <Radio.Button value={2}>已修复</Radio.Button>
+                      <Radio.Button value={3}>未修复</Radio.Button>
+                    </Radio.Group>
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                    <span>漏洞类别：</span>
+                    <Radio.Group buttonStyle="solid">
+    <Radio.Button value={0}>全部</Radio.Button>
+                      <Radio.Button value={1}>Web漏洞<span className="red" style={{paddingLeft:'5px'}}>0</span></Radio.Button>
+                        <Radio.Button value={2}>组件漏洞<span className="red" style={{paddingLeft:'5px'}}>0</span></Radio.Button>
+                        <Radio.Button value={3}>系统漏洞<span className="red" style={{paddingLeft:'5px'}}>0</span></Radio.Button>
+                    </Radio.Group>
+                    </div>
+                    <TableOptional props={optionalTransferInfo} />
     </TabPane>
     <TabPane tab="基线检查" key="4">
     <SearchForm data={userInfo}/>
@@ -269,6 +309,129 @@ export default function AssetsDetail() {
   </Tabs>
     )
 }
+
+function SelectTable(params:any) {
+  console.log(searchListForm)//搜索表单值
+  const [test, setTest] = useState("全部")  
+const handleMenuClick=(e:any)=>{
+  setTest(e.key)
+    params.list.map((item:any,index:number)=>{
+      if(index>0 && item[0]===e.key){
+        if(params.list[0]===0){
+        menuFirst=item[1]
+        }else{
+          menuSecond=item[1]
+        }
+      }
+    })
+    
+  
+}
+const handleMenuClickC=(e:any)=>{
+  console.log(e)
+}
+const userInfoMenu = (
+  <Menu onClick={handleMenuClick}>
+    {
+          params.list.map((item:any,index:number) => {
+            if(index>0){
+            return <Menu.Item key={item[0]} onClick={()=>handleMenuClickC(item[1])}>{item[0]}</Menu.Item>
+            }
+          })
+        }
+  </Menu>
+);
+return(<Dropdown overlay={userInfoMenu}>
+  <span className="ant-dropdown-link">
+    ({test}) <DownOutlined />
+  </span>
+</Dropdown>)
+}
+
+//漏洞信息
+const loopholeInfoData:any = [
+  {
+    id: 1,
+    name:"",
+    level: 'Guest',
+    status:'55508',
+    principal: `udp`,
+    urgent_degree:"-",
+    operating: '-',
+    get_time: "2020-01-09 16:15:35",
+    update_time:"2020-01-09 16:15:30"
+},
+  {
+      id: 2,
+      name:"漏洞名称",
+      level: '等级',
+      status:'状态',
+      principal: '负责人',
+      urgent_degree:"紧急程度",
+      operating: '操作',
+      get_time: "获取时间",
+      update_time:"更新时间"
+  }
+];
+
+const loopholeInfoColumns:any = [
+  {
+    title: '漏洞名称',
+    dataIndex: 'name',
+    key: 'name'
+},
+  {
+      title: '等级',
+      dataIndex: 'level',
+      key: 'level',
+      width: 120,
+      valueEnum: {
+        低危: { text: '低危', status: 'Default' },
+        中危: { text: '中危', status: 'info' },
+        高危: { text: '高危', status: 'Warning' },
+        严重: { text: '严重', status: 'Success' },
+      }
+  },
+  {
+      title: '漏洞状态',
+      dataIndex: 'status',
+      key: 'status',
+      width: 120,
+      valueEnum: {
+        待修复: { text: '待修复', status: 'Warning' },
+        已修复: { text: '已修复', status: 'Success' },
+        未修复: { text: '已忽略', status: 'Default' },
+      }
+  },
+   {
+    title: '负责人',
+    dataIndex: 'type',
+    key: 'type'
+},
+{
+  title: () => (
+    <span>
+      {'紧急程度'}
+      <SelectTable list={[0,['全部',1],['必须修复',2],['暂缓操作',3],['无需操作',4]]}/>
+    </span>
+  ),
+  dataIndex: 'urgent_degree',
+  key: 'urgent_degree'
+},
+{
+title: '操作',
+dataIndex: 'operating',
+key: 'operating'
+},{
+  title: '获取时间',
+  dataIndex: 'get_time',
+  key: 'get_time',
+},{
+  title: '更新时间',
+  dataIndex: 'update_time',
+  key: 'update_time',
+}
+]
 
   //基线检查
   const baselineCheckData:any = [
@@ -336,12 +499,6 @@ export default function AssetsDetail() {
       title: '获取时间',
       key: 'get_time',
       dataIndex: 'get_time',
-      /* render: (text:any, record:any) => (
-        <Space size="middle">
-          <a href="##">Invite {record.name}</a>
-          <a href="##">Delete</a>
-        </Space>
-      ), */
     },
   ];
   //弱密码检查

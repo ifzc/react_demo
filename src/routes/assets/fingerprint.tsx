@@ -304,11 +304,14 @@ const softwareListColumns: any = [
     key: 'name'
   },
   {
-    title: '状态',
+    title: () => (
+      <span>
+        {'状态'}
+        <SelectTable list={[0,getValue, ['全部', 11], ['启用', 12], ['禁用', 13]]} />
+      </span>
+    ),
     dataIndex: 'status',
     key: 'status',
-    filters: true,
-    onFilter: true,
     width: 80,
     valueEnum: {
       启用: { text: '启用', status: 'Success' },

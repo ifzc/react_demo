@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Tabs, Card, DatePicker, Button, Radio } from 'antd';
+import { Tabs, Card, DatePicker, Button, Radio,Typography  } from 'antd';
 import moment from 'moment';
 import FingerprintDetail from './fingerprint';
 import TableBasic from '../../components/table/TableBasic'
@@ -13,8 +13,9 @@ import SelectTable from '../../components/table/SelectTable'
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
-
+const { Text } = Typography;
 let searchListForm = ""
+
 let menuFirst = ""
 let menuSecond = ""
 
@@ -335,7 +336,7 @@ const loopholeInfoData: any = [
     level: 'Guest',
     status: '55508',
     principal: `udp`,
-    urgent_degree: "-",
+    urgent_degree: "必须修复",
     operating: '-',
     get_time: "2020-01-09 16:15:35",
     update_time: "2020-01-09 16:15:30"
@@ -395,7 +396,16 @@ const loopholeInfoColumns: any = [
       </span>
     ),
     dataIndex: 'urgent_degree',
-    key: 'urgent_degree'
+    key: 'urgent_degree',
+    render: (text:any) => {
+      if (text==="必须修复") {
+        return <Text type="danger">必须修复</Text>
+      }else if (text==="暂缓操作") {
+        return <Text type="warning">暂缓操作</Text>
+      }else{
+        return <Text type="secondary">无需操作</Text>
+      }
+    },
   },
   {
     title: '操作',
@@ -444,10 +454,7 @@ const baselineCheckColumns: any = [
     ),
     dataIndex: 'required_items',
     key: 'required_items',
-    valueEnum: {
-      是: { text: '是', status: 'Success' },
-      否: { text: '否', status: 'info' },
-    }
+    render: (text:any) => text==='是' ? <Text type="success">是</Text> : <Text type="danger">否</Text>,
   },
   {
     title: () => (
@@ -458,10 +465,7 @@ const baselineCheckColumns: any = [
     ),
     dataIndex: 'conform_baseline',
     key: 'conform_baseline',
-    valueEnum: {
-      符合: { text: '符合', status: 'Success' },
-      不符合: { text: '不符合', status: 'Error' },
-    }
+    render: (text:any) => text==='符合' ? <Text type="success">符合</Text> : <Text type="danger">不符合</Text>,
   },
   {
     title: '操作',
@@ -513,30 +517,48 @@ const weakPasswordColumns: any = [
     dataIndex: 'level',
     key: 'level',
     width: 120,
-    valueEnum: {
+    render: (text:any) => {
+      if (text==="严重") {
+        return <Text type="danger">严重</Text>
+      }else if (text==="高危") {
+        return <Text type="warning">高危</Text>
+      }else if(text==="中危"){
+        return <Text type="secondary">中危</Text>
+      }else{
+        return <Text type="success">低危</Text>
+      }
+    },
+    /* valueEnum: {
       低危: { text: '低危', status: 'Default' },
       中危: { text: '中危', status: 'info' },
       高危: { text: '高危', status: 'Warning' },
       严重: { text: '严重', status: 'Success' },
-    }
+    } */
   },
   {
     title: () => (
       <span>
         {'状态'}
-        <SelectTable list={[1,getValue, ['全部', 1], ['待修复', 2], ['已修复', 3], ['已忽略', 4]]} />
+        <SelectTable list={[1,getValue, ['全部', 1], ['待修复', 2], ['已修复', 3], ['已修复', 4]]} />
       </span>
     ),
     dataIndex: 'status',
     key: 'status',
-    filters: true,
-    onFilter: true,
     width: 120,
-    valueEnum: {
+    render: (text:any) => {
+      if (text==="待修复") {
+        return <Text type="warning">待修复</Text>
+      }else if (text==="未修复") {
+        return <Text type="danger">未修复</Text>
+      }else{
+        return <Text type="success">已修复</Text>
+      }
+    }
+    /* valueEnum: {
       待修复: { text: '待修复', status: 'Warning' },
       已修复: { text: '已修复', status: 'Success' },
       未修复: { text: '已忽略', status: 'Default' },
-    }
+    } */
   },
   {
     title: '中间件类型',
@@ -609,6 +631,16 @@ const abnormalLoginColumns: any = [
     ),
     dataIndex: 'status',
     key: 'status',
+    width: 120,
+    render: (text:any) => {
+      if (text==="待确认") {
+        return <Text type="warning">待确认</Text>
+      }else if (text==="已忽略") {
+        return <Text type="danger">已忽略</Text>
+      }else{
+        return <Text type="success">已确认</Text>
+      }
+    },
   },
   {
     title: '用户',
@@ -717,6 +749,18 @@ const websiteBackdoorColumns: any = [
     ),
     dataIndex: 'level',
     key: 'level',
+    width: 120,
+    render: (text:any) => {
+      if (text==="严重") {
+        return <Text type="danger">严重</Text>
+      }else if (text==="高危") {
+        return <Text type="warning">高危</Text>
+      }else if(text==="中危"){
+        return <Text type="secondary">中危</Text>
+      }else{
+        return <Text type="success">低危</Text>
+      }
+    },
   },
   {
     title: () => (
@@ -727,7 +771,16 @@ const websiteBackdoorColumns: any = [
     ),
     dataIndex: 'status',
     key: 'status',
-    
+    width: 120,
+    render: (text:any) => {
+      if (text==="待处理") {
+        return <Text type="warning">待处理</Text>
+      }else if (text==="已忽略") {
+        return <Text type="danger">已忽略</Text>
+      }else{
+        return <Text type="success">已处理</Text>
+      }
+    },
   },
   {
     title: '下载',
@@ -789,6 +842,18 @@ const reverseShellColumns: any = [
     ),
     dataIndex: 'level',
     key: 'level',
+    width: 120,
+    render: (text:any) => {
+      if (text==="严重") {
+        return <Text type="danger">严重</Text>
+      }else if (text==="高危") {
+        return <Text type="warning">高危</Text>
+      }else if(text==="中危"){
+        return <Text type="secondary">中危</Text>
+      }else{
+        return <Text type="success">低危</Text>
+      }
+    },
   },
   {
     title: () => (
@@ -799,6 +864,16 @@ const reverseShellColumns: any = [
     ),
     dataIndex: 'status',
     key: 'status',
+    width: 120,
+    render: (text:any) => {
+      if (text==="待处理") {
+        return <Text type="warning">待处理</Text>
+      }else if (text==="已忽略") {
+        return <Text type="danger">已忽略</Text>
+      }else{
+        return <Text type="success">已处理</Text>
+      }
+    },
   },
   {
     title: '目标主机',
@@ -860,6 +935,18 @@ const trojanDetectionColumns: any = [
     ),
     dataIndex: 'level',
     key: 'level',
+    width: 120,
+    render: (text:any) => {
+      if (text==="严重") {
+        return <Text type="danger">严重</Text>
+      }else if (text==="高危") {
+        return <Text type="warning">高危</Text>
+      }else if(text==="中危"){
+        return <Text type="secondary">中危</Text>
+      }else{
+        return <Text type="success">低危</Text>
+      }
+    },
   },
   {
     title: () => (
@@ -870,6 +957,16 @@ const trojanDetectionColumns: any = [
     ),
     dataIndex: 'status',
     key: 'status',
+    width: 120,
+    render: (text:any) => {
+      if (text==="待处理") {
+        return <Text type="warning">待处理</Text>
+      }else if (text==="已忽略") {
+        return <Text type="danger">已忽略</Text>
+      }else{
+        return <Text type="success">已处理</Text>
+      }
+    },
   },
   {
     title: '操作',
@@ -923,6 +1020,18 @@ const suspiciousBehaviorColumns: any = [
     ),
     dataIndex: 'level',
     key: 'level',
+    width: 120,
+    render: (text:any) => {
+      if (text==="严重") {
+        return <Text type="danger">严重</Text>
+      }else if (text==="高危") {
+        return <Text type="warning">高危</Text>
+      }else if(text==="中危"){
+        return <Text type="secondary">中危</Text>
+      }else{
+        return <Text type="success">低危</Text>
+      }
+    },
   },
   {
     title: () => (
@@ -933,6 +1042,16 @@ const suspiciousBehaviorColumns: any = [
     ),
     dataIndex: 'status',
     key: 'status',
+    width: 120,
+    render: (text:any) => {
+      if (text==="待确认") {
+        return <Text type="warning">待确认</Text>
+      }else if (text==="已忽略") {
+        return <Text type="danger">已忽略</Text>
+      }else{
+        return <Text type="success">已确认</Text>
+      }
+    },
   },
   {
     title: '操作',

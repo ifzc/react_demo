@@ -1,21 +1,29 @@
 import React, { useState }from 'react'
-import { Tabs,Button } from 'antd';
+import { Tabs, Menu, Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import SearchForm from '../../components/table/search';
 import TableOptional from '../../components/table/TableOptional'
 
 import './index.scss'
 
 const { TabPane } = Tabs;
-
+let searchListForm=''
+let menuFirst=""
+let menuSecond=""
 export default function FingerprintDetail() {
   //查询接口
   const searchCondition =(val:any)=>{
-    console.log(val)
+    console.log(menuFirst,menuSecond)//表格筛选值
+    searchListForm=val
+  }
+  //重置
+  const searchReset =()=>{
+    searchListForm=""
   }
   const [data, setData] = useState(userInfoData)
   const [info, setInfo] = useState({columns:userInfoColumns,columnsMap:{},ifExpand:false,name:"",index:"0"})
    //引用查询条件
-  const [userInfo, setUserInfo] = useState({inputList:[{placeholder:"用户名/shell",label:"用户搜索：",name:"keyword"}],searchCondition:searchCondition})
+  const [userInfo, setUserInfo] = useState({inputList:[{placeholder:"用户名/shell",label:"用户搜索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
   //列表相关
   let columnsStateMap = {}
 
@@ -27,61 +35,61 @@ export default function FingerprintDetail() {
           columnsStateMap={
             password_last_time: {show: false,order: 2,}, password_expiration_time: {show: false,order: 2,},
             get_time: {show: false,order: 2,}}
-          setUserInfo({inputList:[{placeholder:"用户名/shell",label:"用户搜索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"用户名/shell",label:"用户搜索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:userInfoColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         }else if(key==="软件清单"){
           setData(softwareListData)
           columnsStateMap={
             type: {show: false,order: 2,},get_time: {show: false,order: 2,}}
-          setUserInfo({inputList:[{placeholder:"请输入",label:"软件搜索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"请输入",label:"软件搜索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:softwareListColumns,columnsMap:columnsStateMap,ifExpand:true,name:"installation_path",index:"6"})
         }else if(key==="监听端口"){
           setData(listeningPortData)
           columnsStateMap={
             get_time: {show: false,order: 2,}}
-          setUserInfo({inputList:[{placeholder:"端口/进程名",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"端口/进程名",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:listeningPortColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="运行进程"){
           setData(runningProcessData)
           columnsStateMap={
             get_time: {show: false,order: 2,}}
-          setUserInfo({inputList:[{placeholder:"进程名/进程ID/路径/文件md5",label:"进程搜索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"进程名/进程ID/路径/文件md5",label:"进程搜索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:runningProcessColumns,columnsMap:columnsStateMap,ifExpand:true,name:"detail",index:"6"})
         } else if(key==="运行服务"){
           setData(runningServiceData)
           columnsStateMap={
             display_name: {show: false,order: 2,},description: {show: false,order: 2,},
             group_name: {show: false,order: 2,},service_user: {show: false,order: 2,}}
-          setUserInfo({inputList:[{placeholder:"请输入",label:"服务搜索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"请输入",label:"服务搜索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:runningServiceColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="web站点"){
           setData(webSiteData)
           columnsStateMap={
             site_path: {show: false,order: 2,},log_path: {show: false,order: 2,},
             get_time: {show: false,order: 2,}}
-          setUserInfo({inputList:[{placeholder:"域名/端口",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"域名/端口",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:webSiteColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="数据库信息"){
           setData(databaseInfoData)
           columnsStateMap={
             aystem_log_path: {show: false,order: 2,},error_log_path: {show: false,order: 2,},
             get_time: {show: false,order: 2,}}
-          setUserInfo({inputList:[{placeholder:"数据库名称/类型/端口/安装路径",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"数据库名称/类型/端口/安装路径",label:"搜 索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:databaseInfoColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="日志信息"){
           setData(logInfoData)
           columnsStateMap={}
-          setUserInfo({inputList:[{placeholder:"请输入",label:"日志搜索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"请输入",label:"日志搜索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:logInfoColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         } else if(key==="补丁信息"){
           setData(patchInfoData)
           columnsStateMap={get_time: {show: false,order: 2}}
-          setUserInfo({inputList:[{placeholder:"请输入",label:"补丁搜索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"请输入",label:"补丁搜索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:patchInfoColumns,columnsMap:columnsStateMap,ifExpand:true,name:"link",index:"5"})
         }else if(key==="共享文件"){
           setData(sharedFileData)
           columnsStateMap={}
-          setUserInfo({inputList:[{placeholder:"请输入",label:"文件搜索：",name:"keyword"}],searchCondition:searchCondition})
+          setUserInfo({inputList:[{placeholder:"请输入",label:"文件搜索：",name:"keyword"}],searchCondition:searchCondition,searchReset:searchReset})
           setInfo({columns:sharedFileColumns,columnsMap:columnsStateMap,ifExpand:false,name:"",index:"0"})
         }
       }//patchInfoData patchInfoColumns sharedFileData sharedFileColumns
@@ -179,6 +187,44 @@ const userInfoData:any = [
       update_time: "2020-01-09 16:15:35",
   }
 ];
+function Teste(params:any) {
+  console.log(searchListForm)//搜索表单值
+  const [test, setTest] = useState("全部")  
+const handleMenuClick=(e:any)=>{
+  setTest(e.key)
+    params.list.map((item:any,index:number)=>{
+      if(index>0 && item[0]===e.key){
+        if(params.list[0]===0){
+        menuFirst=item[1]
+        }else{
+          menuSecond=item[1]
+        }
+      }
+    })
+    
+  
+}
+const handleMenuClickC=(e:any)=>{
+  console.log(e)
+}
+const userInfoMenu = (
+  <Menu onClick={handleMenuClick}>
+    {
+          params.list.map((item:any,index:number) => {
+            if(index>0){
+            return <Menu.Item key={item[0]} onClick={()=>handleMenuClickC(item[1])}>{item[0]}</Menu.Item>
+            }
+          })
+        }
+  </Menu>
+);
+return(<Dropdown overlay={userInfoMenu}>
+  <span className="ant-dropdown-link">
+    ({test}) <DownOutlined />
+  </span>
+</Dropdown>)
+}
+
 const userInfoColumns:any = [
   {
       title: '用户名',
@@ -186,16 +232,18 @@ const userInfoColumns:any = [
       key: 'username'
   },
   {
-      title: '状态',
+      title: () => (
+        <span>
+          {'状态'}
+          <Teste list={[0,['全部',11],['启用',12],['禁用',13]]}/>
+        </span>
+      ),
       dataIndex: 'status',
       key: 'status',
-      filters: true,
-      onFilter: true,
-      width: 80,
       valueEnum: {
-          启用: { text: '启用', status: 'Success' },
-          禁用: { text: '禁用', status: 'Error' },
-      },
+        启用: { text: '启用', status: 'Success' },
+        禁用: { text: '禁用', status: 'Error' },
+    }
   },
   {
       title: '描述',
@@ -379,23 +427,27 @@ const listeningPortColumns:any = [
       dataIndex: 'process',
       key: 'process',
   }, {
-    title: '状态',
+    title: () => (
+      <span>
+        {'状态'}
+        <Teste list={[0,['全部',110],['在线',120],['离线',130]]}/>
+      </span>
+    ),
     dataIndex: 'status',
     key: 'status',
-    filters: true,
-    onFilter: true,
-    width: 100,
     valueEnum: {
         在线: { text: '在线', status: 'Success' },
         离线: { text: '离线', status: 'Error' },
     }
 },{
-  title: '风险',
+  title: () => (
+    <span>
+      {'风险'}
+      <Teste list={[1,['全部',112],['存在风险',120],['安全',132]]}/>
+    </span>
+  ),
   dataIndex: 'risk',
   key: 'risk',
-  filters: true,
-  onFilter: true,
-  width: 120,
   valueEnum: {
     存在风险: { text: '存在风险', status: 'Error' },
     安全: { text: '安全', status: 'Success' },
@@ -747,12 +799,14 @@ const logInfoData:any = [
 
 const logInfoColumns:any = [
   {
-      title: '事件等级',
+      title: () => (
+        <span>
+          {'事件等级'}
+          <Teste list={[0,['全部',110],['信息',120],['错误',130],['警告',120],['提醒',130]]}/>
+        </span>
+      ),
       dataIndex: 'level',
       key: 'level',
-      filters: true,
-      onFilter: true,
-      width: 120,
       valueEnum: {
         信息: { text: '信息', status: 'Default' },
         错误: { text: '错误', status: 'info' },

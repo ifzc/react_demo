@@ -436,38 +436,32 @@ const baselineCheckColumns: any = [
     key: 'middleware',
   },
   {
-    title: '必须项',
+    title: () => (
+      <span>
+        {'必须项'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['是', 2], ['否', 3]]} />
+      </span>
+    ),
     dataIndex: 'required_items',
     key: 'required_items',
-    filters: [
-      {
-        text: '是',
-        value: '是',
-        status: 'success'
-      },
-      {
-        text: '否',
-        value: '否',
-        status: 'Default'
-      }
-    ]
+    valueEnum: {
+      是: { text: '是', status: 'Success' },
+      否: { text: '否', status: 'info' },
+    }
   },
   {
-    title: '符合基线',
+    title: () => (
+      <span>
+        {'符合基线'}
+        <SelectTable list={[1,getValue, ['全部', 11], ['符合', 22], ['不符合', 33]]} />
+      </span>
+    ),
     dataIndex: 'conform_baseline',
     key: 'conform_baseline',
-    filters: [
-      {
-        text: '符合',
-        value: '符合',
-        status: 'Success'
-      },
-      {
-        text: '不符合',
-        value: '不符合',
-        status: 'Error'
-      }
-    ]
+    valueEnum: {
+      符合: { text: '符合', status: 'Success' },
+      不符合: { text: '不符合', status: 'Error' },
+    }
   },
   {
     title: '操作',
@@ -510,11 +504,14 @@ const weakPasswordData: any = [
 
 const weakPasswordColumns: any = [
   {
-    title: '等级',
+    title: () => (
+      <span>
+        {'等级'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['严重', 2], ['高危', 3], ['中危', 4], ['低危', 5]]} />
+      </span>
+    ),
     dataIndex: 'level',
     key: 'level',
-    filters: true,
-    onFilter: true,
     width: 120,
     valueEnum: {
       低危: { text: '低危', status: 'Default' },
@@ -524,7 +521,12 @@ const weakPasswordColumns: any = [
     }
   },
   {
-    title: '状态',
+    title: () => (
+      <span>
+        {'状态'}
+        <SelectTable list={[1,getValue, ['全部', 1], ['待修复', 2], ['已修复', 3], ['已忽略', 4]]} />
+      </span>
+    ),
     dataIndex: 'status',
     key: 'status',
     filters: true,
@@ -599,23 +601,14 @@ const abnormalLoginColumns: any = [
     key: 'level',
   },
   {
-    title: '状态',
+    title: () => (
+      <span>
+        {'状态'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['待确认', 2], ['已确认', 3], ['已忽略', 4]]} />
+      </span>
+    ),
     dataIndex: 'status',
     key: 'status',
-    filters: [
-      {
-        text: '待确认',
-        value: '待确认',
-      },
-      {
-        text: '已确认',
-        value: '已确认',
-      },
-      {
-        text: '已忽略',
-        value: '已忽略',
-      },
-    ]
   },
   {
     title: '用户',
@@ -716,46 +709,25 @@ const websiteBackdoorData: any = [
 ];
 const websiteBackdoorColumns: any = [
   {
-    title: '等级',
+    title: () => (
+      <span>
+        {'等级'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['严重', 2], ['高危', 3], ['中危', 4], ['低危', 5]]} />
+      </span>
+    ),
     dataIndex: 'level',
     key: 'level',
-    filters: [
-      {
-        text: '严重',
-        value: '严重',
-      },
-      {
-        text: '高危',
-        value: '高危',
-      },
-      {
-        text: '中危',
-        value: '中危',
-      },
-      {
-        text: '低危',
-        value: '低危',
-      },
-    ]
   },
   {
-    title: '状态',
+    title: () => (
+      <span>
+        {'状态'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['待处理', 2], ['已处理', 3], ['已忽略', 4]]} />
+      </span>
+    ),
     dataIndex: 'status',
     key: 'status',
-    filters: [
-      {
-        text: '待处理',
-        value: '待处理',
-      },
-      {
-        text: '已处理',
-        value: '已处理',
-      },
-      {
-        text: '已忽略',
-        value: '已忽略',
-      },
-    ]
+    
   },
   {
     title: '下载',
@@ -809,46 +781,24 @@ const reverseShellData: any = [
 ];
 const reverseShellColumns: any = [
   {
-    title: '等级',
+    title: () => (
+      <span>
+        {'等级'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['严重', 2], ['高危', 3], ['中危', 4], ['低危', 5]]} />
+      </span>
+    ),
     dataIndex: 'level',
     key: 'level',
-    filters: [
-      {
-        text: '严重',
-        value: '严重',
-      },
-      {
-        text: '高危',
-        value: '高危',
-      },
-      {
-        text: '中危',
-        value: '中危',
-      },
-      {
-        text: '低危',
-        value: '低危',
-      },
-    ]
   },
   {
-    title: '状态',
+    title: () => (
+      <span>
+        {'状态'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['待处理', 2], ['已处理', 3], ['已忽略', 4]]} />
+      </span>
+    ),
     dataIndex: 'status',
     key: 'status',
-    filters: [
-      {
-        text: '待处理',
-        value: '待处理',
-      },
-      {
-        text: '已处理',
-        value: '已处理',
-      },
-      {
-        text: '已忽略',
-        value: '已忽略',
-      },
-    ]
   },
   {
     title: '目标主机',
@@ -902,46 +852,24 @@ const trojanDetectionColumns: any = [
     key: 'name',
   },
   {
-    title: '等级',
+    title: () => (
+      <span>
+        {'等级'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['严重', 2], ['高危', 3], ['中危', 4], ['低危', 5]]} />
+      </span>
+    ),
     dataIndex: 'level',
     key: 'level',
-    filters: [
-      {
-        text: '严重',
-        value: '严重',
-      },
-      {
-        text: '高危',
-        value: '高危',
-      },
-      {
-        text: '中危',
-        value: '中危',
-      },
-      {
-        text: '低危',
-        value: '低危',
-      },
-    ]
   },
   {
-    title: '状态',
+    title: () => (
+      <span>
+        {'状态'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['待处理', 2], ['已处理', 3], ['已忽略', 4]]} />
+      </span>
+    ),
     dataIndex: 'status',
     key: 'status',
-    filters: [
-      {
-        text: '待处理',
-        value: '待处理',
-      },
-      {
-        text: '已处理',
-        value: '已处理',
-      },
-      {
-        text: '已忽略',
-        value: '已忽略',
-      },
-    ]
   },
   {
     title: '操作',
@@ -987,46 +915,24 @@ const suspiciousBehaviorColumns: any = [
     key: 'name',
   },
   {
-    title: '等级',
+    title: () => (
+      <span>
+        {'等级'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['严重', 2], ['高危', 3], ['中危', 4], ['低危', 5]]} />
+      </span>
+    ),
     dataIndex: 'level',
     key: 'level',
-    filters: [
-      {
-        text: '严重',
-        value: '严重',
-      },
-      {
-        text: '高危',
-        value: '高危',
-      },
-      {
-        text: '中危',
-        value: '中危',
-      },
-      {
-        text: '低危',
-        value: '低危',
-      },
-    ]
   },
   {
-    title: '状态',
+    title: () => (
+      <span>
+        {'状态'}
+        <SelectTable list={[0,getValue, ['全部', 1], ['待确认', 2], ['已确认', 3], ['已忽略', 4]]} />
+      </span>
+    ),
     dataIndex: 'status',
     key: 'status',
-    filters: [
-      {
-        text: '待确认',
-        value: '待确认',
-      },
-      {
-        text: '已确认',
-        value: '已确认',
-      },
-      {
-        text: '已忽略',
-        value: '已忽略',
-      },
-    ]
   },
   {
     title: '操作',

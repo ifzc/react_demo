@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from "react-router-dom";
+import store from '../../store';
 import './index.scss'
 import { Button, Divider, Form, Input } from 'antd';
 import ModalFrom from '../../components/userFrom/Modal'
@@ -15,9 +16,17 @@ export default function OpenAgent() {
     const [clickNum, setClickNum] = useState(0);
     const [form] = Form.useForm();
 
+    const [openStore, setOpenStore] = useState(store.getState().open);
+function change(){
+    setOpenStore(store.getState().open)
+}
+
+store.subscribe(change);
+
     const getFromValue = (value: any) => {
         axios.post('/open',value).then((res: any) => {
             if (res.data.status === "200") {
+                store.dispatch({type: 'open',value: '1'})
                 history.push("/dashboard");
             }
         })

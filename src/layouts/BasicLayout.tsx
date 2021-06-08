@@ -1,7 +1,7 @@
-import React, { useState }from 'react'
+import React, { useState, useEffect }from 'react'
 import store from '../store';
 import { Layout, Menu, Breadcrumb, Card } from 'antd'
-import { Router, Link } from "react-router-dom"
+import { useLocation, Link } from "react-router-dom"
 import {
     PieChartOutlined,
     UserOutlined,
@@ -17,6 +17,12 @@ const { SubMenu } = Menu;
 function BasicLayout() {
     const [collapsed, setCollapsed] = useState(false);
     const [open, setOpen] = useState(store.getState().open);
+
+    const { pathname } = useLocation(); 
+    useEffect(()=>{
+            console.log(pathname)
+    },[pathname])
+
 function change(){
     setOpen(store.getState().open)
 }
@@ -31,7 +37,7 @@ store.subscribe(change);
                     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} style={{ position: 'fixed',height: '100vh',overflow: 'auto',zIndex:2  }}>
                         <div className="logo" id="logo" />
                         {open !== "0" ?
-                        <Menu theme="dark" defaultSelectedKeys={['/dashboard']} mode="inline">
+                        <Menu theme="dark" defaultSelectedKeys={['/dashboard']} selectedKeys={[pathname]} mode="inline">
                             <Menu.Item key="/dashboard" icon={<PieChartOutlined />}>
                                 <Link to="/dashboard">仪表盘</Link>
                             </Menu.Item>

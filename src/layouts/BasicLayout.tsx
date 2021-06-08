@@ -17,7 +17,7 @@ const { SubMenu } = Menu;
 function BasicLayout() {
     const [collapsed, setCollapsed] = useState(false);
     const [open, setOpen] = useState(store.getState().open);
-
+    //导航高亮随着路由改变而改变
     const { pathname } = useLocation(); 
     useEffect(()=>{
             console.log(pathname)

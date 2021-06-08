@@ -276,9 +276,9 @@ export default function AssetsDetail() {
           <span>漏洞类别：</span>
           <Radio.Group buttonStyle="solid">
             <Radio.Button value={0}>全部</Radio.Button>
-            <Radio.Button value={1}>Web漏洞<span className="red" style={{ paddingLeft: '5px' }}>0</span></Radio.Button>
-            <Radio.Button value={2}>组件漏洞<span className="red" style={{ paddingLeft: '5px' }}>0</span></Radio.Button>
-            <Radio.Button value={3}>系统漏洞<span className="red" style={{ paddingLeft: '5px' }}>0</span></Radio.Button>
+            <Radio.Button value={1}>Web漏洞 <Text type="danger">0</Text></Radio.Button>
+            <Radio.Button value={2}>组件漏洞 <Text type="danger">1</Text></Radio.Button>
+            <Radio.Button value={3}>系统漏洞 <Text type="danger">2</Text></Radio.Button>
           </Radio.Group>
         </div>
         <TableOptional props={optionalTransferInfo} />

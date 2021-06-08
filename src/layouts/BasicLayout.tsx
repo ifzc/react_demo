@@ -7,7 +7,7 @@ import {
     UserOutlined,
     BellOutlined
 } from '@ant-design/icons'
-import { createBrowserHistory } from 'history'
+//import { createBrowserHistory } from 'history'
 import RouterSwitch from './RouterSwitch'
 import './BasicLayout.css'
 
@@ -27,7 +27,7 @@ store.subscribe(change);
     };
         return (
             <Layout style={{ minHeight: '100vh' }}>
-                <Router history={createBrowserHistory()} >
+                {/* <Router history={createBrowserHistory()} > */}
                     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} style={{ position: 'fixed',height: '100vh',overflow: 'auto',zIndex:2  }}>
                         <div className="logo" id="logo" />
                         {open !== "0" ?
@@ -110,7 +110,7 @@ store.subscribe(change);
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
                     </Layout>
-                </Router>
+                {/* </Router> */}
             </Layout>
         );
     }

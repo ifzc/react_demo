@@ -2,13 +2,14 @@ import React, { Suspense, lazy } from 'react';
 import { Spin } from 'antd'
 import { Route, Switch } from 'react-router-dom';
 const Open = lazy(() => import('../routes/open'));
-/* const LoginLayout = lazy(() => import('../layouts/LoginLayout')); */
 const Dashboard = lazy(() => import('../routes/dashboard'));
 const UserInfo = lazy(() => import('../routes/userCenter/userInfo'));
 const UserSettings = lazy(() => import('../routes/userCenter/settings'));
 const UserLog = lazy(() => import('../routes/userCenter/log'));
 const ShareAccount = lazy(() => import('../routes/userCenter/share'));
-const AssetsTable = lazy(() => import('../routes/assets'));
+//asset
+const AssetsTable = lazy(() => import('../routes/assets/index'));
+const Detail = lazy(() => import('../routes/assets/detail'));
 const TodoList = lazy(() => import('../routes/assets/test'));
 //top
 const Help = lazy(() => import('../routes/top/help'));
@@ -32,6 +33,7 @@ function RouterSwitch() {
                     <Route path='/help' component={Help} />
                     <Route path='/introduction' component={Introduction} />
                     <Route path='/guide' component={Guide} />
+                    <Route path='/detail' component={Detail} />
                 </Switch>
             </Suspense>
         )

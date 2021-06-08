@@ -57,7 +57,7 @@ store.subscribe(change);
                 <p>一款主机安全软件，为您提供主机漏洞检测、基线检查、病毒处理、资产统一管理等功能，为您建立安全运维管理平台。</p>
                 <Button type="primary" onClick={openAgen}>开通主机安全agent</Button>
                 <Divider />
-                <a href="//#">了解产品详情</a><a href="//#">使用指南</a>
+                <a href="/introduction">了解产品详情</a><a href="/blue">使用指南</a>
             </div>
             <div className="open-box-bottom">
                 <img src="/images/open/open_banner.png" alt="" />

@@ -79,8 +79,8 @@ store.subscribe(change);
                                 <Menu.Item key="/Page8">
                                     <Link to="/Page8">数据大屏</Link>
                                 </Menu.Item>
-                                <Menu.Item key="/Page9">
-                                    <Link to="/Page9">帮助文档</Link>
+                                <Menu.Item key="/help">
+                                    <Link to="/help">帮助文档</Link>
                                 </Menu.Item>
                                 <SubMenu key="sub1" title="User">
                                     <Menu.Item key="/Personal/BasicData"><Link to="/user/info">个人资料</Link></Menu.Item>

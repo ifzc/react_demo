@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/http'
-import { Card, Layout, Table, Button, Form, Radio, Tooltip, Dropdown, Menu } from 'antd';
+import { Card, Layout, Table, Button, Form, Radio, Tooltip, Dropdown, Menu, Input, Col, Row } from 'antd';
 import UserCenter from '../../../components/userCenter/UserCenter';
 import ModalFrom from '../../../components/userFrom/Modal'
 import UserName from '../../../components/userFrom/UserName'
@@ -80,6 +80,7 @@ export default function ShareAccount() {
     axios.get('/sub_user').then((res: any) => {
       if (res.data.status === "200") {
         setDataList(res.data.sub_user_info)
+        form.resetFields();
       }
     })
   }
@@ -99,24 +100,6 @@ export default function ShareAccount() {
     })
   }
 
-  const setCaptchaValue = {
-    form: form,
-    fromType: ifEdit,
-    type: "child",
-    ifPhone: ifEditPhone
-  }
-  const setCaptchaValueEmail = {
-    form: form,
-    fromType: ifEdit,
-    type: "child",
-    ifPhone: 1,
-    childEmailCode: true
-  }
-  if (fromType === "添加子账号") {
-    setCaptchaValue.fromType = "1"
-  } else {
-    setCaptchaValue.fromType = "2"
-  }
 
   const over = (text: any) => {
     //getEditRow()
@@ -184,8 +167,6 @@ export default function ShareAccount() {
 
   const getFromValue = (value: any) => {
     if (fromType === "添加子账号") {
-      value['phone_code'] = value.code
-      delete value['code'];
       axios.post('/sub_user', value).then((res: any) => {
         if (res.data.status === "200") {
           getList()
@@ -240,6 +221,31 @@ export default function ShareAccount() {
     from: form,
     getFromValue: getFromValue
   }
+
+    const sendCode = (type:string,index:number) => {
+      if (type === "phone") {//子账号手机号验证码
+        let paramChildPhone = {
+          phone: form.getFieldValue('phone'),
+          type: index
+        }
+        axios.post('/send_code', paramChildPhone).then((res: any) => {
+          if (res.data.status === "200") {
+          }
+        })
+      } 
+      if (type === "email") {//子账号邮箱验证码
+        let paramChildEmail = {
+          email: form.getFieldValue('email'),
+          type: index
+        }
+        axios.put('/send_code', paramChildEmail).then((res: any) => {
+          if (res.data.status === "200") {
+          }
+        })
+      }
+      }
+
+
   return (
     <Layout className="personal-active">
       <UserCenter />
@@ -255,8 +261,8 @@ export default function ShareAccount() {
               {...formItemLayout}
               form={form}
               initialValues={{
-                permission: "1",
-                alarm: "1"
+                permission: 1,
+                alarm: 1
               }}
               name="form_in_modal"
               className="labelFrom"
@@ -269,9 +275,31 @@ export default function ShareAccount() {
                   {fromType === "添加子账号" &&
                     <div>
                       <Email />
-                      <Captcha value={setCaptchaValueEmail} />
+                      <Form.Item style={{marginLeft:"118px"}}>
+                      <Row gutter={10}>
+                      <Col span={22}>
+                  <Form.Item  name="email_code" noStyle rules={[{ required: true, message: '请输入您获得的验证码!' }]}>
+              <Input placeholder="请输入验证码" />
+            </Form.Item>
+            </Col>
+            <Col span={2}>
+          <Button type="primary" onClick={()=>sendCode("email",1)}>发送验证码</Button>
+        </Col>
+        </Row>
+        </Form.Item>
                       <Phone status={1} />
-                      <Captcha value={setCaptchaValue} />
+                      <Form.Item style={{marginLeft:"118px"}}>
+                      <Row gutter={10}>
+                      <Col span={22}>
+                  <Form.Item label="" name="phone_code" noStyle rules={[{ required: true, message: '请输入您获得的验证码!' }]}>
+              <Input placeholder="请输入验证码" />
+            </Form.Item>
+            </Col>
+            <Col span={2}>
+          <Button type="primary" onClick={()=>sendCode("phone",1)}>发送验证码</Button>
+        </Col>
+        </Row>
+        </Form.Item>
                     </div>
                   }
                   <Form.Item label="权限" name="permission">
@@ -294,12 +322,34 @@ export default function ShareAccount() {
               {ifPhone === 1 &&
                 <div>
                   <Email />
-                  <Captcha value={setCaptchaValue} />
+                  <Form.Item style={{marginLeft:"118px"}}>
+                  <Row gutter={10}>
+                  <Col span={22}>
+                  <Form.Item name="email_code" noStyle rules={[{ required: true, message: '请输入您获得的验证码!' }]}>
+              <Input placeholder="请输入验证码" />
+            </Form.Item>
+            </Col>
+            <Col span={2}>
+          <Button type="primary" onClick={()=>sendCode("email",1)}>发送验证码</Button>
+        </Col>
+        </Row>
+        </Form.Item>
                 </div>}
               {ifPhone === 2 &&
                 <div>
                   <Phone status={1} />
-                  <Captcha value={setCaptchaValue} />
+                  <Form.Item style={{marginLeft:"118px"}}>
+                  <Row gutter={10}>
+                  <Col span={22}>
+                  <Form.Item name="code" noStyle rules={[{ required: true, message: '请输入您获得的验证码!' }]}>
+              <Input placeholder="请输入验证码" />
+            </Form.Item>
+            </Col>
+            <Col span={2}>
+          <Button type="primary" onClick={()=>sendCode("phone",1)}>发送验证码</Button>
+        </Col>
+        </Row>
+        </Form.Item>
                 </div>
               }
             </Form>

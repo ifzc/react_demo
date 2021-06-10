@@ -13,7 +13,8 @@ const data = [
         location: "上海市",
         status: '离线',
         system: "公网",
-        system1: "windows",
+        systemTest: "windows",
+        option:"",
         update_time: "2020-01-09 16:15:35",
         version: "1.22.5",
         hosttype: "宿主机"
@@ -26,7 +27,8 @@ const data = [
         location: "上海市",
         status: '在线',
         system: "内网",
-        system1: "windows",
+        systemTest: "windows",
+        option:"",
         update_time: "2020-01-09 16:15:35",
         version: "1.22.5",
         hosttype: "宿主机"
@@ -92,18 +94,14 @@ export default function AssetsTable() {
         },
         {
             title: '系统',
-            dataIndex: 'system1',
-            key: 'system1',
-            filters: [
-                {
-                    text: 'windows',
-                    value: 'windows',
-                },
-                {
-                    text: 'linux',
-                    value: 'linux',
-                }
-            ]
+            dataIndex: 'systemTest',
+            key: 'systemTest',
+            filters: true,
+            onFilter: true,
+            valueEnum: {
+                windows: { text: 'windows', status: 'Error' },
+                linux: { text: 'linux', status: 'Success' },
+            }
         },
         {
             title: '操作',

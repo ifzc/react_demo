@@ -20,7 +20,6 @@ function App(){
     return(
       
       <Router>
-            <Route path="/login" component={LoginLayout}/>
             {token===null || token===undefined || token==="" ?
             <LoginLayout />
             :

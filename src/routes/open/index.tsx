@@ -42,7 +42,8 @@ store.subscribe(change);
     const setCaptchaValue = {
         form: form,
         fromType: "2",
-        type:"email"
+        type:"email",
+        style:true
     }
     const openAgen = () => {
         setClickNum(clickNum + 1);
@@ -57,7 +58,7 @@ store.subscribe(change);
                 <p>一款主机安全软件，为您提供主机漏洞检测、基线检查、病毒处理、资产统一管理等功能，为您建立安全运维管理平台。</p>
                 <Button type="primary" onClick={openAgen}>开通主机安全agent</Button>
                 <Divider />
-                <a href="/introduction">了解产品详情</a><a href="/blue">使用指南</a>
+                <a href="/introduction">了解产品详情</a><a href="/Guide">使用指南</a>
             </div>
             <div className="open-box-bottom">
                 <img src="/images/open/open_banner.png" alt="" />
@@ -101,13 +102,18 @@ store.subscribe(change);
             className="labelFrom"
             {...layout}
         >
+            <Form.Item
+        label="开通版本："
+        name="open"
+      >试用版
+      </Form.Item>
         <Form.Item
-        label="资产数量"
+        label="资产数量："
         name="num"
       >3 台
       </Form.Item>
       <Form.Item
-        label="使用时长"
+        label="使用时长："
         name="time"
       >30 天（自然天）
       </Form.Item>
@@ -141,8 +147,9 @@ store.subscribe(change);
               </Col>
               </Row>
             </Form.Item> */}
-            <Captcha value={setCaptchaValue} />
+            <Captcha value={setCaptchaValue} style={{width:"200px"}}/>
         </Form>
+        <p>标准版请联系安识科技商务：<span className="blue">021-3332 8652</span> / <span className="blue">mkt@duoyinsu.com</span></p>
     </ModalFrom>
         }
         </div>

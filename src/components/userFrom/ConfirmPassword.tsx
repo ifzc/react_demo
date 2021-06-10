@@ -15,16 +15,15 @@ class ConfirmPassword extends React.Component<Props> {
           dependencies={['password']}
           hasFeedback
           rules={[
-            {
-              required: true,
-              message: '请输入密码!',
-            },
             ({ getFieldValue }) => ({
               validator(rule, value) {
-                if (getFieldValue('password') === value) {
-                  return Promise.resolve();
+                if(value!=="" && value!==undefined){
+                  if (getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('两次输入的密码不一致！');
                 }
-                return Promise.reject('两次输入的密码不一致！');
+                return Promise.reject('请输入密码')
               },
             }),
           ]}
@@ -37,16 +36,15 @@ class ConfirmPassword extends React.Component<Props> {
       <Form.Item
         name="password2"
         rules={[
-          {
-            required: true,
-            message: '请输入密码!',
-          },
           ({ getFieldValue }) => ({
             validator(rule, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
+              if(value!=="" && value!==undefined){
+                if (getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('两次输入的密码不一致！');
               }
-              return Promise.reject('两次输入的密码不一致！');
+              return Promise.reject('请输入密码')
             },
           }),
         ]}

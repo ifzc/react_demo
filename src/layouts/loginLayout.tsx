@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import axios from '../utils/http'
 import store from '../store';
 import './LoginLayout.scss'
-import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal } from 'antd';
+import { Layout, Menu, Row, Col, Divider, Tabs, Card, Form, Button, Modal, Spin } from 'antd';
 import UserName from '../components/userFrom/UserName'
 import Password from '../components/userFrom/Password'
 import ConfirmPassword from '../components/userFrom/ConfirmPassword'
@@ -114,6 +114,7 @@ function LoginFrom(tab: any) {
     const [fromType, setFromType] = useState("免密登录");
     const [manner, setManner] = useState(true);
     const [qrImg, setQrImg] = useState("");
+    const [loading,setLoading] = useState(true);
 
     const storeInfo = (res:any) =>{
         store.dispatch({type: 'token',value: res.data.token})
@@ -123,7 +124,7 @@ function LoginFrom(tab: any) {
                 if(res.data.user_status === "0"){//未开通apollo
                     history.push("/agent");
                 }else{
-                    history.push("/user/info");
+                    history.push("/dashboard");
                 }
     }
     //未注册平台账号扫码登录 注册过平台账号第一次扫码登录
@@ -137,6 +138,12 @@ function LoginFrom(tab: any) {
                 setQrImg(res.data.code_info.qrcode_url);
                 eventId = res.data.code_info.event_id;
                 qrLogob()
+                setLoading(false)
+                let test:any = document.querySelector(".qr-code-status-success")
+                if(test !==null && test !=="" && test !==undefined){
+                    test.innerHTML="二维码加载成功, 请扫码进行确认!"
+                }
+                
             }
         })
     }
@@ -144,6 +151,7 @@ function LoginFrom(tab: any) {
         let event_id = { event_id: eventId }
         //扫码登录
         axios.post('/code', event_id).then((res: any) => {
+            console.log(res.data.msg.status)
             if (res.data.status === "200") {
                 storeInfo(res)
             } else if (res.data.status === "201") {//未注册平台账号扫码登录 
@@ -158,7 +166,8 @@ function LoginFrom(tab: any) {
                 tab.tab.changeActive(statusAccount)
                 dysUid = res.data.dys_uid
                 console.log("202")
-            }else if(res.data.msg.status !== "604"){
+            }else if(res.data.msg.status !== "604" && !manner){
+                console.log("jin")
                 setTimeout((function () { qrLogob() }), 2000);
             }
         })
@@ -249,14 +258,15 @@ function LoginFrom(tab: any) {
             mannerImg = <div>
                 <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true) }} />
                 <span className="manner-box-span">使用密码登录</span>
-                <div className="qr-code"><p className="qr-code-status-success">二维码加载成功, 请扫码进行确认!</p><img src={qrImg} alt="" /><p className="qr-code-description">打开多因素令牌APP 或 微信小程序，进入“扫码登录”</p></div>
+                <div className="qr-code"><Spin spinning={loading}><p className="qr-code-status-success"></p><img src={qrImg} alt="" /></Spin><p className="qr-code-description">打开多因素令牌APP 或 微信小程序，进入“扫码登录”</p></div>
             </div>
         }
     }
     const [form] = Form.useForm();
     const setCaptchaValue = {
         form: form,
-        fromType: "1"
+        fromType: "1",
+        col:16
     }
     return (
         <div>
@@ -326,6 +336,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     }
     return (
         <Modal
+        className="loginModel"
             centered
             visible={visible}
             title={fromType}

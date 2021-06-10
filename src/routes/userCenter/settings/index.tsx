@@ -18,8 +18,8 @@ interface Values {
 interface CollectionCreateFormProps {
     titleType: string;
     visible: boolean;
-    onCreate: (values: Values) => void;
-    onCancel: () => void;
+    onCreate: (values: Values,f:any) => void;
+    onCancel: (f:any) => void;
 }
 const data = [
     {
@@ -78,12 +78,13 @@ class SecuritySettings extends React.Component<any, any> {
 //控制表单弹出隐藏
 function CollectionsPage(props: any) {
     const [visible, setVisible] = useState(false);
-    const onCreate = (values: Values) => {
+    const onCreate = (values: Values,f:any) => {
         if(props.titleType==="登录密码"){
         axios.post('/user', values).then((res: any) => {
             if (res.status === 200) {
                 if (res.data.status === "200") {
                     setVisible(false);
+                    f.resetFields();
                 }
             }
         })
@@ -92,6 +93,7 @@ function CollectionsPage(props: any) {
             if (res.status === 200) {
                 if (res.data.status === "200") {
                     setVisible(false);
+                    f.resetFields();
                 }
             }
         })
@@ -111,8 +113,9 @@ function CollectionsPage(props: any) {
                 titleType={props.titleType}
                 visible={visible}
                 onCreate={onCreate}
-                onCancel={() => {
+                onCancel={(f:any) => {
                     setVisible(false);
+                    f.resetFields();
                 }}
             />
         </div>
@@ -133,17 +136,17 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     }
     return (
         <Modal
+        className="loginModel"
             visible={visible}
             title={titleType}
             okText="确认"
             cancelText="取消"
-            onCancel={onCancel}
+            onCancel={()=>onCancel(form)}
             onOk={() => {
                 form
                     .validateFields()
                     .then(values => {
-                        form.resetFields();
-                        onCreate(values);
+                        onCreate(values,form);
                     })
                     .catch(info => {
                     });
@@ -155,7 +158,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 name="form_in_modal"
             >
                 <Form.Item
-                            name="password"
+                            name="old_password"
                             label="原密码"
                             rules={[{ required: true, message: '请输入原密码!' }]}
                         >

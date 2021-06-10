@@ -27,9 +27,9 @@ function Captcha(props: any) {
     }
   }
   return (
-    <Form.Item>
+    <Form.Item style={props.value.style ? {'width':"268px",marginLeft:"80px"} : {}}>
       <Row gutter={10}>
-        <Col span={16}>
+        <Col span={props.value.col ? 16 : 17}>
           <Form.Item
             name="code"
             noStyle
@@ -38,7 +38,7 @@ function Captcha(props: any) {
             <Input placeholder="验证码" />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col span={6}>
           <Button type="primary" onClick={sendCode}>发送验证码</Button>
         </Col>
       </Row>

@@ -22,17 +22,17 @@ class Password extends React.Component<Props> {
           }
           rules={[
             {
-              required: true,
-              message: '请输入密码!',
-              // }, {
-              //   validator(rule, value) {
-              //     //正则验证：let reg;
-              //     console.log(value)
-              //     if (!value) {
-              //       return Promise.resolve();
-              //     }
-              //     return Promise.reject('两次输入的密码不一致！');
-              //   },
+                 validator(rule, value) {
+                   //正则验证
+                   let reg = /^(?![a-zA-Z]+$)(?![0-9]+$)(?![_!@#$%^&*`.~()+=]+$)[AZa-z0-9_!@#$%^&*`.~()+=]{8,20}$/
+                   if(value!=="" && value!==undefined){
+                    if (value.match(reg)) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject('8-20个字符，数字，字母，特殊符号至少包含两种');
+                   }
+                   return Promise.reject('请输入密码')
+                 },
             },
           ]}
           hasFeedback

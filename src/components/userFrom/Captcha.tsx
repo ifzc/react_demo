@@ -53,8 +53,8 @@ function Captcha(props: any) {
     }
   }
   return (
-    <Form.Item {...buttonItemLayout}>
-      <Row gutter={8}>
+    <Form.Item>
+      <Row gutter={10}>
         <Col span={16}>
           {props.value.childEmailCode ?
             <Form.Item

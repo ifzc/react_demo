@@ -43,3 +43,9 @@ border: none;
 .blue{
   color: #00A0FF;
 }
+//高级表格下card-padding
+.ant-pro-table{
+  .ant-card-body{
+      padding: 0;
+  }
+}

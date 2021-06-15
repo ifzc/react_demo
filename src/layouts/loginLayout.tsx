@@ -166,8 +166,7 @@ function LoginFrom(tab: any) {
                 tab.tab.changeActive(statusAccount)
                 dysUid = res.data.dys_uid
                 console.log("202")
-            }else if(res.data.msg.status !== "604" && !manner){
-                console.log("jin")
+            }else if(res.data.msg.status !== "604"){
                 setTimeout((function () { qrLogob() }), 2000);
             }
         })

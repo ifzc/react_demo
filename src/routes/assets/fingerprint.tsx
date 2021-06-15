@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Tabs } from 'antd';
+import { Card, Tabs } from 'antd';
 import SearchForm from '../../components/table/search';
 import TableOptional from '../../components/table/TableOptional'
 import SelectTable from '../../components/table/SelectTable'
@@ -120,6 +120,7 @@ export default function FingerprintDetail() {
 
 
   return (
+    <Card className="fingerprint-box" bordered={false}>
     <Tabs defaultActiveKey="用户信息" onChange={callback} className="detail">
       <TabPane tab="用户信息" key="用户信息">
         <SearchForm data={userInfo} />
@@ -163,6 +164,7 @@ export default function FingerprintDetail() {
         <TableOptional props={optionalTransferInfo} />
       </TabPane>
     </Tabs>
+    </Card>
   )
 }
 

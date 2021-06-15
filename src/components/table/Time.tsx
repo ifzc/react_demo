@@ -18,7 +18,6 @@ export default function Time() {
         '昨天': [moment().subtract('days', 1), moment()],
         '最近一周': [moment().subtract('days', 6), moment()],
         '最近一个月': [moment().subtract('days', 30), moment()],
-        '最近三个月': [moment().subtract('days', 90), moment()],
       }}
       showTime
       format="YYYY/MM/DD HH:mm:ss"

@@ -142,6 +142,7 @@ export default function AssetsDetail() {
   return (
     <Tabs defaultActiveKey="1" onChange={callback} className="detail">
       <TabPane tab="基本信息" key="1">
+      <Card>
         <div className="detail-basic">
           <div className="detail-basic-left">
             <p className="detail-list-title">基本信息</p>
@@ -226,7 +227,6 @@ export default function AssetsDetail() {
                 ranges={{
                   '最近一周': [moment().subtract('days', 6), moment()],
                   '最近一个月': [moment().subtract('days', 30), moment()],
-                  '最近三个月': [moment().subtract('days', 90), moment()],
                 }}
                 showTime
                 format="YYYY/MM/DD HH:mm:ss"
@@ -248,11 +248,13 @@ export default function AssetsDetail() {
             <Line data={lineDataDisk} />
           </Card>
         </div>
+        </Card>
       </TabPane>
       <TabPane tab="指纹信息" key="2">
         <FingerprintDetail />
       </TabPane>
       <TabPane tab="漏洞信息" key="3">
+      <Card>
         <SearchForm data={userInfo} />
         <div style={{ marginTop: "20px" }}>
           <span>漏洞等级：</span>
@@ -282,38 +284,56 @@ export default function AssetsDetail() {
           </Radio.Group>
         </div>
         <TableOptional props={optionalTransferInfo} />
+        </Card>
       </TabPane>
+      
       <TabPane tab="基线检查" key="4">
+      <Card>
         <SearchForm data={userInfo} />
         <TableBasic props={basicTransferInfo} />
+        </Card>
       </TabPane>
       <TabPane tab="弱密码检查" key="5">
+      <Card>
         <SearchForm data={userInfo} />
         <TableOptional props={optionalTransferInfo} />
+        </Card>
       </TabPane>
       <TabPane tab="异常登录" key="6">
+      <Card>
         <SearchForm data={userInfo} />
         <TableBasic props={basicTransferInfo} />
+        </Card>
       </TabPane>
       <TabPane tab="暴力破解" key="7">
+      <Card>
         <SearchForm data={userInfo} />
         <TableBasic props={basicTransferInfo} />
+        </Card>
       </TabPane>
       <TabPane tab="网站后门" key="8">
+      <Card>
         <SearchForm data={userInfo} />
         <TableBasic props={basicTransferInfo} />
+        </Card>
       </TabPane>
       <TabPane tab="反弹shell" key="9">
+      <Card>
         <SearchForm data={userInfo} />
         <TableBasic props={basicTransferInfo} />
+        </Card>
       </TabPane>
       <TabPane tab="木马检测" key="10">
+      <Card>
         <SearchForm data={userInfo} />
         <TableBasic props={basicTransferInfo} />
+        </Card>
       </TabPane>
       <TabPane tab="可疑行为" key="11">
+      <Card>
         <SearchForm data={userInfo} />
         <TableBasic props={basicTransferInfo} />
+        </Card>
       </TabPane>
     </Tabs>
   )

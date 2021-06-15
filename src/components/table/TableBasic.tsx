@@ -8,7 +8,7 @@ export default function TableBasic(params: any) {
     }
     return (
         <div>
-            <Table columns={params.props.columns} dataSource={params.props.data} pagination={false} rowKey="id" expandable={
+            <Table style={{marginTop:"20px"}} columns={params.props.columns} dataSource={params.props.data} pagination={false} rowKey="id" expandable={
                     params.props.ifExpand && {
                       expandedRowRender: (record: any) => <p>{record[params.props.name]}</p>,
                       expandIconColumnIndex:params.props.index,//ant-table-row-expand-icon-cell

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Tooltip, Button, Form } from 'antd';
+import { Tooltip, Button, Form, Card } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import TableOptional from '../../components/table/TableOptional'
 import TagGroup from '../../components/table/Tag'
 import ModalFrom from '../../components/userFrom/Modal'
+import SelectTable from '../../components/table/SelectTable'
+import {Link} from 'react-router-dom'
 const data = [
     {
         id: 1,
@@ -35,7 +37,19 @@ const data = [
     }
 ];
 
+let searchListForm = ''
+let menuFirst = ""
+let menuSecond = ""
+
 export default function AssetsTable() {
+    const getValue = (i:number,n:any)=> {//i-第几个下拉选择 n-传给后端值
+        console.log(searchListForm)
+        if (i === 0) {
+          menuFirst = n
+        } else {
+          menuSecond = n
+        }
+      }
     const columns = [
         {
             title: '服务器名称',
@@ -69,35 +83,44 @@ export default function AssetsTable() {
             key: 'location',
         },
         {
-            title: '状态',
+            title: () => (
+                <span>
+                  {'状态'}
+                  <SelectTable list={[0,getValue, ['全部', 11], ['在线', 12], ['离线', 13]]} />
+                </span>
+              ),
             dataIndex: 'status',
             key: 'status',
-            filters: true,
-            onFilter: true,
-            width: 80,
+            width: 100,
             valueEnum: {
                 离线: { text: '离线', status: 'Default' },
                 在线: { text: '在线', status: 'Success' },
             },
         },
         {
-            title: '网络',
+            title: () => (
+            <span>
+              {'网络'}
+              <SelectTable list={[0,getValue, ['全部', 11], ['公网', 12], ['内网', 13]]} />
+            </span>
+          ),
             dataIndex: 'system',
             key: 'system',
-            filters: true,
-            onFilter: true,
-            width: 80,
+            width: 100,
             valueEnum: {
                 公网: { text: '公网', status: 'Error' },
                 内网: { text: '内网', status: 'Success' },
             },
         },
         {
-            title: '系统',
+            title: () => (
+                <span>
+                  {'系统'}
+                  <SelectTable list={[0,getValue, ['全部', 11], ['windows', 12], ['linux', 13]]} />
+                </span>
+              ),
             dataIndex: 'systemTest',
             key: 'systemTest',
-            filters: true,
-            onFilter: true,
             valueEnum: {
                 windows: { text: 'windows', status: 'Error' },
                 linux: { text: 'linux', status: 'Success' },
@@ -108,8 +131,8 @@ export default function AssetsTable() {
             width: 180,
             key: 'option',
             valueType: 'option',
-            render: () => [
-                <Button type="primary" size="small">查看</Button>
+            render: (text:any, record:any, index:number) => [
+                <Button type="primary" size="small"><Link to={`/detail?id=`+index}>查看</Link>{/* 查看 */}</Button>
             ],
         },
         {
@@ -137,6 +160,7 @@ export default function AssetsTable() {
     const [history, setHistory] = useState([''])
     const [editId,setId] = useState([0])
     const [form] = Form.useForm();
+    const [type,setType] =useState("标签")
 
     const getFromValue = (value: any) => {
         console.log('model表单值', value)
@@ -144,6 +168,7 @@ export default function AssetsTable() {
     }
     //编辑标签 负责人
     const addAssetsTag = (title: string, showTag: boolean) => {
+
         if (!showTag) {
             console.log(1)
             setAlready([])
@@ -190,15 +215,14 @@ export default function AssetsTable() {
         }
     }
 
-    const tagChange = (tag:Array<string>,type:number) =>{
-        console.log("asset")
+    const tagChange = (tag:string,type:number) =>{
         console.log(tag,type)
         if(type === 0){
-            setAlready(tag)
+            setAlready([tag])
         }else if(type === 1){
-        setAdd(tag)
+        setAdd([tag])
         }else{
-            setAdd(tag)
+            setAdd([tag])
         }
     }
     let optionalTransferInfo = {
@@ -215,7 +239,7 @@ export default function AssetsTable() {
     let addTag={tags:add,type:1,tagChange:tagChange}
     let historyTag={tags:history,type:2,tagChange:tagChange}
     return (
-        <div>
+            <Card>
             <TableOptional props={optionalTransferInfo} />
             <div className="table-button">
                 <Button disabled={buttonD} onClick={() => addAssetsTag('编辑标签', true)}>编辑标签</Button>
@@ -229,11 +253,13 @@ export default function AssetsTable() {
                     name="form_in_modal"
                     className="labelFrom"
                 >
-                    <Form.Item label="● 当前资源已有标签（若选择多个资源则显示其共有标签，删除只影响共有标签）" name="labelA"><TagGroup tags={alreadyTag} /></Form.Item>
+                    <Form.Item label="● 当前资源已有标签(若选择多个资源则显示共有标签，删除只影响共有标签)" name="labelA"><TagGroup tags={alreadyTag} /></Form.Item>
                     <Form.Item label="● 新增标签" name="label"><TagGroup tags={addTag} /></Form.Item>
+                    {fromType==="编辑标签" &&
                     <Form.Item label="● 历史标签" name="labelH"><TagGroup tags={historyTag} /></Form.Item>
+    }
                 </Form>
             </ModalFrom>
-        </div>
+            </Card>
     )
 }

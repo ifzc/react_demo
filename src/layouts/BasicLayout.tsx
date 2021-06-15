@@ -44,12 +44,12 @@ store.subscribe(change);
                             <Menu.Item key="/assets" icon={<PieChartOutlined />}>
                                 <Link to="/assets">资产列表</Link>
                             </Menu.Item>
-                            <SubMenu key="/user" icon={<UserOutlined />} title="用户中心">
+                            {/* <SubMenu key="/user" icon={<UserOutlined />} title="用户中心">
                                 <Menu.Item key="/user/info">
                                     <Link to="/user/info">用户信息</Link></Menu.Item>
                                 <Menu.Item key="/user/settings">
                                     <Link to="/user/settings">安全设置</Link></Menu.Item>
-                            </SubMenu>
+                            </SubMenu> */}
                         </Menu>
                         :
                         <Menu theme="dark" defaultSelectedKeys={['/agent']} mode="inline">
@@ -59,12 +59,6 @@ store.subscribe(change);
                             <Menu.Item key="2" icon={<PieChartOutlined />}>
                                 <Link to="/agent">资产列表</Link>
                             </Menu.Item>
-                            <SubMenu key="3" icon={<UserOutlined />} title="用户中心">
-                                <Menu.Item key="3-1">
-                                    <Link to="/agent">用户信息</Link></Menu.Item>
-                                <Menu.Item key="3-2">
-                                    <Link to="/agent">安全设置</Link></Menu.Item>
-                            </SubMenu>
                         </Menu>
 }
                     </Sider>
@@ -110,9 +104,7 @@ store.subscribe(change);
                                 {/* <Breadcrumb.Item>User</Breadcrumb.Item>
                                 <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
                             </Breadcrumb>
-                            <Card className="site-layout-background">
                                 <RouterSwitch />
-                            </Card>
                         </Content>
                         {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer> */}
                     </Layout>

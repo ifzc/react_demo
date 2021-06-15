@@ -174,8 +174,8 @@ export default function AssetsDetail() {
               </tr>
               <tr>
                 <td>组 件：</td>
-                <td>
-                  <p className="metaList"></p>
+                <td className="metaList">
+                  <span>list1</span><span>list2</span><span>list3</span><span>list4</span>
                 </td>
               </tr>
               <tr>

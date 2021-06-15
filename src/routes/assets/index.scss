@@ -42,6 +42,14 @@
         min-width: 70px;
     }
 }
+.metaList{
+    span{
+        display: inline-block;
+        padding: 1px 6px;
+        border: 1px solid #eee;
+        border-radius: 16px;
+    }
+}
 }
 
 //监控信息
@@ -77,5 +85,4 @@
     .ant-tabs-tabpane{
         margin-top: 15px;
     }
-    
 }

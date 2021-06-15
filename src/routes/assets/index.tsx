@@ -239,7 +239,7 @@ export default function AssetsTable() {
     let addTag={tags:add,type:1,tagChange:tagChange}
     let historyTag={tags:history,type:2,tagChange:tagChange}
     return (
-            <Card>
+            <Card title="资产列表">
             <TableOptional props={optionalTransferInfo} />
             <div className="table-button">
                 <Button disabled={buttonD} onClick={() => addAssetsTag('编辑标签', true)}>编辑标签</Button>

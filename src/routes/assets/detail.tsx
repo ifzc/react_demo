@@ -34,15 +34,23 @@ export default function AssetsDetail() {
   const [basicInfo, setBasicInfo] = useState({ columns: [], ifExpand: false, name: "", index: "0" })
   const [optionalData, setOptionalData] = useState([])
   const [optionalInfo, setOptionalInfo] = useState({ columns: [], columnsMap: {} })
+  const [barName, setBarName] = useState('用户信息')
+  const [activeKey, setActiveKey] = useState('1')
   //引用查询条件
   const [userInfo, setUserInfo] = useState({})
+  //bar click
+  const clickBar =(name:string)=>{
+    setBarName(name)
+    setActiveKey("2")
+  }
   //x轴数据
   const [lineXdata, setLineXdata] = useState([
     '2009/6/12 2:00', '2009/6/12 3:00', '2009/6/12 4:00', '2009/6/12 5:00', '2009/6/12 6:00', '2009/6/12 7:00', '2009/6/12 8:00', '2009/6/12 9:00', '2009/6/12 10:00', '2009/6/12 11:00', '2009/6/12 12:00', '2009/6/12 13:00', '2009/6/12 14:00', '2009/6/12 15:00', '2009/6/12 16:00', '2009/6/12 17:00', '2009/6/12 18:00', '2009/6/12 19:00', '2009/6/12 20:00', '2009/6/12 21:00'])
   let barData = {
     legend: [],
     xdata: ['用户信息', '软件清单', '监听端口', '运行进程', 'web站点', '数据库信息', '组件信息', '共享文件'],
-    ydata: [0, 417, 20, 27, 11, 12, 12, 0]
+    ydata: [0, 417, 20, 27, 11, 12, 12, 0],
+    clickBar:clickBar
   }
   let lineDataCpu = {
     legend: ['cpu使用率'],
@@ -71,6 +79,7 @@ export default function AssetsDetail() {
   let columnsStateMap = {}
   //tab切换
   const callback = (key: string) => {
+    setActiveKey(key)
     if (key === "3") {
       columnsStateMap = {
         get_time: { show: false, order: 2, }
@@ -140,7 +149,7 @@ export default function AssetsDetail() {
     ifRowSelection: false//是否可选择
   }
   return (
-    <Tabs defaultActiveKey="1" onChange={callback} className="detail">
+    <Tabs defaultActiveKey="1" activeKey={activeKey} onChange={callback} className="detail">
       <TabPane tab="基本信息" key="1">
       <Card>
         <div className="detail-basic">
@@ -251,7 +260,7 @@ export default function AssetsDetail() {
         </Card>
       </TabPane>
       <TabPane tab="指纹信息" key="2">
-        <FingerprintDetail />
+        <FingerprintDetail data={barName}/>
       </TabPane>
       <TabPane tab="漏洞信息" key="3">
       <Card>

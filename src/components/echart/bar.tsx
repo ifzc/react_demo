@@ -42,10 +42,13 @@ export default function Bar(prop:any) {
         };
         return option
         }
-
+        
+let clickItem = {
+    'click': (e:any) => {prop.data.clickBar(e.name)}
+ }
     return ( 
         <div title="折线图表之一" style={{width:'100%'}}>
-        <ReactEcharts option={getOption()} theme="Imooc" style={{height:'330px',width:'100%'}}/>
+        <ReactEcharts onEvents={clickItem} option={getOption()} theme="Imooc" style={{height:'330px',width:'100%'}}/>
     </div>
     );
 }

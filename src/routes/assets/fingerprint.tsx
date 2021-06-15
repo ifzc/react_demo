@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, Tabs } from 'antd';
 import SearchForm from '../../components/table/search';
 import TableOptional from '../../components/table/TableOptional'
@@ -10,7 +10,12 @@ const { TabPane } = Tabs;
 let searchListForm = ''
 let menuFirst = ""
 let menuSecond = ""
-export default function FingerprintDetail() {
+export default function FingerprintDetail(prop:any) {
+  //bar点击切换tab
+  const [barName, setBarName] = useState(prop.data)
+  useEffect(()=>{
+    setBarName(prop.data)
+},[prop.data])
   //查询接口
   const searchCondition = (val: any) => {
     console.log(menuFirst, menuSecond)//表格筛选值
@@ -29,6 +34,7 @@ export default function FingerprintDetail() {
 
 
   const callback = (key: string) => {
+    setBarName(key)
     console.log(key);
     if (key === "用户信息") {
       setData(userInfoData)
@@ -118,10 +124,9 @@ export default function FingerprintDetail() {
     index: info.index
   }
 
-
   return (
     <Card className="fingerprint-box" bordered={false}>
-    <Tabs defaultActiveKey="用户信息" onChange={callback} className="detail">
+    <Tabs defaultActiveKey="1" activeKey={barName} onChange={callback} className="detail">
       <TabPane tab="用户信息" key="用户信息">
         <SearchForm data={userInfo} />
         <TableOptional props={optionalTransferInfo} />

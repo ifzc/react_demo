@@ -151,7 +151,6 @@ function LoginFrom(tab: any) {
         let event_id = { event_id: eventId }
         //扫码登录
         axios.post('/code', event_id).then((res: any) => {
-            console.log(res.data.msg.status)
             if (res.data.status === "200") {
                 storeInfo(res)
             } else if (res.data.status === "201") {//未注册平台账号扫码登录 
@@ -167,7 +166,8 @@ function LoginFrom(tab: any) {
                 dysUid = res.data.dys_uid
                 console.log("202")
             }else if(res.data.msg.status !== "604"){
-                setTimeout((function () { qrLogob() }), 2000);
+                var timeOut:any=setTimeout((function () { qrLogob() }), 2000);
+                sessionStorage.setItem("timeOut", timeOut);
             }
         })
     }
@@ -255,7 +255,7 @@ function LoginFrom(tab: any) {
             </div>
         } else {
             mannerImg = <div>
-                <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true) }} />
+                <img src="/images/login/namelogin.png" alt="" style={{ 'width': '30px' }} onClick={() => { setManner(true);let timeOut:any =sessionStorage.getItem('timeOut');clearTimeout(timeOut);} }/>
                 <span className="manner-box-span">使用密码登录</span>
                 <div className="qr-code"><Spin spinning={loading}><p className="qr-code-status-success"></p><img src={qrImg} alt="" /></Spin><p className="qr-code-description">打开多因素令牌APP 或 微信小程序，进入“扫码登录”</p></div>
             </div>

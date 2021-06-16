@@ -51,8 +51,8 @@ export default function ShareAccount() {
     },
     {
       title: '创建时间',
-      key: 'creat_time',
-      dataIndex: 'creat_time',
+      key: 'create_time',
+      dataIndex: 'create_time',
     },
     {
       title: '操作',

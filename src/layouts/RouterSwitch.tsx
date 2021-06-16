@@ -11,6 +11,10 @@ const ShareAccount = lazy(() => import('../routes/userCenter/share'));
 const AssetsTable = lazy(() => import('../routes/assets/index'));
 const Detail = lazy(() => import('../routes/assets/detail'));
 const TodoList = lazy(() => import('../routes/assets/test'));
+//assetManagement
+const AssetFingerprint = lazy(() => import('../routes/assetManagement/fingerprint'));
+const AssetLog = lazy(() => import('../routes/assetManagement/log'));
+const AssetOperating = lazy(() => import('../routes/assetManagement/operating'));
 //top
 const Help = lazy(() => import('../routes/top/help'));
 const Introduction = lazy(() => import('../routes/top/introduction'));
@@ -33,7 +37,10 @@ function RouterSwitch() {
                     <Route path='/help' component={Help} />
                     <Route path='/introduction' component={Introduction} />
                     <Route path='/guide' component={Guide} />
-                    <Route path='/detail' component={Detail} />
+                    <Route path='/asset/detail' component={Detail} />
+                    <Route path='/asset/fingerprint' component={AssetFingerprint} />
+                    <Route path='/asset/log' component={AssetLog} />
+                    <Route path='/asset/operating' component={AssetOperating} />
                 </Switch>
             </Suspense>
         )

@@ -44,12 +44,14 @@ store.subscribe(change);
                             <Menu.Item key="/assets" icon={<PieChartOutlined />}>
                                 <Link to="/assets">资产列表</Link>
                             </Menu.Item>
-                            {/* <SubMenu key="/user" icon={<UserOutlined />} title="用户中心">
-                                <Menu.Item key="/user/info">
-                                    <Link to="/user/info">用户信息</Link></Menu.Item>
-                                <Menu.Item key="/user/settings">
-                                    <Link to="/user/settings">安全设置</Link></Menu.Item>
-                            </SubMenu> */}
+                            <SubMenu key="/asset/fingerprint" icon={<UserOutlined />} title="资产管理">
+                                <Menu.Item key="/asset/fingerprint">
+                                    <Link to="/asset/fingerprint">资产指纹</Link></Menu.Item>
+                                <Menu.Item key="/asset/log">
+                                    <Link to="/asset/log">日志信息</Link></Menu.Item>
+                                    <Menu.Item key="/asset/operating">
+                                    <Link to="/asset/operating">操作审计</Link></Menu.Item>
+                            </SubMenu>
                         </Menu>
                         :
                         <Menu theme="dark" defaultSelectedKeys={['/agent']} mode="inline">
@@ -59,6 +61,14 @@ store.subscribe(change);
                             <Menu.Item key="2" icon={<PieChartOutlined />}>
                                 <Link to="/agent">资产列表</Link>
                             </Menu.Item>
+                            <SubMenu key="/agent" icon={<UserOutlined />} title="资产管理">
+                                <Menu.Item key="/agent">
+                                    <Link to="/agent">资产指纹</Link></Menu.Item>
+                                <Menu.Item key="/agent">
+                                    <Link to="/agent">日志信息</Link></Menu.Item>
+                                    <Menu.Item key="/agent">
+                                    <Link to="/agent">操作审计</Link></Menu.Item>
+                            </SubMenu>
                         </Menu>
 }
                     </Sider>

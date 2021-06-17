@@ -75,7 +75,6 @@ export default function TableOptional(params: any) {
                 dateFormatter="string"
                 pagination={false}
                 search={false}
-                style={{margin:'0 0 20px 0'}}
             />
             <PaginationNum change={TableProps} />
         </div>

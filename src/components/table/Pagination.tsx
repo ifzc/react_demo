@@ -28,6 +28,7 @@ export default function PaginationNum(params: any) {
             onShowSizeChange={onShowSizeChange}
             onChange={onChange}
             className="table-pagination"
+            style={{marginTop:"20px"}}
         />
     );
 };

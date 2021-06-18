@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Card, Radio } from 'antd';
+import { Card, Radio, Button } from 'antd';
+import {Link} from 'react-router-dom'
 import SearchForm from '../../components/table/search';
 import TableBasic from '../../components/table/TableBasic'
 
@@ -31,7 +32,7 @@ export default function AssetLog() {
         console.log(e.target.value)
     }
     return (
-        <Card title="日志信息">
+        <Card title="日志信息" extra={<Button><Link to="/asset/custom_log">自定义日志</Link></Button>} >
             <SearchForm data={userInfo} />
             <div style={{ marginTop: "20px" }}>
                 <span>操作系统：</span>

@@ -14,6 +14,8 @@ const TodoList = lazy(() => import('../routes/assets/test'));
 //assetManagement
 const AssetFingerprint = lazy(() => import('../routes/assetManagement/fingerprint'));
 const AssetLog = lazy(() => import('../routes/assetManagement/log'));
+const CustomLog = lazy(() => import('../routes/assetManagement/customLog'));
+const AddCustomLog = lazy(() => import('../routes/assetManagement/addCustomLog'));
 const AssetOperating = lazy(() => import('../routes/assetManagement/operating'));
 //top
 const Help = lazy(() => import('../routes/top/help'));
@@ -40,6 +42,8 @@ function RouterSwitch() {
                     <Route path='/asset/detail' component={Detail} />
                     <Route path='/asset/fingerprint' component={AssetFingerprint} />
                     <Route path='/asset/log' component={AssetLog} />
+                    <Route path='/asset/custom_log' component={CustomLog} />
+                    <Route path='/asset/custom_log_add' component={AddCustomLog} />
                     <Route path='/asset/operating' component={AssetOperating} />
                 </Switch>
             </Suspense>

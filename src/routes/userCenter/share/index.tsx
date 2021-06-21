@@ -77,7 +77,7 @@ export default function ShareAccount() {
   const [ifEditPhone, setIfEditPhone] = useState(2)
   const [form] = Form.useForm();
   const getList = () =>{ 
-    axios.get('/sub_user').then((res: any) => {
+    axios.get('/auth/sub_user').then((res: any) => {
       if (res.data.status === "200") {
         setDataList(res.data.sub_user_info)
         form.resetFields();
@@ -93,7 +93,7 @@ export default function ShareAccount() {
 
   //编辑row信息
   const getEditRow = () =>{
-    axios.get('/sub_user',{params:{id:editRowValue.id}}).then((res: any) => {
+    axios.get('/auth/sub_user',{params:{id:editRowValue.id}}).then((res: any) => {
       if (res.data.status === "200") {
         setRowValue(res.data)
       }
@@ -167,7 +167,7 @@ export default function ShareAccount() {
 
   const getFromValue = (value: any) => {
     if (fromType === "添加子账号") {
-      axios.post('/sub_user', value).then((res: any) => {
+      axios.post('/auth/sub_user', value).then((res: any) => {
         if (res.data.status === "200") {
           getList()
         }
@@ -175,7 +175,7 @@ export default function ShareAccount() {
     } else {//编辑子账号
       if (ifPhone === 0) {
         value['sub_id'] = editRowValue.id
-        axios.put('/sub_user', value).then((res: any) => {
+        axios.put('/auth/sub_user', value).then((res: any) => {
           if (res.data.status === "200") {
             getList()
           }
@@ -195,7 +195,7 @@ export default function ShareAccount() {
           editCode.message = value.email
           editCode.send_type = '2'
         }
-        axios.patch('/sub_user', editCode).then((res: any) => {
+        axios.patch('/auth/sub_user', editCode).then((res: any) => {
           if (res.data.status === "200") {
             getList()
           }
@@ -206,7 +206,7 @@ export default function ShareAccount() {
   //删除列
   const deleteRow = (id:number) => {
     let params={sub_id:id}
-    {axios.delete('/sub_user', {params:params}).then((res: any) => {
+    {axios.delete('/auth/sub_user', {params:params}).then((res: any) => {
       if (res.data.status === "200") {
         getList()
       }
@@ -228,7 +228,7 @@ export default function ShareAccount() {
           phone: form.getFieldValue('phone'),
           type: index
         }
-        axios.post('/send_code', paramChildPhone).then((res: any) => {
+        axios.post('/auth/send_code', paramChildPhone).then((res: any) => {
           if (res.data.status === "200") {
           }
         })
@@ -238,7 +238,7 @@ export default function ShareAccount() {
           email: form.getFieldValue('email'),
           type: index
         }
-        axios.put('/send_code', paramChildEmail).then((res: any) => {
+        axios.put('/auth/send_code', paramChildEmail).then((res: any) => {
           if (res.data.status === "200") {
           }
         })

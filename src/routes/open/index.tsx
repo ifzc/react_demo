@@ -24,7 +24,7 @@ function change(){
 store.subscribe(change);
 
     const getFromValue = (value: any) => {
-        axios.post('/open',value).then((res: any) => {
+        axios.post('/auth/open',value).then((res: any) => {
             if (res.data.status === "200") {
                 store.dispatch({type: 'open',value: '1'})
                 history.push("/dashboard");

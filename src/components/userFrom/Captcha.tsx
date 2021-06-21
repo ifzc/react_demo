@@ -10,7 +10,7 @@ function Captcha(props: any) {
         email: props.value.form.getFieldValue('email'),
         type: props.value.fromType
       }
-      axios.post('/email', paramEmail).then((res: any) => {
+      axios.post('/auth/email', paramEmail).then((res: any) => {
         if (res.data.status === "200") {
 
         }
@@ -20,7 +20,7 @@ function Captcha(props: any) {
         phone: props.value.form.getFieldValue('phone'),
         type: props.value.fromType
       }
-      axios.post('/send', paramPhone).then((res: any) => {
+      axios.post('/auth/send', paramPhone).then((res: any) => {
         if (res.data.status === "200") {
         }
       })

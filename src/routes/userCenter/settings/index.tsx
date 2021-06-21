@@ -80,7 +80,7 @@ function CollectionsPage(props: any) {
     const [visible, setVisible] = useState(false);
     const onCreate = (values: Values,f:any) => {
         if(props.titleType==="登录密码"){
-        axios.post('/user', values).then((res: any) => {
+        axios.post('/auth/user', values).then((res: any) => {
             if (res.status === 200) {
                 if (res.data.status === "200") {
                     setVisible(false);
@@ -89,7 +89,7 @@ function CollectionsPage(props: any) {
             }
         })
     }else{
-        axios.put('/user', values).then((res: any) => {
+        axios.put('/auth/user', values).then((res: any) => {
             if (res.status === 200) {
                 if (res.data.status === "200") {
                     setVisible(false);

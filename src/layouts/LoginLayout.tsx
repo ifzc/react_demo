@@ -133,7 +133,7 @@ function LoginFrom(tab: any) {
     const nameLogin = () => {
         setManner(false)
         //定时请求接口=> 拿到二维码图片路径=> 更改img-url
-        axios.get('/code').then((res: any) => {
+        axios.get('/auth/code').then((res: any) => {
             if (res.data.status === "200") {
                 setQrImg(res.data.code_info.qrcode_url);
                 eventId = res.data.code_info.event_id;
@@ -150,7 +150,7 @@ function LoginFrom(tab: any) {
     const qrLogob = () => {
         let event_id = { event_id: eventId }
         //扫码登录
-        axios.post('/code', event_id).then((res: any) => {
+        axios.post('/auth/code', event_id).then((res: any) => {
             if (res.data.status === "200") {
                 storeInfo(res)
             } else if (res.data.status === "201") {//未注册平台账号扫码登录 
@@ -176,7 +176,7 @@ function LoginFrom(tab: any) {
         //登陆成功执行
         if (tab.tab.fromKey === 1) {
             if (tab.tab.tabLogin === "登录") {
-                axios.post('/login', values).then((res: any) => {
+                axios.post('/auth/login', values).then((res: any) => {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
                             storeInfo(res)
@@ -186,7 +186,7 @@ function LoginFrom(tab: any) {
             } else {
                 //绑定多因素
                 values.dys_uid = dysUid
-                axios.put('/bind', values).then((res: any) => {
+                axios.put('/auth/bind', values).then((res: any) => {
                     if (res.status === 200) {
                         if (res.data.status === "200") {
                             storeInfo(res)
@@ -196,7 +196,7 @@ function LoginFrom(tab: any) {
             }
         } else {
             if (tab.tab.tabRegistered === "注册") {
-                axios.post('/register', values).then((res: any) => {
+                axios.post('/auth/register', values).then((res: any) => {
                     if (res.data.status === "200") {
                         tab.tab.changeActive("3");
                         setManner(false);
@@ -206,7 +206,7 @@ function LoginFrom(tab: any) {
                 //注册并绑定多因素
                 values.dys_uid = dysUid
                 console.log(dysUid)
-                axios.post('/bind', values).then((res: any) => {
+                axios.post('/auth/bind', values).then((res: any) => {
                     if (res.data.status === "200") {
                         storeInfo(res)
                     }
@@ -226,7 +226,7 @@ function LoginFrom(tab: any) {
     } */
     const onCreate = (values: any) => {
         if (fromType === "免密登录") {
-            axios.post('/free_login', values).then((res: any) => {
+            axios.post('/auth/free_login', values).then((res: any) => {
                 console.log(res);
                 if (res.data.status === "200") {
                     storeInfo(res)
@@ -234,7 +234,7 @@ function LoginFrom(tab: any) {
 
             })
         } else {
-            axios.post('/forget', values).then((res: any) => {
+            axios.post('/auth/forget', values).then((res: any) => {
                 console.log(res);
                 if (res.data.status === "200") {
                 tab.tab.changeActive("3")

@@ -87,6 +87,6 @@ axios.interceptors.response.use(
 
 axios.defaults.withCredentials = true
 axios.defaults.timeout = 100000
-axios.defaults.baseURL = "http://139.217.130.227/api/auth";
+axios.defaults.baseURL = "http://139.217.130.227/api";
 
 export default axios

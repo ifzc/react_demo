@@ -41,20 +41,23 @@ axios.interceptors.response.use(
   (response) => {
     // 请求结束，蓝色过渡滚动条消失
     NProgress.done()
+    console.log(response.data.msg)
     if(response.data.msg && response.config.method !== "get"){
     if (response.data.status === "200") {
       message.success(response.data.msg);
-    } else if (response.data.status === "501") {
-      message.error(response.data.msg);
-      store.dispatch({
-        type: 'token',
-        value: null
-      });
-    }else if(response.data.msg.status === "604"){
+    } else if(response.data.msg.status === "604"){
       message.error(response.data.msg.msg);
     } else if(!response.data.msg.status) {
       message.error(response.data.msg);
     }
+  }
+  //token失效
+  if (response.data.status === "501") {
+    message.error(response.data.msg);
+    store.dispatch({
+      type: 'token',
+      value: null
+    });
   }
     return response
   },

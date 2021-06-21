@@ -1,0 +1,50 @@
+.install {
+    .install-list {
+        width: 611px;
+        padding: 18px 20px 28px;
+        background: #F5F8F8;
+        list-style: none;
+        margin-top: 20px;
+
+        li {
+            height: 30px;
+            line-height: 30px;
+            clear: both;
+
+            span:nth-of-type(1) {
+                display: block;
+                float: left;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: #00a0ff;
+                margin: 7px 5px 0 0;
+            }
+
+            span:nth-of-type(2) {
+                display: inline-block;
+                width: 543px;
+                float: left;
+                line-height: 20px;
+            }
+        }
+    }
+}
+
+//uninstall
+.uninstall {
+    margin-top: 30px;
+    p {
+        margin-top: 20px;
+    }
+}
+
+//and
+.install,
+.uninstall {
+    div:nth-of-type(1){width: 80%;}
+    .ant-input-search {
+        width: 800px;
+        margin: 10px 0 20px 0;
+    }
+}

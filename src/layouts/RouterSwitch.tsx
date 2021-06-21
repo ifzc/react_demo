@@ -3,6 +3,10 @@ import { Spin } from 'antd'
 import { Route, Switch } from 'react-router-dom';
 const Open = lazy(() => import('../routes/open'));
 const Dashboard = lazy(() => import('../routes/dashboard'));
+//头部
+const Help = lazy(() => import('../routes/top/help'));
+const Introduction = lazy(() => import('../routes/top/introduction'));
+const Guide = lazy(() => import('../routes/top/guide'));
 //个人中心
 const UserInfo = lazy(() => import('../routes/userCenter/userInfo'));
 const UserSettings = lazy(() => import('../routes/userCenter/settings'));
@@ -22,10 +26,9 @@ const AssetOperating = lazy(() => import('../routes/assetManagement/operating'))
 const Loop = lazy(() => import('../routes/securityCheck/loop'));
 const Baseline = lazy(() => import('../routes/securityCheck/baseline'));
 const WeakPassword = lazy(() => import('../routes/securityCheck/weakPassword'));
-//头部
-const Help = lazy(() => import('../routes/top/help'));
-const Introduction = lazy(() => import('../routes/top/introduction'));
-const Guide = lazy(() => import('../routes/top/guide'));
+//系统设置
+const InstallUninstall = lazy(() => import('../routes/systemSettings/installUninstall'));
+
 function RouterSwitch() {
         return (
             <Suspense fallback={<div className="suspense-box"><Spin size="large" /></div>}>
@@ -53,6 +56,7 @@ function RouterSwitch() {
                     <Route path='/loop' component={Loop} />
                     <Route path='/baseline' component={Baseline} />
                     <Route path='/weak' component={WeakPassword} />
+                    <Route path='/agent_install' component={InstallUninstall} />
                 </Switch>
             </Suspense>
         )

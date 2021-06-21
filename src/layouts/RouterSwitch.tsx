@@ -3,21 +3,26 @@ import { Spin } from 'antd'
 import { Route, Switch } from 'react-router-dom';
 const Open = lazy(() => import('../routes/open'));
 const Dashboard = lazy(() => import('../routes/dashboard'));
+//个人中心
 const UserInfo = lazy(() => import('../routes/userCenter/userInfo'));
 const UserSettings = lazy(() => import('../routes/userCenter/settings'));
 const UserLog = lazy(() => import('../routes/userCenter/log'));
 const ShareAccount = lazy(() => import('../routes/userCenter/share'));
-//asset
+//资产列表
 const AssetsTable = lazy(() => import('../routes/assets/index'));
 const Detail = lazy(() => import('../routes/assets/detail'));
 const TodoList = lazy(() => import('../routes/assets/test'));
-//assetManagement
+//资产管理
 const AssetFingerprint = lazy(() => import('../routes/assetManagement/fingerprint'));
 const AssetLog = lazy(() => import('../routes/assetManagement/log'));
 const CustomLog = lazy(() => import('../routes/assetManagement/customLog'));
 const AddCustomLog = lazy(() => import('../routes/assetManagement/addCustomLog'));
 const AssetOperating = lazy(() => import('../routes/assetManagement/operating'));
-//top
+//安全检查
+const Loop = lazy(() => import('../routes/securityCheck/loop'));
+const Baseline = lazy(() => import('../routes/securityCheck/baseline'));
+const WeakPassword = lazy(() => import('../routes/securityCheck/weakPassword'));
+//头部
 const Help = lazy(() => import('../routes/top/help'));
 const Introduction = lazy(() => import('../routes/top/introduction'));
 const Guide = lazy(() => import('../routes/top/guide'));
@@ -45,6 +50,9 @@ function RouterSwitch() {
                     <Route path='/asset/custom_log' component={CustomLog} />
                     <Route path='/asset/custom_log_add' component={AddCustomLog} />
                     <Route path='/asset/operating' component={AssetOperating} />
+                    <Route path='/loop' component={Loop} />
+                    <Route path='/baseline' component={Baseline} />
+                    <Route path='/weak' component={WeakPassword} />
                 </Switch>
             </Suspense>
         )

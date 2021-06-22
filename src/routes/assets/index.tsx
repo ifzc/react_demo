@@ -161,7 +161,7 @@ export default function AssetsTable() {
     const [form] = Form.useForm();
     const [type,setType] =useState("标签")
     const [dataList, setDataList] = useState([])//列表数据
-    const [assemblyList, setAssemblyList] = useState([])//组件数据
+    const [assemblyList, setAssemblyList] = useState([""])//组件数据
     const [selectedId, setSelectedId] = useState([0])//选中id
 
     let searchValue={}
@@ -186,6 +186,7 @@ export default function AssetsTable() {
         axios.get('/assets/assembly').then((res: any) => {
           if (res.data.status === "200") {
             setAssemblyList(res.data.assembly_info)
+            console.log(assemblyList)
           }
         })
       }
@@ -354,6 +355,7 @@ export default function AssetsTable() {
  <Form.Item name="assembly">
  <Select
     showSearch
+    allowClear
     style={{ width: 200 }}
     placeholder="组件"
     optionFilterProp="label"
@@ -365,9 +367,11 @@ export default function AssetsTable() {
       option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
     }
   >
-    <Option value="jack">Jack</Option>
-    <Option value="lucy">Lucy</Option>
-    <Option value="tom">Tom</Option>
+    {
+        assemblyList.map((item: any) => {
+          return <Option value={item}>{item}</Option>
+        })
+      }
   </Select></Form.Item>
  <Form.Item><Button type="primary" htmlType="submit">查询</Button></Form.Item>
 <Form.Item><Button onClick={onReset}>重置</Button></Form.Item>

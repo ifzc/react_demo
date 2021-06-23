@@ -61,16 +61,30 @@ export default function AssetsTable() {
             title: '标签',
             dataIndex: 'label',
             key: 'label',
-            render: () => [
-                <EditOutlined onClick={() => addAssetsTag('编辑标签', false)} />
+            render: (label:Array<string>, record: any, index: number) => [
+              label.length==0 ? <EditOutlined onClick={() => addAssetsTag('编辑标签', false, record.id)} /> :
+              <div className="span-round">
+              {
+                label.map((item: any) => {
+                  return <span>{item}</span>
+                })
+              } 
+              </div>
             ]
         },
         {
             title: '负责人',
             dataIndex: 'person',
             key: 'person',
-            render: () => [
-                <EditOutlined onClick={() => addAssetsTag('编辑负责人', false)} />
+            render: (person:Array<string>, record: any, index: number) => [
+              person.length==0 ? <EditOutlined onClick={() => addAssetsTag('编辑负责人', false, record.id)} /> :
+              <div className="span-round">
+              {
+                person.map((item: any) => {
+                  return <span>{item}</span>
+                })
+              } 
+              </div>
             ]
         },
         {
@@ -159,10 +173,13 @@ export default function AssetsTable() {
     const [history, setHistory] = useState([''])
     const [editId,setId] = useState([0])
     const [form] = Form.useForm();
+    const [formModal] = Form.useForm();
     const [type,setType] =useState("标签")
     const [dataList, setDataList] = useState([])//列表数据
     const [assemblyList, setAssemblyList] = useState([""])//组件数据
-    const [selectedId, setSelectedId] = useState([0])//选中id
+    const [selectedId, setSelectedId] = useState([0])//选中idHistoricalLabel
+    const [label, setLabel] = useState({label:[""],allLabel:[""]})//标签信息
+    const [person, setPerson] = useState({person:[""],allPerson:[""]})//负责人信息
 
     let searchValue={}
     let sizeInfo={current:1,pageSize:10}
@@ -200,35 +217,30 @@ export default function AssetsTable() {
       //获取标签
       const getLabel = () =>{
         let list:any=searchValue
-        list['host_id_list'] = selectedId
+        list['host_id_list'] = JSON.stringify(selectedId)
         list['net_status'] = menuFirst
         list['host_status'] = menuSecond
         list['system'] = menuThird
-        axios.get('/assets/label').then((res: any) => {
+        axios.get('/assets/label',{params:list}).then((res: any) => {
           if (res.data.status === "200") {
-            setAssemblyList(res.data.assembly_info)
+            setLabel({label:res.data.label_list,allLabel:res.data.all_label_list})
+            setAlready(res.data.label_list)
+            setHistory(res.data.all_label_list)
           }
         })
       }
       //获取负责人
       const getPerson = () =>{
         let list:any=searchValue
-        list['host_id_list'] = selectedId
+        list['host_id_list'] = JSON.stringify(selectedId)
         list['net_status'] = menuFirst
         list['host_status'] = menuSecond
         list['system'] = menuThird
-        axios.get('/assets/assembly').then((res: any) => {
+        axios.get('/assets/assembly',{params:list}).then((res: any) => {
           if (res.data.status === "200") {
-            setAssemblyList(res.data.host_info)
-          }
-        })
-      }
-
-      //获取历史标签
-      const getHistoricalLabel = () =>{
-        axios.get('/assets/assembly').then((res: any) => {
-          if (res.data.status === "200") {
-            setAssemblyList(res.data.assembly_info)
+            setPerson({person:res.data.person_list,allPerson:res.data.all_person_list})
+            setAlready(res.data.person_list)
+            setHistory(res.data.all_person_list)
           }
         })
       }
@@ -238,22 +250,22 @@ export default function AssetsTable() {
         console.log(already,add)
     }
     //编辑标签 负责人
-    const addAssetsTag = (title: string, showTag: boolean) => {
-
-        if (!showTag) {
+    const addAssetsTag = (title: string, showTag: boolean,id:number) => {
+        setSelectedId([id])
+        if (!showTag) {//添加标签、负责人
             console.log(1)
             setAlready([])
             setAdd([])
             setHistory(['Tage1', 'Tage2'])
         } else {
             console.log(2)
-            setAlready(['Tage3'])
             setAdd([])
-            setHistory(['Tage1', 'Tage2'])
         }
         setClickNum(clickNum + 1)
         setVisible(true)
         setFromType(title);
+        getLabel()
+        getPerson()
     }
 
     //moder
@@ -261,7 +273,7 @@ export default function AssetsTable() {
         clickNum: clickNum,
         visible: visible,
         fromType: fromType,
-        from: form,
+        from: formModal,
         getFromValue: getFromValue
     }
     //列表相关
@@ -378,14 +390,14 @@ export default function AssetsTable() {
     </Form>
             <TableOptional props={optionalTransferInfo} />
             <div className="table-button">
-                <Button disabled={buttonD} onClick={() => addAssetsTag('编辑标签', true)}>编辑标签</Button>
-                <Button disabled={buttonD} onClick={() => addAssetsTag('编辑负责人', true)}>编辑负责人</Button>
+                <Button disabled={buttonD} onClick={() => addAssetsTag('编辑标签', true,0)}>编辑标签</Button>
+                <Button disabled={buttonD} onClick={() => addAssetsTag('编辑负责人', true,0)}>编辑负责人</Button>
                 <Button disabled={buttonD}>导出报告</Button>
                 <Button disabled={buttonD}>一键安全检查</Button>
             </div>
             <ModalFrom value={madalValue}>
                 <Form
-                    form={form}
+                    form={formModal}
                     name="form_in_modal"
                     className="labelFrom"
                 >

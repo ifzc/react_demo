@@ -324,7 +324,8 @@ export default function AssetsTable() {
         changeSize: changeSize,
         selectedChange: selectedChange,
         selectedChangeAll:selectedChangeAll,
-        ifRowSelection:true
+        ifRowSelection:true,
+        selectedId:selectedId
     }
     //提交表单且数据验证成功后回调事件
   const onFinish = (values: any) => {

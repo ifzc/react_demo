@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Tabs, Card, DatePicker, Button, Radio,Typography  } from 'antd';
 import moment from 'moment';
 import FingerprintDetail from './fingerprint';
 import TableBasic from '../../components/table/TableBasic'
 import TableOptional from '../../components/table/TableOptional'
 import SearchForm from '../../components/table/search';
-
 import './index.scss'
 import Bar from '../../components/echart/bar';
 import Line from '../../components/echart/line';
 import SelectTable from '../../components/table/SelectTable'
+import GetQueryString from '../../utils/query'
+import axios from '../../utils/http'
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -36,41 +37,115 @@ export default function AssetsDetail() {
   const [optionalInfo, setOptionalInfo] = useState({ columns: [], columnsMap: {} })
   const [barName, setBarName] = useState('用户信息')
   const [activeKey, setActiveKey] = useState('1')
+  const [dataList, setDataList] = useState({agent_version: "",assembly: [""],cpu_info: "",create_time: "",
+  host_status: 0,inner_net: "",last_line_time: "",location: "",name: "",os: "",outer_net: "",status: "",
+  })//基本信息数据
+  const [dataBar, setDataBar] = useState([])//柱状图数据
+  const [monitor, setMonitor] = useState({
+    create_time_list:[],cpu_list:[],in_network_list:[],out_network_list:[],mem_list:[],disk_list:[],disk_info_list:[]
+  })//监控数据
+
   //引用查询条件
   const [userInfo, setUserInfo] = useState({})
+
+  let hostId = GetQueryString('id')
+  let hostType = GetQueryString('type')
+  //获取基本信息
+  const getList = () =>{
+    axios.get('/assets/host_info',{params:{host_id:hostId}}).then((res: any) => {
+      if (res.data.status === "200") {
+        setDataList({
+          agent_version: res.data.host_info.agent_version,
+          assembly: res.data.host_info.assembly,
+          cpu_info: res.data.host_info.cpu_info,
+          create_time: res.data.host_info.create_time,
+          host_status: res.data.host_info.host_status,
+          inner_net: res.data.host_info.inner_net,
+          last_line_time: res.data.host_info.last_line_time,
+          location: res.data.host_info.location,
+          name: res.data.host_info.name,
+          os: res.data.host_info.os,
+          outer_net: res.data.host_info.outer_net,
+          status: res.data.host_info.status,
+        })
+      }
+    })
+  }
+  //获取柱状图
+  const getListBar = () =>{
+    axios.get('/assets/host_info_count',{params:{host_id:hostId}}).then((res: any) => {
+      if (res.data.status === "200") {
+        setDataBar(res.data.count_list)
+
+      }
+    })
+  }
+//获取监控信息
+  const getAssembly = () =>{
+    let info = {
+      host_id:hostId,
+      start_time:"2021-06-01 00:00:00",
+      end_time:"2021-06-20 00:00:00"
+    }
+    axios.get('/assets/monitor',{params:info}).then((res: any) => {
+      if (res.data.status === "200") {
+        
+        let diskUse:any=dataSplit(res.data.disk_list)
+        let memUse:any=dataSplit(res.data.mem_list)
+        setMonitor({create_time_list:res.data.create_time_list,
+          cpu_list:res.data.cpu_list,
+          in_network_list:res.data.in_network_list,
+          out_network_list:res.data.out_network_list,
+          mem_list:memUse,
+          disk_list:diskUse,
+          disk_info_list:res.data.disk_info_list
+        })
+      }
+    })
+  }
+  const dataSplit=(data:Array<string>) =>{
+    let dataUse=data.map(function (item:string) {
+      let diskAll =item.split('/')
+      return diskAll[0];
+    });
+    return dataUse
+  }
+  function Example() {
+    useEffect(() => {getList();getAssembly();getListBar()}, []);
+    return null;
+  }
+  Example()
   //bar click
   const clickBar =(name:string)=>{
     setBarName(name)
     setActiveKey("2")
   }
-  //x轴数据
-  const [lineXdata, setLineXdata] = useState([
-    '2009/6/12 2:00', '2009/6/12 3:00', '2009/6/12 4:00', '2009/6/12 5:00', '2009/6/12 6:00', '2009/6/12 7:00', '2009/6/12 8:00', '2009/6/12 9:00', '2009/6/12 10:00', '2009/6/12 11:00', '2009/6/12 12:00', '2009/6/12 13:00', '2009/6/12 14:00', '2009/6/12 15:00', '2009/6/12 16:00', '2009/6/12 17:00', '2009/6/12 18:00', '2009/6/12 19:00', '2009/6/12 20:00', '2009/6/12 21:00'])
+  //x轴数据create_time_list:[],cpu_list:[],in_network_list:[],out_network_list:[],mem_list:[],disk_list:[],disk_info_list:[]
   let barData = {
     legend: [],
-    xdata: ['用户信息', '软件清单', '监听端口', '运行进程', 'web站点', '数据库信息', '组件信息', '共享文件'],
-    ydata: [0, 417, 20, 27, 11, 12, 12, 0],
+    xdata: ['web站点', '监听端口', '运行进程', '运行服务', '用户信息', '软件清单', '数据库信息'],
+    ydata: dataBar,
     clickBar:clickBar
   }
   let lineDataCpu = {
     legend: ['cpu使用率'],
-    xdata: lineXdata,
-    ydata: [[10, 20, 40, 0, 30, 100, 80, 90, 10, 20, 40, 0, 30, 100, 80, 90, 60, 2, 5, 100]]
+    xdata: monitor.create_time_list,
+    ydata: [monitor.cpu_list]
   }
   let lineDataAccessNetwork = {
     legend: ['出网', '入网'],
-    xdata: lineXdata,
-    ydata: [[10, 20, 40, 0, 30, 100, 80, 90, 10, 20, 40, 0, 30, 100, 80, 90, 60, 2, 5, 100], [100, 200, 400, 0, 300, 100, 80, 90, 100, 200, 400, 0, 300, 100, 80, 90, 6, 20, 50, 100]]
+    xdata: monitor.create_time_list,
+    ydata: [monitor.in_network_list, monitor.out_network_list]
   }
   let lineDataRam = {
     legend: ['内存占用'],
-    xdata: lineXdata,
-    ydata: [[10, 20, 40, 0, 30, 100, 80, 90, 10, 20, 40, 0, 30, 100, 80, 90, 60, 2, 5, 100]]
+    xdata: monitor.create_time_list,
+    ydata: [monitor.mem_list]
   }
   let lineDataDisk = {
     legend: ['磁盘使用'],
-    xdata: lineXdata,
-    ydata: [[10, 20, 40, 0, 30, 100, 80, 90, 10, 20, 40, 0, 30, 100, 80, 90, 60, 2, 5, 100]]
+    xdata: monitor.create_time_list,
+    ydata: [ monitor.disk_list]
   }
   const onChange = () => {
 
@@ -158,33 +233,37 @@ export default function AssetsDetail() {
             <table className="detail-basic-info">
               <tr>
                 <td>主机名：</td>
-                <td>iZ11sbkr2q3Z</td>
+                <td>{dataList.name}</td>
               </tr>
               <tr>
                 <td>内网IP：</td>
-                <td>10.25.44.145</td>
+                <td>{dataList.inner_net}</td>
               </tr>
               <tr>
                 <td>外网IP：</td>
-                <td>120.55.165.80</td>
+                <td>{dataList.outer_net}</td>
               </tr>
               <tr>
                 <td>状 态：</td>
-                <td>离线 (离线时间:2020年7月28日 18:03)</td>
+                {dataList.host_status===1 ? <Text type="success">在线</Text> : <Text type="secondary">离线 {dataList.last_line_time}</Text>}
               </tr>
               <tr>
                 <td>组 件：</td>
                 <td className="metaList">
-                  <span>list1</span><span>list2</span><span>list3</span><span>list4</span>
+                {
+        dataList.assembly.map((item: any,) => {
+          return <span>{item}</span>
+        })
+      }
                 </td>
               </tr>
               <tr>
                 <td>地 域：</td>
-                <td>浙江省杭州市</td>
+                <td>{dataList.location}</td>
               </tr>
               <tr>
                 <td>版 本：</td>
-                <td>1.2</td>
+                <td>{dataList.agent_version}</td>
               </tr>
               <tr>
                 <td>安装时间：</td>
@@ -192,13 +271,13 @@ export default function AssetsDetail() {
               </tr>
               <tr>
                 <td>操作系统：</td>
-                <td>CentOS release 6.10 (Final)</td>
+                <td>{dataList.os}</td>
               </tr>
               <tr>
                 <td>CPU：</td>
-                <td>Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz / 1核</td>
+                <td>{dataList.cpu_info}</td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>内 存：</td>
                 <td>总内存:3.9G 已使用:2.2G</td>
               </tr>
@@ -212,7 +291,8 @@ export default function AssetsDetail() {
               <tr>
                 <td>补丁信息：</td>
                 <td>补丁信息</td>
-              </tr>
+              </tr> */}
+              {hostType==="0" &&
               <tr>
                 <td></td>
                 <td>
@@ -220,6 +300,7 @@ export default function AssetsDetail() {
                   <pre className="moreinfo" style={{ display: 'none' }}></pre>
                 </td>
               </tr>
+}
             </table>
           </div>
           <div className="detail-basic-right">

@@ -483,18 +483,18 @@ export default function AssetsTable() {
                     className="labelFrom"
                 >
                   <Form.Item label="● 当前资源已有标签(若选择多个资源则显示共有标签，删除只影响共有标签)">
-                  {alreadyTag && alreadyTag.length<=0 ?
+                  {alreadyTag && alreadyTag.length<=1 ?
                 <p style={{margin:0,textAlign:"center",fontWeight:"bold"}}>暂无</p>
                 :
                 ''
     }
-                    {alreadyTag && alreadyTag.map((tag:string, index:number) => {
+                    {alreadyTag && alreadyTag.length>1 && alreadyTag.map((tag:string, index:number) => {
                     return <Tag closable onClose={()=>onCloseTag(tag)} key={index}>{tag}</Tag>
                   })}
                   </Form.Item>
 
                   <Form.Item label="● 新增标签">
-                  {addTag && addTag.map((tag:string, index:number) => {
+                  {addTag && addTag.length>1  && addTag.map((tag:string, index:number) => {
                     if (editInputIndex === index) {
                         return (
                             <Input
@@ -559,7 +559,7 @@ export default function AssetsTable() {
                   </Form.Item>
                     {fromType==="编辑标签" &&
                     <Form.Item label="● 历史标签">
-                    {historyTag && historyTag.map((tag:string, index:number) => {
+                    {historyTag && historyTag.length>1 && historyTag.map((tag:string, index:number) => {
                     return <Tag key={index} onClick={()=>tagClick(tag)}>{tag}</Tag>
                   })}
                   </Form.Item>

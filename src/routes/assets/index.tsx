@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Tooltip, Button, Form, Card, Input,Select } from 'antd';
+import { Tooltip, Button, Form, Card, Input,Select, Tag } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import TableOptional from '../../components/table/TableOptional'
 import TagGroup from '../../components/table/Tag'
@@ -7,6 +7,7 @@ import ModalFrom from '../../components/userFrom/Modal'
 import SelectTable from '../../components/table/SelectTable'
 import {Link} from 'react-router-dom'
 import axios from '../../utils/http'
+import { PlusOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 let searchListForm = ''
@@ -62,7 +63,7 @@ export default function AssetsTable() {
             dataIndex: 'label',
             key: 'label',
             render: (label:Array<string>, record: any, index: number) => [
-              label.length==0 ? <EditOutlined onClick={() => addAssetsTag('编辑标签', false, record.id)} /> :
+              label.length==0 ? <EditOutlined onClick={() => addLabel(false, record.id)} /> :
               <div className="span-round">
               {
                 label.map((item: any) => {
@@ -77,7 +78,7 @@ export default function AssetsTable() {
             dataIndex: 'person',
             key: 'person',
             render: (person:Array<string>, record: any, index: number) => [
-              person.length==0 ? <EditOutlined onClick={() => addAssetsTag('编辑负责人', false, record.id)} /> :
+              person.length==0 ? <EditOutlined onClick={() => addPerson(false, record.id)} /> :
               <div className="span-round">
               {
                 person.map((item: any) => {
@@ -216,7 +217,7 @@ export default function AssetsTable() {
       Example()
 
       //获取标签
-      const getLabel = () =>{
+      const getLabel = (edit:boolean) =>{
         let list:any=searchValue
         list['host_id_list'] = JSON.stringify(selectedId)
         list['net_status'] = menuFirst
@@ -224,10 +225,10 @@ export default function AssetsTable() {
         list['system'] = menuThird
         axios.get('/assets/label',{params:list}).then((res: any) => {
           if (res.data.status === "200") {
-            if (type) {
-            setAlreadyTag({tags:res.data.label_list,type:0,tagChange:tagChange})
+            if (edit) {
+            setAlreadyTag(res.data.label_list)
             }
-            setHistoryTag({tags:res.data.all_label_list,type:2,tagChange:tagChange})
+            setHistoryTag(res.data.all_label_list)
           }
         })
       }
@@ -242,9 +243,9 @@ export default function AssetsTable() {
           if (res.data.status === "200") {
             console.log(type)
             if (type) {
-              setAlreadyTag({tags:res.data.person_list,type:0,tagChange:tagChange})
+              setAlreadyTag(res.data.person_list)
             }
-            setHistoryTag({tags:res.data.all_person_list,type:2,tagChange:tagChange})
+            setHistoryTag(res.data.all_person_list)
           }
         })
       }
@@ -256,41 +257,38 @@ export default function AssetsTable() {
         list['host_status'] = menuSecond
         list['system'] = menuThird
         if (fromType==="编辑标签") {
-          list['add_label'] = addTag.tags
+          list['add_label'] = addTag
           axios.post('/assets/label',list)
         }else{
-          list['add_person'] = addTag.tags
+          list['add_person'] = addTag
           axios.post('/assets/person',list)
         }
     }
     //编辑标签 负责人
-    const addAssetsTag = (title: string, showTag: boolean,id:number) => {
-        setSelectedId([id])
-        setType(showTag)
-        if (!showTag) {//添加标签、负责人
-            console.log(1)
-            setAlreadyTag({tags:[""],type:0,tagChange:tagChange})
-            setAddTag({tags:[""],type:1,tagChange:tagChange})
-            //setHistory(['Tage1', 'Tage2'])
-        } else {
-            console.log(2)
-            setAddTag({tags:[""],type:1,tagChange:tagChange})
-        }
-        setClickNum(clickNum + 1)
-        setVisible(true)
-        setFromType(title);
-        if (title==="编辑标签") {
-          getLabel()
-        }else{
-          getPerson()
-        }
-    }
-    const cancel = () => {
-      console.log("cancel")
-      setAlreadyTag({tags:[""],type:0,tagChange:tagChange})
-      setAddTag({tags:[""],type:1,tagChange:tagChange})
-      setHistoryTag({tags:[""],type:2,tagChange:tagChange})
-    }
+    const addLabel = (edit:boolean,id:number) => {
+      setAlreadyTag([""])
+      setAddTag([""])
+      setHistoryTag([""])
+      setClickNum(clickNum + 1)
+      setVisible(true)
+      setFromType("编辑标签");
+      setSelectedId([id])
+      setType(edit)
+      getLabel(edit)
+    };
+    //编辑负责人
+    const addPerson =(edit:boolean,id:number) => {
+      setAlreadyTag([""])
+      setAddTag([""])
+      setHistoryTag([""])
+      setClickNum(clickNum + 1)
+      setVisible(true)
+      setFromType("编辑	负责人");
+      setSelectedId([id])
+      setType(edit)
+      getPerson()
+  };
+    
     //moder
     let madalValue = {
         clickNum: clickNum,
@@ -298,7 +296,6 @@ export default function AssetsTable() {
         fromType: fromType,
         from: formModal,
         getFromValue: getFromValue,
-        cancel:cancel
     }
     //列表相关
     const columnsStateMap = {
@@ -344,9 +341,9 @@ export default function AssetsTable() {
               axios.delete('/assets/label',{params:list})
               }
         }else if(type === 1){
-          setAddTag({tags:[tag],type:1,tagChange:tagChange})
+          setAddTag([tag])
         }else{
-          setAddTag({tags:[tag],type:1,tagChange:tagChange})
+          setAddTag([tag])
         }
     }
     let optionalTransferInfo = {
@@ -384,10 +381,60 @@ export default function AssetsTable() {
   function onSearch(val:any) {
     console.log('search:', val);
   }
+  //
+  function onCloseTag(e:any) {
+    console.log('search:', e);
+  }
+  //点击标签事件--运用在历史标签上
+  const tagClick = (e:any) =>{
+    console.log(e)
+}
 //type 0:可删除不可添加，1：可删除可添加，2：不可删除不可添加
-    const [alreadyTag, setAlreadyTag] = useState({tags:[""],type:0,tagChange:tagChange})
-    const [addTag, setAddTag] = useState({tags:[""],type:1,tagChange:tagChange})
-    const [historyTag, setHistoryTag] = useState({tags:[""],type:2,tagChange:tagChange})
+    const [alreadyTag, setAlreadyTag] = useState([""])
+    const [addTag, setAddTag] = useState([""])
+    const [historyTag, setHistoryTag] = useState([""])
+
+
+    const [dataType, setDataType] = useState(1)
+    const [closable, setClosable] = useState(true)
+    const [editInputValue, setEditInputValue] = useState("")
+    const [editInputIndex, setEditInputIndex] = useState(-1)
+    const [inputVisible, setInputVisible] = useState(false)
+    const [inputValue, setInputValue] = useState("")
+
+    useEffect(() => {
+        
+}, []);
+
+    const showInput = () => {
+        setInputVisible(true)
+    };
+
+    const handleInputChange = (e: any) => {
+        setInputValue(e.target.value)
+    };
+    //添加
+    const handleInputConfirm = () => {
+        let tags = addTag;
+        if (inputValue && addTag.indexOf(inputValue) === -1) {
+          let tag:any = tags.push(inputValue)
+            setAddTag(tag)
+        }
+        setAddTag(tags)
+        setInputVisible(false)
+        setInputValue("")
+    };
+
+    const handleEditInputChange = (e: any) => {
+        setEditInputValue(e.target.value)
+    };
+    const saveInputRef = (input: any) => {
+        if (input != null) {
+            input.focus()
+        }
+    }
+
+
     return (
             <Card title="资产列表">
                 <Form
@@ -414,7 +461,7 @@ export default function AssetsTable() {
     }
   >
     {
-        assemblyList.map((item: any) => {
+        assemblyList && assemblyList.map((item: any) => {
           return <Option value={item}>{item}</Option>
         })
       }
@@ -424,8 +471,8 @@ export default function AssetsTable() {
     </Form>
             <TableOptional props={optionalTransferInfo} />
             <div className="table-button">
-                <Button disabled={buttonD} onClick={() => addAssetsTag('编辑标签', true,0)}>编辑标签</Button>
-                <Button disabled={buttonD} onClick={() => addAssetsTag('编辑负责人', true,0)}>编辑负责人</Button>
+                <Button disabled={buttonD} onClick={() => addLabel(true,0)}>编辑标签</Button>
+                <Button disabled={buttonD} onClick={() => addPerson(true,0)}>编辑负责人</Button>
                 <Button disabled={buttonD}>导出报告</Button>
                 <Button disabled={buttonD}>一键安全检查</Button>
             </div>
@@ -435,10 +482,87 @@ export default function AssetsTable() {
                     name="form_in_modal"
                     className="labelFrom"
                 >
-                    <Form.Item label="● 当前资源已有标签(若选择多个资源则显示共有标签，删除只影响共有标签)" name="labelA"><TagGroup tags={alreadyTag} /></Form.Item>
-                    <Form.Item label="● 新增标签" name="label"><TagGroup tags={addTag} /></Form.Item>
+                  <Form.Item label="● 当前资源已有标签(若选择多个资源则显示共有标签，删除只影响共有标签)">
+                  {alreadyTag && alreadyTag.length<=0 ?
+                <p style={{margin:0,textAlign:"center",fontWeight:"bold"}}>暂无</p>
+                :
+                ''
+    }
+                    {alreadyTag && alreadyTag.map((tag:string, index:number) => {
+                    return <Tag closable onClose={()=>onCloseTag(tag)} key={index}>{tag}</Tag>
+                  })}
+                  </Form.Item>
+
+                  <Form.Item label="● 新增标签">
+                  {addTag && addTag.map((tag:string, index:number) => {
+                    if (editInputIndex === index) {
+                        return (
+                            <Input
+                                key={tag}
+                                size="small"
+                                className="tag-input"
+                                value={editInputValue}
+                                onChange={handleEditInputChange}
+                            />
+                        );
+                    }
+
+                    const isLongTag = tag.length > 20;
+
+                    const tagElem = (
+                        <Tag
+                            className="edit-tag"
+                            key={tag}
+                            closable={closable}
+                        >
+                            <span
+                                onDoubleClick={e => {
+                                    if (index !== 0) {
+                                        setEditInputIndex(index);setEditInputValue(tag)
+                                        e.preventDefault();
+                                    }
+                                }}
+                                onClick={(e)=>tagClick(tag)}
+                            >
+                                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                            </span>
+                        </Tag>
+                    );
+
+                    return isLongTag ? (
+                        <Tooltip title={tag} key={tag}>
+                            {tagElem}
+                        </Tooltip>
+                    ) : (
+                            tagElem
+                        );
+                })}
+                <div style={{display:"inline-block"}}>
+                {inputVisible ? 
+                    <Input
+                        ref={saveInputRef}
+                        type="text"
+                        size="small"
+                        className="tag-input"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onBlur={handleInputConfirm}
+                        onPressEnter={handleInputConfirm}
+                    />
+                :
+                    <Tag className="site-tag-plus" onClick={showInput}>
+                        <PlusOutlined /> New Tag
+                    </Tag>
+                }
+                </div>
+
+                  </Form.Item>
                     {fromType==="编辑标签" &&
-                    <Form.Item label="● 历史标签" name="labelH"><TagGroup tags={historyTag} /></Form.Item>
+                    <Form.Item label="● 历史标签">
+                    {historyTag && historyTag.map((tag:string, index:number) => {
+                    return <Tag key={index} onClick={()=>tagClick(tag)}>{tag}</Tag>
+                  })}
+                  </Form.Item>
     }
                 </Form>
             </ModalFrom>

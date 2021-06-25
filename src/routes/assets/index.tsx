@@ -102,11 +102,13 @@ export default function AssetsTable() {
             dataIndex: 'host_status',
             key: 'host_status',
             width: 100,
-            valueEnum: {
-                离线: { text: '离线', status: 'Default' },
-                在线: { text: '在线', status: 'Success' },
-            },
-            render: (text:number) => text===1 ? <span>在线</span> : <span>离线</span>,
+            render: (text:number) =>{
+              if (text===1) {
+              return <span>在线</span>
+            }else{
+              return <span>离线</span>
+            }
+          },
         },
         {
             title: () => (
@@ -118,11 +120,13 @@ export default function AssetsTable() {
             dataIndex: 'net_status',
             key: 'net_status',
             width: 100,
-            valueEnum: {
-                公网: { text: '公网', status: 'Error' },
-                内网: { text: '内网', status: 'Success' },
+            render: (text:number) => {
+              if (text===1) {
+                return <span>公网</span>
+              }else{
+                return <span>内网</span>
+              }
             },
-            render: (text:number) => text===1 ? <span>公网</span> : <span>内网</span>,
         },
         {
             title: () => (
@@ -133,19 +137,21 @@ export default function AssetsTable() {
               ),
             dataIndex: 'system',
             key: 'system',
-            valueEnum: {
-                windows: { text: 'windows', status: 'Error' },
-                linux: { text: 'linux', status: 'Success' },
+            render: (text:any) => {
+              if (text===1) {
+                return <span>linux</span>
+              }else{
+                return <span>windows</span>
+              }
             },
-            render: (text:number) => text===1 ? <span>linux</span> : <span>windows</span>,
         },
         {
             title: '操作',
             width: 180,
             key: 'option',
             valueType: 'option',
-            render: (text:any, record:any, index:number) => [
-                <Button type="primary" size="small"><Link to={`/asset/detail?id=`+index}>查看</Link>{/* 查看 */}</Button>
+            render: (text:string, record:any, index:number) => [
+                <Button type="primary" size="small"><Link to={'/asset/detail/?id='+record.id+'&type='+record.system}>查看</Link></Button>
             ],
         },
         {
@@ -169,7 +175,7 @@ export default function AssetsTable() {
     const [clickNum, setClickNum] = useState(0)
     const [buttonD, setButtonD] = useState(true)
     const [already, setAlready] = useState([''])
-    const [add, setAdd] = useState([''])
+    const [add, setAdd]:any = useState({list:[],type:""})
     const [history, setHistory] = useState([''])
     const [editId,setId] = useState([0])
     const [form] = Form.useForm();
@@ -226,6 +232,8 @@ export default function AssetsTable() {
             setLabel({label:res.data.label_list,allLabel:res.data.all_label_list})
             setAlready(res.data.label_list)
             setHistory(res.data.all_label_list)
+            setAlreadyTag({tags:res.data.label_list,type:0,tagChange:tagChange})
+            setHistoryTag({tags:res.data.all_label_list,type:2,tagChange:tagChange})
           }
         })
       }
@@ -241,25 +249,41 @@ export default function AssetsTable() {
             setPerson({person:res.data.person_list,allPerson:res.data.all_person_list})
             setAlready(res.data.person_list)
             setHistory(res.data.all_person_list)
+            setAlreadyTag({tags:res.data.person_list,type:0,tagChange:tagChange})
+            setHistoryTag({tags:res.data.all_person_list,type:2,tagChange:tagChange})
           }
         })
       }
-
+      ////添加标签 负责人
     const getFromValue = (value: any) => {
-        console.log('model表单值', value)
         console.log(already,add)
+        let list:any=searchValue
+        list['host_id_list'] = JSON.stringify(selectedId)
+        list['net_status'] = menuFirst
+        list['host_status'] = menuSecond
+        list['system'] = menuThird
+        if (fromType==="编辑标签") {
+          list['add_label'] = add.list
+          axios.post('/assets/label',list)
+        }else{
+          list['add_person'] = add.list
+          axios.post('/assets/person',list)
+        }
     }
     //编辑标签 负责人
     const addAssetsTag = (title: string, showTag: boolean,id:number) => {
         setSelectedId([id])
         if (!showTag) {//添加标签、负责人
             console.log(1)
-            setAlready([])
-            setAdd([])
-            setHistory(['Tage1', 'Tage2'])
+            setAlready([""])
+            setAdd({list:[""],type:""})
+            setAlreadyTag({tags:[""],type:0,tagChange:tagChange})
+            setAddTag({tags:[""],type:1,tagChange:tagChange})
+            //setHistory(['Tage1', 'Tage2'])
         } else {
             console.log(2)
-            setAdd([])
+            setAdd({list:[""],type:""})
+            setAddTag({tags:[""],type:1,tagChange:tagChange})
         }
         setClickNum(clickNum + 1)
         setVisible(true)
@@ -267,14 +291,19 @@ export default function AssetsTable() {
         getLabel()
         getPerson()
     }
-
+    const cancel = () => {
+      setAlreadyTag({tags:[""],type:0,tagChange:tagChange})
+      setAddTag({tags:[""],type:1,tagChange:tagChange})
+      setHistoryTag({tags:[""],type:2,tagChange:tagChange})
+    }
     //moder
     let madalValue = {
         clickNum: clickNum,
         visible: visible,
         fromType: fromType,
         from: formModal,
-        getFromValue: getFromValue
+        getFromValue: getFromValue,
+        cancel:cancel
     }
     //列表相关
     const columnsStateMap = {
@@ -306,14 +335,31 @@ export default function AssetsTable() {
         console.log("all",all)
     }
 
-    const tagChange = (tag:string,type:number) =>{
-        console.log(tag,type)
+    const tagChange = (tag:string,type:number,removedTag:string) =>{
+        console.log(tag,type,removedTag,typeof removedTag,fromType)
+        let list:any=searchValue
+        list['host_id_list'] = JSON.stringify(selectedId)
+        list['net_status'] = menuFirst
+        list['host_status'] = menuSecond
+        list['system'] = menuThird
+        
         if(type === 0){
-            setAlready([tag])
+            //setAlready([tag])
+            //setAlreadyTag({tags:[tag],type:0,tagChange:tagChange})
+            if (removedTag) {
+              list['delete_label'] = removedTag
+              axios.delete('/assets/label',{params:list})
+              }
         }else if(type === 1){
-        setAdd([tag])
+          setAdd({list:tag,type:"新增"})
+          setAddTag({tags:[tag],type:1,tagChange:tagChange})
+          /* if (removedTag) {
+            list['delete_person'] = removedTag
+            axios.delete('/assets/person',{params:list})
+            } */
         }else{
-            setAdd([tag])
+          setAdd({list:tag,type:"历史"})
+          setAddTag({tags:[tag],type:1,tagChange:tagChange})
         }
     }
     let optionalTransferInfo = {
@@ -352,9 +398,13 @@ export default function AssetsTable() {
     console.log('search:', val);
   }
 //type 0:可删除不可添加，1：可删除可添加，2：不可删除不可添加
-    let alreadyTag={tags:already,type:0,tagChange:tagChange}
-    let addTag={tags:add,type:1,tagChange:tagChange}
-    let historyTag={tags:history,type:2,tagChange:tagChange}
+    //let alreadyTag={tags:already,type:0,tagChange:tagChange}
+    //let addTag={tags:add.list,type:1,tagChange:tagChange}
+    //let historyTag={tags:history,type:2,tagChange:tagChange}
+    //console.log(alreadyTag,addTag,historyTag)
+    const [alreadyTag, setAlreadyTag] = useState({tags:[""],type:0,tagChange:tagChange})
+    const [addTag, setAddTag] = useState({tags:[""],type:1,tagChange:tagChange})
+    const [historyTag, setHistoryTag] = useState({tags:[""],type:2,tagChange:tagChange})
     return (
             <Card title="资产列表">
                 <Form

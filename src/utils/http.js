@@ -65,7 +65,7 @@ axios.interceptors.response.use(
     //有错误状态值时
     if(error.response){
     let element = error.response.data.message
-    if(error.response.status === 429 || error.response.status === 500){
+    if(error.response.status === 429 || error.response.status === 500 || error.response.status === 405){
       message.error(element);
     }else{
     for (const i in element) {

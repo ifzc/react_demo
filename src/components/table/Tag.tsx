@@ -1,14 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tag, Input, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-interface Props {
-    tags:{
-    tags:Array<string>,
-    type:number,
-    tagChange:any
-    }
-}
 enum Direction {
     tags= '父级传过来的tag',
         inputVisible= '是否点击+NewTag',
@@ -16,74 +9,67 @@ enum Direction {
         editInputIndex= '编辑input的index',
         editInputValue= '编辑input的值',
 }
-export default class TagGroup extends React.Component<Props> {
-    state = {
-        tags: this.props.tags.tags,
-        type:this.props.tags.type,
-        closable:true,
-        inputVisible: false,
-        inputValue: '',
-        editInputIndex: -1,
-        editInputValue: '',
-    };
+export default function TagGroup(props:any) {
+    const [dataTag, setDataTag] = useState(props.tags.tags)
+    const [dataType, setDataType] = useState(props.tags.type)
+    const [closable, setClosable] = useState(true)
+    const [editInputValue, setEditInputValue] = useState("")
+    const [editInputIndex, setEditInputIndex] = useState(-1)
+    const [inputVisible, setInputVisible] = useState(false)
+    const [inputValue, setInputValue] = useState("")
+
+    useEffect(() => {
+      setDataTag(props.tags.tags)
+      setDataType(props.tags.type)
+        if(dataType===2){
+      setClosable(false)
+  }else{
+      setClosable(true)
+  }
+}, []);
     //删除
-    handleClose = (removedTag: any) => {
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
-        console.log(this.state.type);
-        this.setState({ tags });
-        this.props.tags.tagChange(tags,this.state.type,removedTag)
+    const handleClose = (removedTag: any) => {
+        const tags = dataTag.filter((tag:string) => tag !== removedTag);
+        props.tags.tagChange(tags,dataType,removedTag)
     };
 
-    showInput = () => {
-        this.setState({ inputVisible: true });
+    const showInput = () => {
+        setInputVisible(true)
     };
 
-    handleInputChange = (e: any) => {
-        this.setState({ inputValue: e.target.value });
+    const handleInputChange = (e: any) => {
+        setInputValue(e.target.value)
     };
     //添加
-    handleInputConfirm = () => {
-        const { inputValue } = this.state;
-        let { tags } = this.state;
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            tags = [...tags, inputValue];
+    const handleInputConfirm = () => {
+        let tags = dataTag;
+        if (inputValue && dataTag.indexOf(inputValue) === -1) {
+            setDataTag(tags.push(inputValue))
         }
-        console.log(tags);
-        console.log(this.state.type);
-        this.props.tags.tagChange(tags,this.state.type)
-        this.setState({
-            tags:tags,
-            inputVisible: false,
-            inputValue: '',
-        });
+
+        props.tags.tagChange(tags,dataType)
+        setDataTag(tags)
+        setInputVisible(false)
+        setInputValue("")
     };
 
-    handleEditInputChange = (e: any) => {
-        this.setState({ editInputValue: e.target.value });
+    const handleEditInputChange = (e: any) => {
+        setEditInputValue(e.target.value)
     };
-    saveInputRef = (input: any) => {
+    const saveInputRef = (input: any) => {
         if (input != null) {
             input.focus()
         }
     }
     //点击标签事件--运用在历史标签上
-    tagClick = (tag:string,type:number) =>{
-        console.log(tag,type)
-        this.props.tags.tagChange(tag,type)
+    const tagClick = (e:any) =>{
+        console.log(e,dataType)
+        props.tags.tagChange(e,dataType)
     }
-    componentDidMount() {
-        if(this.state.type===2){
-            this.setState({ closable: false });
-        }else{
-            this.setState({ closable: true });
-        }
-      }
-    render() {
-        const { tags, type, closable, inputVisible, inputValue, editInputIndex, editInputValue } = this.state;
+    
         return (
             <>
-                {tags.length>0 && tags.map((tag, index) => {
+                {dataTag && dataTag.map((tag:string, index:number) => {
                     if (editInputIndex === index) {
                         return (
                             <Input
@@ -91,7 +77,7 @@ export default class TagGroup extends React.Component<Props> {
                                 size="small"
                                 className="tag-input"
                                 value={editInputValue}
-                                onChange={this.handleEditInputChange}
+                                onChange={handleEditInputChange}
                             />
                         );
                     }
@@ -103,17 +89,16 @@ export default class TagGroup extends React.Component<Props> {
                             className="edit-tag"
                             key={tag}
                             closable={closable}
-                            onClose={() => this.handleClose(tag)}
+                            onClose={() => handleClose(tag)}
                         >
                             <span
                                 onDoubleClick={e => {
                                     if (index !== 0) {
-                                        this.setState({ editInputIndex: index, editInputValue: tag }, () => {
-                                        });
+                                        setEditInputIndex(index);setEditInputValue(tag)
                                         e.preventDefault();
                                     }
                                 }}
-                                onClick={(e)=>this.tagClick(tag,type)}
+                                onClick={(e)=>tagClick(tag)}
                             >
                                 {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                             </span>
@@ -128,26 +113,26 @@ export default class TagGroup extends React.Component<Props> {
                             tagElem
                         );
                 })}
-                {type===0 && tags.length<=0 ?
+                {dataTag && dataType===0 && dataTag.length<=0 ?
                 <p style={{margin:0,textAlign:"center",fontWeight:"bold"}}>暂无</p>
                 :
                 ''
     }
-                {type ===1 &&
+                {dataType ===1 &&
                 <div style={{display:"inline-block"}}>
                 {inputVisible ? 
                     <Input
-                        ref={this.saveInputRef}
+                        ref={saveInputRef}
                         type="text"
                         size="small"
                         className="tag-input"
                         value={inputValue}
-                        onChange={this.handleInputChange}
-                        onBlur={this.handleInputConfirm}
-                        onPressEnter={this.handleInputConfirm}
+                        onChange={handleInputChange}
+                        onBlur={handleInputConfirm}
+                        onPressEnter={handleInputConfirm}
                     />
                 :
-                    <Tag className="site-tag-plus" onClick={this.showInput}>
+                    <Tag className="site-tag-plus" onClick={showInput}>
                         <PlusOutlined /> New Tag
                     </Tag>
                 }
@@ -156,5 +141,4 @@ export default class TagGroup extends React.Component<Props> {
                 
             </>
         );
-    }
 }

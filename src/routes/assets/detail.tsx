@@ -11,6 +11,7 @@ import Line from '../../components/echart/line';
 import SelectTable from '../../components/table/SelectTable'
 import GetQueryString from '../../utils/query'
 import axios from '../../utils/http'
+import { start } from 'repl';
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -44,6 +45,8 @@ export default function AssetsDetail() {
   const [monitor, setMonitor] = useState({
     create_time_list:[],cpu_list:[],in_network_list:[],out_network_list:[],mem_list:[],disk_list:[],disk_info_list:[]
   })//监控数据
+  const [timeClick,setTimeClick]:any=useState([])
+  const [time,setTime]:any=useState({start:moment().subtract(60, 'm').format("YYYY-MM-DD HH:mm:ss"),end:moment().format("YYYY-MM-DD HH:mm:ss")})
 
   //引用查询条件
   const [userInfo, setUserInfo] = useState({})
@@ -84,8 +87,8 @@ export default function AssetsDetail() {
   const getAssembly = () =>{
     let info = {
       host_id:hostId,
-      start_time:"2021-06-01 00:00:00",
-      end_time:"2021-06-20 00:00:00"
+      start_time:time.start,
+      end_time:time.end
     }
     axios.get('/assets/monitor',{params:info}).then((res: any) => {
       if (res.data.status === "200") {
@@ -147,8 +150,9 @@ export default function AssetsDetail() {
     xdata: monitor.create_time_list,
     ydata: [ monitor.disk_list]
   }
-  const onChange = () => {
-
+  const onChange=(dates:any, dateStrings:Array<string>)=> {
+    console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+    setTime({start:dateStrings[0],end:dateStrings[1]})
   }
   //列表-隐藏列
   let columnsStateMap = {}
@@ -204,6 +208,24 @@ export default function AssetsDetail() {
   const changeSize = (value: any) => {
     console.log(value)
   }
+  //不可选择的日期
+  const disabledDate:any = (current: any) => {
+
+  if(!current || !timeClick || timeClick.length === 0){
+    return false
+}
+    let start = moment(timeClick[1]).startOf("month")
+    let end = moment(timeClick[0]).endOf("month")
+    const tooLate = timeClick[0] && current.diff(timeClick[0], 'day') > end.diff(timeClick[0], 'day');
+    const tooEarly = timeClick[1] && timeClick[1].diff(current, 'day') > timeClick[1].diff(start, 'day');
+    return tooEarly || tooLate;
+  }
+  //弹出日历和关闭日历的回调
+  const onOpenChange = (open:any) => {
+    if (open ) {
+      setTimeClick([]);
+    }
+  };
   //
   let basicTransferInfo = {
     columns: basicInfo.columns,
@@ -315,12 +337,16 @@ export default function AssetsDetail() {
               <a href="##">查看告警规则</a>
               <RangePicker
                 ranges={{
+                  'Today': [moment(), moment()],
                   '最近一周': [moment().subtract('days', 6), moment()],
                   '最近一个月': [moment().subtract('days', 30), moment()],
                 }}
                 showTime
-                format="YYYY/MM/DD HH:mm:ss"
+                format="YYYY-MM-DD HH:mm:ss"
                 onChange={onChange}
+                disabledDate={disabledDate}
+                onCalendarChange={val => setTimeClick(val)}
+                onOpenChange={onOpenChange}
               />
               <Button type="primary" size="small">查询</Button>
             </p>

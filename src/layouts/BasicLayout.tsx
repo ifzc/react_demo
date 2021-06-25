@@ -52,6 +52,18 @@ store.subscribe(change);
                                     <Menu.Item key="/asset/operating">
                                     <Link to="/asset/operating">操作审计</Link></Menu.Item>
                             </SubMenu>
+                            <SubMenu key="/loop" icon={<UserOutlined />} title="安全检查">
+                                <Menu.Item key="/loop">
+                                    <Link to="/loop">漏洞管理</Link></Menu.Item>
+                                <Menu.Item key="/baseline">
+                                    <Link to="/baseline">基线检查</Link></Menu.Item>
+                                    <Menu.Item key="/weak">
+                                    <Link to="/weak">弱密码检查</Link></Menu.Item>
+                            </SubMenu>
+                            <SubMenu key="/agent_install" icon={<UserOutlined />} title="系统设置">
+                                <Menu.Item key="/agent_install">
+                                    <Link to="/agent_install">安装策略</Link></Menu.Item>
+                            </SubMenu>
                         </Menu>
                         :
                         <Menu theme="dark" defaultSelectedKeys={['/agent']} mode="inline">
@@ -68,6 +80,18 @@ store.subscribe(change);
                                     <Link to="/agent">日志信息</Link></Menu.Item>
                                     <Menu.Item key="/agent">
                                     <Link to="/agent">操作审计</Link></Menu.Item>
+                            </SubMenu>
+                            <SubMenu key="/agent" icon={<UserOutlined />} title="安全检查">
+                                <Menu.Item key="/agent">
+                                    <Link to="/agent">漏洞管理</Link></Menu.Item>
+                                <Menu.Item key="/agent">
+                                    <Link to="/agent">基线检查</Link></Menu.Item>
+                                    <Menu.Item key="/agent">
+                                    <Link to="/agent">弱密码检查</Link></Menu.Item>
+                            </SubMenu>
+                            <SubMenu key="/agent" icon={<UserOutlined />} title="系统设置">
+                                <Menu.Item key="/agent">
+                                    <Link to="/agent">安装策略</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
 }

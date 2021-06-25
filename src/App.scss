@@ -28,7 +28,7 @@ border: none;
   vertical-align: top;
 }
 .table-button{
-  padding-left: 24px;
+  margin-top: 20px;
   button{
     margin-right: 10px;
   }
@@ -52,8 +52,43 @@ border: none;
 //面包屑
 .ant-card-head-title{
   font-size: 14px;
-  padding: 10px 0;
+  padding: 15px 0;
 }
-.ant-card-head{
-  min-height: 10px;
+//card-left
+.ant-card-extra{
+  padding: 0;
+}
+//@at-root
+.step{
+  height: 40px;
+  line-height: 40px;
+  padding-left: 30px;
+  background: rgba(0, 160, 255, .5);
+  margin-top: 10px;
+  border-radius: 3px;
+  color: #fff;
+}
+textarea {
+  width: 350px;
+  height: 100px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-left: 50px;
+  padding: 8px;
+  outline: none;
+}
+.example{
+  position: absolute;
+  left: 0px;
+  top: 20px;
+  min-width: 100px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  p{
+    line-height: 20px;
+    color: #000;
+    margin: 0;
+  }
 }

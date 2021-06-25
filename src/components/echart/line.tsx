@@ -13,7 +13,6 @@ import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 
 export default function Line(prop:any) {
-    console.log(prop)
       var lineSeries:any =[]
     for (let i = 0; i < prop.data.ydata.length; i++) {
         const element = prop.data.ydata[i];

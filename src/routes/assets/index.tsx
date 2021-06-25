@@ -63,7 +63,7 @@ export default function AssetsTable() {
             dataIndex: 'label',
             key: 'label',
             render: (label:Array<string>, record: any, index: number) => [
-              label.length==0 ? <EditOutlined onClick={() => addLabel(false, record.id)} /> :
+              label.length==0 ? <EditOutlined onClick={() => addAsset("编辑标签", record.id)} /> :
               <div className="span-round">
               {
                 label.map((item: any) => {
@@ -78,7 +78,7 @@ export default function AssetsTable() {
             dataIndex: 'person',
             key: 'person',
             render: (person:Array<string>, record: any, index: number) => [
-              person.length==0 ? <EditOutlined onClick={() => addPerson(false, record.id)} /> :
+              person.length==0 ? <EditOutlined onClick={() => addAsset("编辑负责人", record.id)} /> :
               <div className="span-round">
               {
                 person.map((item: any) => {
@@ -178,7 +178,6 @@ export default function AssetsTable() {
     const [editId,setId] = useState([0])
     const [form] = Form.useForm();
     const [formModal] = Form.useForm();
-    const [type,setType] =useState(false)
     const [dataList, setDataList] = useState([])//列表数据
     const [assemblyList, setAssemblyList] = useState([""])//组件数据
     const [selectedId, setSelectedId] = useState([0])//选中idHistoricalLabel
@@ -233,16 +232,15 @@ export default function AssetsTable() {
         })
       }
       //获取负责人
-      const getPerson = () =>{
+      const getPerson = (edit:boolean) =>{
         let list:any=searchValue
         list['host_id_list'] = JSON.stringify(selectedId)
         list['net_status'] = menuFirst
         list['host_status'] = menuSecond
         list['system'] = menuThird
-        axios.get('/assets/assembly',{params:list}).then((res: any) => {
+        axios.get('/assets/person',{params:list}).then((res: any) => {
           if (res.data.status === "200") {
-            console.log(type)
-            if (type) {
+            if (edit) {
               setAlreadyTag(res.data.person_list)
             }
             setHistoryTag(res.data.all_person_list)
@@ -256,38 +254,63 @@ export default function AssetsTable() {
         list['net_status'] = menuFirst
         list['host_status'] = menuSecond
         list['system'] = menuThird
+        let add=addTag
+          add.shift()
+          if (add.length>0) {
+
         if (fromType==="编辑标签") {
-          list['add_label'] = addTag
-          axios.post('/assets/label',list)
+          
+          list['add_label'] = add
+          axios.post('/assets/label',list).then((res: any) => {
+            if (res.data.status === "200") {
+              getList();
+            }
+          })
         }else{
-          list['add_person'] = addTag
-          axios.post('/assets/person',list)
+          list['add_person'] = add
+          axios.post('/assets/person',list).then((res: any) => {
+            if (res.data.status === "200") {
+              getList();
+            }
+          })
         }
+      }
     }
     //编辑标签 负责人
-    const addLabel = (edit:boolean,id:number) => {
+    const addAsset = (type:string,id:number) => {
       setAlreadyTag([""])
       setAddTag([""])
       setHistoryTag([""])
       setClickNum(clickNum + 1)
       setVisible(true)
-      setFromType("编辑标签");
+      setFromType(type);
       setSelectedId([id])
-      setType(edit)
-      getLabel(edit)
+      if (type==="编辑标签") {
+        getLabel(false)
+      }else{
+        getPerson(false)
+      }
+      
     };
     //编辑负责人
-    const addPerson =(edit:boolean,id:number) => {
+    const editAsset =(type:string) => {
       setAlreadyTag([""])
       setAddTag([""])
       setHistoryTag([""])
       setClickNum(clickNum + 1)
       setVisible(true)
-      setFromType("编辑	负责人");
-      setSelectedId([id])
-      setType(edit)
-      getPerson()
+      setFromType(type);
+      if (type==="编辑标签") {
+        getLabel(true)
+      }else{
+        getPerson(true)
+      }
   };
+
+  //编辑负责人
+  const cancel =() => {
+    setSelectedId([0])
+};
     
     //moder
     let madalValue = {
@@ -296,6 +319,7 @@ export default function AssetsTable() {
         fromType: fromType,
         from: formModal,
         getFromValue: getFromValue,
+        cancel:cancel
     }
     //列表相关
     const columnsStateMap = {
@@ -314,7 +338,6 @@ export default function AssetsTable() {
     }
     const selectedChange = (id: Array<number>, row: any) => {
         setSelectedId(id)
-        console.log("q")
         if (id.length !== 0) {
             setButtonD(false)
             setId(id)
@@ -381,13 +404,32 @@ export default function AssetsTable() {
   function onSearch(val:any) {
     console.log('search:', val);
   }
-  //
+  //删除tag
   function onCloseTag(e:any) {
-    console.log('search:', e);
+    let list:any=searchValue
+        list['host_id_list'] = JSON.stringify(selectedId)
+        list['net_status'] = menuFirst
+        list['host_status'] = menuSecond
+        list['system'] = menuThird
+        list['delete_label'] = e
+        axios.delete('/assets/label',{params:list}).then((res: any) => {
+          if (res.data.status === "200") {
+            getList()
+          }
+        })
   }
   //点击标签事件--运用在历史标签上
   const tagClick = (e:any) =>{
     console.log(e)
+    let add=addTag
+    let already=alreadyTag
+    //console.log(already.indexOf(e)<0 , add.indexOf(e)<0)
+    if (add.indexOf(e)<0) {
+      add.push(e)
+      console.log(add)
+    }
+    setAddTag(add)
+    console.log(addTag)
 }
 //type 0:可删除不可添加，1：可删除可添加，2：不可删除不可添加
     const [alreadyTag, setAlreadyTag] = useState([""])
@@ -417,8 +459,9 @@ export default function AssetsTable() {
     const handleInputConfirm = () => {
         let tags = addTag;
         if (inputValue && addTag.indexOf(inputValue) === -1) {
-          let tag:any = tags.push(inputValue)
-            setAddTag(tag)
+            let tag:any = tags.push(inputValue)
+            setAddTag([inputValue])
+
         }
         setAddTag(tags)
         setInputVisible(false)
@@ -471,8 +514,8 @@ export default function AssetsTable() {
     </Form>
             <TableOptional props={optionalTransferInfo} />
             <div className="table-button">
-                <Button disabled={buttonD} onClick={() => addLabel(true,0)}>编辑标签</Button>
-                <Button disabled={buttonD} onClick={() => addPerson(true,0)}>编辑负责人</Button>
+                <Button disabled={buttonD} onClick={() => editAsset("编辑标签")}>编辑标签</Button>
+                <Button disabled={buttonD} onClick={() => editAsset("编辑负责人")}>编辑负责人</Button>
                 <Button disabled={buttonD}>导出报告</Button>
                 <Button disabled={buttonD}>一键安全检查</Button>
             </div>
@@ -483,18 +526,18 @@ export default function AssetsTable() {
                     className="labelFrom"
                 >
                   <Form.Item label="● 当前资源已有标签(若选择多个资源则显示共有标签，删除只影响共有标签)">
-                  {alreadyTag && alreadyTag.length<=1 ?
+                  {alreadyTag && alreadyTag.length<=0 ?
                 <p style={{margin:0,textAlign:"center",fontWeight:"bold"}}>暂无</p>
                 :
                 ''
     }
-                    {alreadyTag && alreadyTag.length>1 && alreadyTag.map((tag:string, index:number) => {
+                    {alreadyTag && alreadyTag.map((tag:string, index:number) => {
                     return <Tag closable onClose={()=>onCloseTag(tag)} key={index}>{tag}</Tag>
                   })}
                   </Form.Item>
 
                   <Form.Item label="● 新增标签">
-                  {addTag && addTag.length>1  && addTag.map((tag:string, index:number) => {
+                  {addTag && addTag.length>0  && addTag.map((tag:string, index:number) => {
                     if (editInputIndex === index) {
                         return (
                             <Input
@@ -559,7 +602,7 @@ export default function AssetsTable() {
                   </Form.Item>
                     {fromType==="编辑标签" &&
                     <Form.Item label="● 历史标签">
-                    {historyTag && historyTag.length>1 && historyTag.map((tag:string, index:number) => {
+                    {historyTag && historyTag.map((tag:string, index:number) => {
                     return <Tag key={index} onClick={()=>tagClick(tag)}>{tag}</Tag>
                   })}
                   </Form.Item>

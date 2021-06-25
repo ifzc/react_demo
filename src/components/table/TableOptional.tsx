@@ -7,10 +7,12 @@ import PaginationNum from './Pagination'
 export default function TableOptional(params: any) {
     useEffect(() => {
         setColumnsStateMap(params.props.columnsStateMap)
+        setSelectedId(params.props.selectedId)
     }, [params])
 
     const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({});
-    const [test, setTest] = useState(params.props.name);
+    const [selectedId, setSelectedId] = useState(params.props.selectedId);
+
     //分页
     const changeSize = (size: any) => {
         params.props.changeSize(size)
@@ -23,14 +25,44 @@ export default function TableOptional(params: any) {
     const onChange = (selectedRowKeys: any, selectedRows: any) => {
         params.props.selectedChange(selectedRowKeys, selectedRows)
     }
+    //全选
+    const onChangeAll = (selectedRowKeys: any, selectedRows: any) => {
+        params.props.selectedChangeAll(selectedRowKeys, selectedRows)
+    }
     //控制是否可选择
     let rowSelection = {}
     if(params.props.ifRowSelection){
         rowSelection = {
+            selectedRowKeys:selectedId,
             onChange: onChange,
+            onSelectAll:onChangeAll,
             selections: [
                 Table.SELECTION_ALL,
-                Table.SELECTION_INVERT]
+                Table.SELECTION_INVERT,
+                {
+                    key: 'odd',
+                    text: '全选所有',
+                    onSelect: (changableRowKeys:any) => {
+                      /* let newSelectedRowKeys = [];
+                      newSelectedRowKeys = changableRowKeys.filter((key:any, index:number) => {
+                        if (index % 2 !== 0) {
+                          return false;
+                        }
+                        return true;
+                      }); */
+                      console.log(changableRowKeys)
+                      setSelectedId(changableRowKeys);
+                    },
+                  },
+                  {
+                    key: 'even',
+                    text: '取消所有',
+                    onSelect: () => {
+                      setSelectedId([]);
+                      return false;
+                    },
+                },
+            ]
         }
     }else{
         rowSelection=false

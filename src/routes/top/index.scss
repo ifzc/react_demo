@@ -33,6 +33,7 @@ h4 {
 //产品简介
 .agent_introduce{
     padding: 50px 80px;
+    background: #fff;
     h1{font-size:22px;line-height:60px;}
 	h2{font-size:20px;line-height:50px;}
 	h3{font-size:18px;line-height:40px;}
@@ -57,7 +58,7 @@ h4 {
     .ant-layout-sider {
         background: #fff;
     }
-    background: #fff;
+    //background: #fff;
     .ant-layout-sider{
     box-shadow: 0 0 8px 0.2px #c1c1c1;
 }

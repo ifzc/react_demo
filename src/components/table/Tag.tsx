@@ -32,7 +32,7 @@ export default class TagGroup extends React.Component<Props> {
         console.log(tags);
         console.log(this.state.type);
         this.setState({ tags });
-        this.props.tags.tagChange(tags,this.state.type)
+        this.props.tags.tagChange(tags,this.state.type,removedTag)
     };
 
     showInput = () => {
@@ -83,7 +83,7 @@ export default class TagGroup extends React.Component<Props> {
         const { tags, type, closable, inputVisible, inputValue, editInputIndex, editInputValue } = this.state;
         return (
             <>
-                {tags.map((tag, index) => {
+                {tags.length>0 && tags.map((tag, index) => {
                     if (editInputIndex === index) {
                         return (
                             <Input

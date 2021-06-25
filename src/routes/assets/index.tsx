@@ -174,18 +174,13 @@ export default function AssetsTable() {
     const [fromType, setFromType] = useState("编辑标签")
     const [clickNum, setClickNum] = useState(0)
     const [buttonD, setButtonD] = useState(true)
-    const [already, setAlready] = useState([''])
-    const [add, setAdd]:any = useState({list:[],type:""})
-    const [history, setHistory] = useState([''])
     const [editId,setId] = useState([0])
     const [form] = Form.useForm();
     const [formModal] = Form.useForm();
-    const [type,setType] =useState("标签")
+    const [type,setType] =useState(false)
     const [dataList, setDataList] = useState([])//列表数据
     const [assemblyList, setAssemblyList] = useState([""])//组件数据
     const [selectedId, setSelectedId] = useState([0])//选中idHistoricalLabel
-    const [label, setLabel] = useState({label:[""],allLabel:[""]})//标签信息
-    const [person, setPerson] = useState({person:[""],allPerson:[""]})//负责人信息
 
     let searchValue={}
     let sizeInfo={current:1,pageSize:10}
@@ -229,10 +224,9 @@ export default function AssetsTable() {
         list['system'] = menuThird
         axios.get('/assets/label',{params:list}).then((res: any) => {
           if (res.data.status === "200") {
-            setLabel({label:res.data.label_list,allLabel:res.data.all_label_list})
-            setAlready(res.data.label_list)
-            setHistory(res.data.all_label_list)
+            if (type) {
             setAlreadyTag({tags:res.data.label_list,type:0,tagChange:tagChange})
+            }
             setHistoryTag({tags:res.data.all_label_list,type:2,tagChange:tagChange})
           }
         })
@@ -246,52 +240,53 @@ export default function AssetsTable() {
         list['system'] = menuThird
         axios.get('/assets/assembly',{params:list}).then((res: any) => {
           if (res.data.status === "200") {
-            setPerson({person:res.data.person_list,allPerson:res.data.all_person_list})
-            setAlready(res.data.person_list)
-            setHistory(res.data.all_person_list)
-            setAlreadyTag({tags:res.data.person_list,type:0,tagChange:tagChange})
+            console.log(type)
+            if (type) {
+              setAlreadyTag({tags:res.data.person_list,type:0,tagChange:tagChange})
+            }
             setHistoryTag({tags:res.data.all_person_list,type:2,tagChange:tagChange})
           }
         })
       }
       ////添加标签 负责人
     const getFromValue = (value: any) => {
-        console.log(already,add)
         let list:any=searchValue
         list['host_id_list'] = JSON.stringify(selectedId)
         list['net_status'] = menuFirst
         list['host_status'] = menuSecond
         list['system'] = menuThird
         if (fromType==="编辑标签") {
-          list['add_label'] = add.list
+          list['add_label'] = addTag.tags
           axios.post('/assets/label',list)
         }else{
-          list['add_person'] = add.list
+          list['add_person'] = addTag.tags
           axios.post('/assets/person',list)
         }
     }
     //编辑标签 负责人
     const addAssetsTag = (title: string, showTag: boolean,id:number) => {
         setSelectedId([id])
+        setType(showTag)
         if (!showTag) {//添加标签、负责人
             console.log(1)
-            setAlready([""])
-            setAdd({list:[""],type:""})
             setAlreadyTag({tags:[""],type:0,tagChange:tagChange})
             setAddTag({tags:[""],type:1,tagChange:tagChange})
             //setHistory(['Tage1', 'Tage2'])
         } else {
             console.log(2)
-            setAdd({list:[""],type:""})
             setAddTag({tags:[""],type:1,tagChange:tagChange})
         }
         setClickNum(clickNum + 1)
         setVisible(true)
         setFromType(title);
-        getLabel()
-        getPerson()
+        if (title==="编辑标签") {
+          getLabel()
+        }else{
+          getPerson()
+        }
     }
     const cancel = () => {
+      console.log("cancel")
       setAlreadyTag({tags:[""],type:0,tagChange:tagChange})
       setAddTag({tags:[""],type:1,tagChange:tagChange})
       setHistoryTag({tags:[""],type:2,tagChange:tagChange})
@@ -344,21 +339,13 @@ export default function AssetsTable() {
         list['system'] = menuThird
         
         if(type === 0){
-            //setAlready([tag])
-            //setAlreadyTag({tags:[tag],type:0,tagChange:tagChange})
             if (removedTag) {
               list['delete_label'] = removedTag
               axios.delete('/assets/label',{params:list})
               }
         }else if(type === 1){
-          setAdd({list:tag,type:"新增"})
           setAddTag({tags:[tag],type:1,tagChange:tagChange})
-          /* if (removedTag) {
-            list['delete_person'] = removedTag
-            axios.delete('/assets/person',{params:list})
-            } */
         }else{
-          setAdd({list:tag,type:"历史"})
           setAddTag({tags:[tag],type:1,tagChange:tagChange})
         }
     }
@@ -398,10 +385,6 @@ export default function AssetsTable() {
     console.log('search:', val);
   }
 //type 0:可删除不可添加，1：可删除可添加，2：不可删除不可添加
-    //let alreadyTag={tags:already,type:0,tagChange:tagChange}
-    //let addTag={tags:add.list,type:1,tagChange:tagChange}
-    //let historyTag={tags:history,type:2,tagChange:tagChange}
-    //console.log(alreadyTag,addTag,historyTag)
     const [alreadyTag, setAlreadyTag] = useState({tags:[""],type:0,tagChange:tagChange})
     const [addTag, setAddTag] = useState({tags:[""],type:1,tagChange:tagChange})
     const [historyTag, setHistoryTag] = useState({tags:[""],type:2,tagChange:tagChange})
